@@ -4,23 +4,22 @@ import java.time.format.DateTimeParseException;
 
 public class Fecha {
 	private LocalDate fecha;
-	public Fecha(String s) {
-		try {
-			fecha=convertirAFecha(s);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public Fecha(String s) throws Exception {
+			this.convertirAFecha(s);
+			if (fecha==null) {
+				throw new Exception("Fecha invalida, fecha:"+s);
+			}
 	}
-	private LocalDate convertirAFecha(String string) throws Exception {
-		try {
+	
+	private void convertirAFecha(String string) throws Exception {
 			fecha=LocalDate.parse(string,DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-			return fecha;	
-		} catch (DateTimeParseException ex) {
-			Exception excepcion = new Exception("Fecha no válida");
-			throw excepcion;
-		}
+		
 	}
-	public Fecha sumarDias(int dias) {
+	public String convertirAString()  {
+		return fecha.toString();
+		
+	}
+	public Fecha sumarDias(int dias) throws Exception {
 		String ss= this.fecha.plusDays(dias).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 		Fecha fecha1=new Fecha(ss);
 		return fecha1;
@@ -30,8 +29,8 @@ public class Fecha {
 	 * @param fecha2 La otra fecha a comparar
 	 * @return true si esta instancia es mayor a la proporcionada por paramátro. falso en otro caso
 	 */
-	public boolean fechaMayorAOtra(Fecha fecha2) {
-		return fecha.compareTo(fecha2.fecha)>0;
+	public boolean fechaMayorIgualAOtra(Fecha fecha2) {
+		return fecha.compareTo(fecha2.fecha)>=0;
 	}
 	public boolean fechaMenorAOtra(Fecha fecha2) {
 		//true si la 1 es mayor a la 2

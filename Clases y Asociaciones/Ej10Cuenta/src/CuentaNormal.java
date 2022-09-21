@@ -9,8 +9,11 @@ public class CuentaNormal {
 	 * @param monto
 	 * @return devuelvo saldo que use del giro, sino use es 0
 	 */
-	public int gastarDin(int monto) {
+	public int gastarDin(int monto) throws Exception{
 		int cant=0;
+		if (monto>(saldo+limiteDeGiro)) {
+			throw new Exception("No se pudo realizar compra. Saldo :"+saldo+", Limite de giro: "+limiteDeGiro);
+		}
 		if (saldo<monto){
 			limiteDeGiro-=monto-saldo;
 			cant= (monto-saldo);
@@ -20,11 +23,12 @@ public class CuentaNormal {
 		}
 		return cant;
 	}
-	public boolean gastarSinGiro(int monto) {
-		if (monto<saldo){
-			saldo-=monto;
+	public boolean gastarSinGiro(int monto) throws Exception{
+		if (monto>saldo){
+			throw new Exception("No se pudo realizar compra sin giro. Saldo :"+saldo);
 		}
-		return monto>=0;
+		 saldo-=monto;
+		 return true;
 	}
 	public void cargar(int monto) {
 		saldo+=monto;

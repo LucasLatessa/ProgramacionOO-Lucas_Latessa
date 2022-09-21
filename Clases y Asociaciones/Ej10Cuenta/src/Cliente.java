@@ -49,10 +49,14 @@ public class Cliente {
 	 * @param monto
 	 * @param dias
 	 * @param inicio
+	 * @throws Exception 
 	 */
-	public void invertir(int monto,int dias,String inicio) {
+	public void invertir(int monto,int dias,String inicio) throws Exception {
 		if ((!this.tieneInversion())&&(cuentaNorm.gastarSinGiro(monto))){
 			pFijo=new PlazoFijo(monto,dias,inicio);
+		}else
+		{
+			throw new Exception("No se pudo crear el plzo fijo(ya tiene inversion).");
 		}
 	}
 	public boolean tieneInversion() {
@@ -61,10 +65,15 @@ public class Cliente {
 	/*Si esta vencido pasa el saldo a la cuenta normal y destruye el plazo fijo
 	 * @throws Exception
 	 */
-	public void acreditarInversion() throws Exception {
-		if (pFijo.estaVencido()) {
+	public void acreditarInversion() throws Exception  {
+		if (this.tieneInversion()) {
 			cuentaNorm.cargar(pFijo.devolverIntereses());
+		}else
+		{
+			throw new Exception("No tiene inversion");
 		}
+			
+		
 	}
 	public int saldoCuentaNormal() {
 		return cuentaNorm.getSaldo(); 
@@ -78,7 +87,7 @@ public class Cliente {
 	public int deudorCuentaCredito() {
 		return cuentaCred.getSaldoDeudor();
 	}
-	public void pagar(int cant,Cuentas cuenta){
+	public void pagar(int cant,Cuentas cuenta) throws Exception{
 		if (cuenta.equals(Cuentas.CUENTA_NORMAL)){
 			cuentaNorm.gastarDin(cant);
 		}
