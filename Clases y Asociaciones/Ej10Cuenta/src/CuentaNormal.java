@@ -7,7 +7,7 @@ public class CuentaNormal {
 	}
 	/**
 	 * @param monto
-	 * @returndevuelvo saldo que use del giro, sino use es 0
+	 * @return devuelvo saldo que use del giro, sino use es 0
 	 */
 	public int gastarDin(int monto) {
 		int cant=0;

@@ -66,10 +66,17 @@ public class Cliente {
 			cuentaNorm.cargar(pFijo.devolverIntereses());
 		}
 	}
-	public String consultarCuentaNormal() {
-		return"El saldo de la cuenta normal es: "+cuentaNorm.getSaldo()+" .El limite de giro en descubierto es: "+cuentaNorm.getLimiteGiro(); }
-	public String consultarCuentaCredito() {
-		return"El monto disponible para compras a credito es:"+cuentaCred.getMontoDisponible()+"El saldo deudor es:"+cuentaCred.getSaldoDeudor();
+	public int saldoCuentaNormal() {
+		return cuentaNorm.getSaldo(); 
+		}
+	public int giroCuentaNormal() {
+		return cuentaNorm.getLimiteGiro(); 
+		}
+	public int montoCuentaCredito() {
+		return cuentaCred.getMontoDisponible() ;
+	}
+	public int deudorCuentaCredito() {
+		return cuentaCred.getSaldoDeudor();
 	}
 	public void pagar(int cant,Cuentas cuenta){
 		if (cuenta.equals(Cuentas.CUENTA_NORMAL)){
