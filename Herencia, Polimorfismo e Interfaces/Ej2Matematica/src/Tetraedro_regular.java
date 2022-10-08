@@ -12,7 +12,7 @@ public class Tetraedro_regular implements IFigura3D{
 		return Math.pow(arista,2) * Math.sqrt(3);
 	}
 	public double getVolumen() {
-		return Math.pow(arista,3) * (Math.sqrt(3)/12);
+		return Math.pow(arista,3) * (Math.sqrt(2)/12);
 	}
 
 }
