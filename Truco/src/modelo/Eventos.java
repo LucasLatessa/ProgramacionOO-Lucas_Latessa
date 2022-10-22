@@ -2,6 +2,7 @@ package modelo;
 
 public enum Eventos {
 	JUEGO_INICIADO(0,"",""),
+	JUEGO_TERMINADO(0,"",""),
 	TRUCO_CANTADO(1,"canto","truco"),
 	RETRUCO_CANTADO(2,"canto","retruco"),
 	VALECUATRO_CANTADO(3,"canto","vale cuatro"),

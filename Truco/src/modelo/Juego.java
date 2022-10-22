@@ -90,7 +90,6 @@ public class Juego implements Observable{
 		}
 	}
 	public void cantado(Eventos evento) {
-		changeTurno();
 		notificar(evento);
 	}
 	public Jugador nuevaRonda() {

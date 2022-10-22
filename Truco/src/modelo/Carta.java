@@ -57,6 +57,5 @@ public enum Carta {
 	}
 	public String toString() {
 		return getValor()+" de "+getPalo();
-		
 	}
 }

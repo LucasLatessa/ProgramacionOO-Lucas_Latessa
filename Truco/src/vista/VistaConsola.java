@@ -14,18 +14,18 @@ public class VistaConsola implements IVista {
 	public VistaConsola() {
 		this.entrada = new Scanner(System.in);
 	}
-	public void quererNoQuerer(String mostrar,Eventos evento) {
-		System.out.println(mostrar);
+	public void quererNoQuerer(String nombre,Eventos evento) {
+		System.out.println(nombre+": el contrario "+evento.getCantadoQuerido()+" "+evento.getEvento());
 		System.out.println("Opciones");
 		System.out.println("1-Quiero");
 		System.out.println("2-No quiero");
 		String opcion = this.entrada.nextLine();
 		switch(Integer.valueOf(opcion)) {
 		case 1:
-			controlador.cantar(evento);
+			controlador.quise(evento);
 			break;
 		case 2:
-			controlador.cantar(evento);}
+			controlador.noQuise(evento);}
 	}
 	public void menuPMano() {
 		String opcion="0";
@@ -36,23 +36,24 @@ public class VistaConsola implements IVista {
 		System.out.println("3-Cantar falta envido");
 		System.out.println("4-Cantar truco");
 		System.out.println("5-Tirar carta");
+		System.out.println("6-Irme al mazo");
 		opcion = this.entrada.nextLine();
 		switch(Integer.valueOf(opcion)) {
 		case 1:
 			controlador.cantar(Eventos.ENVIDO_CANTADO);
-			System.out.println(controlador.preguntar(Eventos.ENVIDO_CANTADO));
+			controlador.preguntar(Eventos.ENVIDO_CANTADO);
 			break;
 		case 2:
 			controlador.cantar(Eventos.REALENVIDO_CANTADO);
-			System.out.println(controlador.preguntar(Eventos.REALENVIDO_CANTADO));
+			controlador.preguntar(Eventos.REALENVIDO_CANTADO);
 			break;
 		case 3:
 			controlador.cantar(Eventos.FALTAENVIDO_CANTADO);
-			System.out.println(controlador.preguntar(Eventos.FALTAENVIDO_CANTADO));
+			controlador.preguntar(Eventos.FALTAENVIDO_CANTADO);
 			break;
 		case 4:
 			controlador.cantar(Eventos.TRUCO_CANTADO);
-			System.out.println(controlador.preguntar(Eventos.TRUCO_CANTADO));
+			controlador.preguntar(Eventos.TRUCO_CANTADO);
 			break;
 		case 5:
 			Carta cartaTirada=null;
@@ -65,6 +66,8 @@ public class VistaConsola implements IVista {
 			System.out.flush(); 
 			System.out.println("Se tiro el "+cartaTirada.toString()); 
 			break;
+		case 6:
+			
 		default:
 			System.out.println("Opcion invalida");
 			opcion="0";
@@ -86,6 +89,9 @@ public class VistaConsola implements IVista {
 		System.out.println("Comienza tirando:"+this.controlador.getTurno().getNombre());
 		System.out.println("Cartas:"+controlador.mostrarCartas());
 		menuPMano();
+		while (!controlador.termino()) {
+			System.out.println("a");
+		}
 		}
 	@Override
 	public void setControlador(Controlador controlador) {
