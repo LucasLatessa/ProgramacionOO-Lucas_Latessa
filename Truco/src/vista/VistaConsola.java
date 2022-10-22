@@ -7,23 +7,25 @@ import modelo.Carta;
 import modelo.Eventos;
 import controlador.Controlador;
 import modelo.IJugador;
+import observer.Observable;
 public class VistaConsola implements IVista {
 	private Controlador controlador;
 	private Scanner entrada;
 	public VistaConsola() {
 		this.entrada = new Scanner(System.in);
 	}
-	public void quererNoQuerer() {
+	public void quererNoQuerer(String mostrar,Eventos evento) {
+		System.out.println(mostrar);
 		System.out.println("Opciones");
 		System.out.println("1-Quiero");
 		System.out.println("2-No quiero");
 		String opcion = this.entrada.nextLine();
 		switch(Integer.valueOf(opcion)) {
 		case 1:
-			controlador.cantar(Eventos.ENVIDO_QUERIDO);
+			controlador.cantar(evento);
 			break;
 		case 2:
-			controlador.cantar(Eventos.ENVIDO_QUERIDO);}
+			controlador.cantar(evento);}
 	}
 	public void menuPMano() {
 		String opcion="0";
@@ -39,30 +41,29 @@ public class VistaConsola implements IVista {
 		case 1:
 			controlador.cantar(Eventos.ENVIDO_CANTADO);
 			System.out.println(controlador.preguntar(Eventos.ENVIDO_CANTADO));
-			quererNoQuerer();
 			break;
 		case 2:
 			controlador.cantar(Eventos.REALENVIDO_CANTADO);
 			System.out.println(controlador.preguntar(Eventos.REALENVIDO_CANTADO));
-			quererNoQuerer();
 			break;
 		case 3:
 			controlador.cantar(Eventos.FALTAENVIDO_CANTADO);
 			System.out.println(controlador.preguntar(Eventos.FALTAENVIDO_CANTADO));
-			quererNoQuerer();
 			break;
 		case 4:
-			controlador.cantar(Eventos.ENVIDO_CANTADO);
-			System.out.println(controlador.preguntar(Eventos.ENVIDO_CANTADO));
+			controlador.cantar(Eventos.TRUCO_CANTADO);
+			System.out.println(controlador.preguntar(Eventos.TRUCO_CANTADO));
 			break;
 		case 5:
-			int carta=0;
-			while (!(carta>0 && carta<4)) {
-			System.out.println("ingrese numero de carta<1-3>");
-			carta =Integer.valueOf(new Scanner(System.in).nextLine()) ;
+			Carta cartaTirada=null;
+			while (cartaTirada==null) {
+			System.out.println("Ingrese numero de carta<1-3>");
+			int carta =Integer.valueOf(new Scanner(System.in).nextLine()) ;
+			cartaTirada=controlador.tirar(carta);
 			}
-			Carta cartaTirada=controlador.tirar(carta);
-			System.out.println("Se tiro el "+cartaTirada.getValor()+" DE "+cartaTirada.getPalo()); 
+			System.out.print("\033[H\033[2J");  
+			System.out.flush(); 
+			System.out.println("Se tiro el "+cartaTirada.toString()); 
 			break;
 		default:
 			System.out.println("Opcion invalida");
@@ -74,13 +75,15 @@ public class VistaConsola implements IVista {
 		System.out.println("######### TRUCO ########");
 		System.out.println("########################");
 		System.out.println();
+		System.out.println("Presione enter para empezar el juego");
+		this.entrada.nextLine();
 		System.out.println("Ingrese nombre de jugador 1:");
 		String nameJ1 = this.entrada.nextLine();
 		System.out.println("Ingrese nombre de jugador 2:");
 		String nameJ2 = this.entrada.nextLine();
 		controlador.agregarJugador(nameJ1);
 		controlador.agregarJugador(nameJ2);
-		System.out.println("Comienza tirando:"+this.controlador.newjuego());
+		System.out.println("Comienza tirando:"+this.controlador.getTurno().getNombre());
 		System.out.println("Cartas:"+controlador.mostrarCartas());
 		menuPMano();
 		}

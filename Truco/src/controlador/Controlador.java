@@ -29,15 +29,17 @@ public void actualizar(Object evento, Observable observado) {
 		switch((Eventos) evento) {
 			case JUEGO_INICIADO:
 				ArrayList<IJugador> jugadores = this.modelo.listarJugadores();
+				modelo.nuevaRonda();
 				this.vista.mostrarJugadores(jugadores);
 				break;
+			case ENVIDO_CANTADO:
+				this.vista.quererNoQuerer(preguntar((Eventos)evento), (Eventos)evento); ;
 			default:
 			break;
 		}
 }}
-public String newjuego() {
-	return this.modelo.nuevaRonda().getNombre();
-	
+public IJugador getTurno() {
+	return modelo.getTurno();
 }
 public String mostrarJugadores() {
 	String ss="";
@@ -47,11 +49,15 @@ public String mostrarJugadores() {
 	return ss;
 }
 public String mostrarCartas() {
-	return (modelo.getTurno().getNombre()+": "+ modelo.getTurno().getCartas());
+	String ss=modelo.getTurno().getNombre()+": ";
+	for (Carta carta:modelo.getTurno().getCartas()) {
+		ss+=carta.toString()+", ";
+	}
+	return ss ;
 	
 }
 public void cantar(Eventos evento) {
-	
+	modelo.cantado(evento);
 }
 public Carta tirar(int carta) {
 	return modelo.getTurno().tirarCarta(carta);

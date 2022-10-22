@@ -47,8 +47,14 @@ public class Jugador implements IJugador{
 			return evento;
 	}
 		}
+	/**
+	 *@return Retorna la carta que quiere tirar jugador<1-3>, en caso de que no tenga esa carta en mano devuelve nulo
+	 */
 	public Carta tirarCarta(int carta) {
-		return cartas.get(carta-1);
+		Carta retorno=null;
+		if (carta<= cartas.size()) {
+			retorno=cartas.get(carta-1);}
+		return retorno;
 		
 	}
 	public int getPuntos() {

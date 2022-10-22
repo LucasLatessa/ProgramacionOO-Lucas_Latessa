@@ -14,6 +14,7 @@ public class Juego implements Observable{
 		private ArrayList<Eventos> eventosEnMano;//cada vez que reparto poner vacio
 		public Juego() {
 		observadores=new ArrayList<>();
+		
 	}
 	public void changeTurno() {
 		if (jugador1.isTurno()) {
@@ -44,7 +45,7 @@ public class Juego implements Observable{
 		} else {
 			carta3=jugador.getCartaTirada();
 		}
-			int c1v=carta1.getValoracion();int c2v=carta1.getValoracion();int c3v=carta1.getValoracion();//valoraciones de cartas
+			int c1v=carta1.getValor();int c2v=carta1.getValor();int c3v=carta1.getValor();//valoraciones de cartas
 			if (carta1.getPalo().equals(carta2.getPalo())&&carta2.getPalo().equals(carta3.getPalo())) {//caso son las 3 cartas mismo palo			
 				sumatoriajug+=((c1v<10)&&(((c2v<10)&&(c2v<c1v))||((c3v<10)&&(c3v<c1v))))?c1v:0;
 				sumatoriajug+=((c2v<10)&&(((c1v<10)&&(c1v<c2v))||((c3v<10)&&(c3v<c2v))))?c2v:0;
@@ -85,10 +86,12 @@ public class Juego implements Observable{
 			this.jugador1=new Jugador(jugador);
 		}else if (this.jugador2==null){
 			this.jugador2=new Jugador(jugador);
+			notificar(Eventos.JUEGO_INICIADO);
 		}
 	}
-	public void cantado() {
-		
+	public void cantado(Eventos evento) {
+		changeTurno();
+		notificar(evento);
 	}
 	public Jugador nuevaRonda() {
 		mazo=new Mazo();

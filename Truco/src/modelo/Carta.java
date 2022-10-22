@@ -1,60 +1,62 @@
 package modelo;
 
-public enum Carta {		
-		UNODEESPADA(Palo.ESPADA,Valor.UNO),
-		UNODEBASTO(Palo.BASTO,Valor.UNO),
-		SIETEDEESPADA(Palo.ESPADA,Valor.SIETE),
-		SIETEDEORO(Palo.ORO,Valor.SIETE),
-		TRESDEESPADA(Palo.ESPADA,Valor.TRES),
-		TRESDEBASTO(Palo.BASTO,Valor.TRES),
-		TRESDEORO(Palo.ORO,Valor.TRES),
-		TRESDECOPA(Palo.COPA,Valor.TRES),
-		DOSDEESPADA(Palo.ESPADA,Valor.DOS),
-		DOSDEBASTO(Palo.BASTO,Valor.DOS),
-		DOSDEORO(Palo.ORO,Valor.DOS),
-		DOSDECOPA(Palo.COPA,Valor.DOS),
-		UNODEORO(Palo.ORO,Valor.UNO),
-		UNODECOPA(Palo.COPA,Valor.UNO),
-		DOCEDEESPADA(Palo.ESPADA,Valor.DOCE),
-		DOCEDEBASTO(Palo.BASTO,Valor.DOCE),
-		DOCEDEORO(Palo.ORO,Valor.DOCE),
-		DOCEDECOPA(Palo.COPA,Valor.DOCE),
-		ONCEDEESPADA(Palo.ESPADA,Valor.ONCE),
-		ONCEDEBASTO(Palo.BASTO,Valor.ONCE),
-		ONCEDEORO(Palo.ORO,Valor.ONCE),
-		ONCEDECOPA(Palo.COPA,Valor.ONCE),
-		DIEZDEESPADA(Palo.ESPADA,Valor.DIEZ),
-		DIEZDEBASTO(Palo.BASTO,Valor.DIEZ),
-		DIEZDEORO(Palo.ORO,Valor.DIEZ),
-		DIEZDECOPA(Palo.COPA,Valor.DIEZ),
-		SIETEDEBASTO(Palo.BASTO,Valor.SIETE),
-		SIETEDECOPA(Palo.COPA,Valor.SIETE),
-		SEISDEESPADA(Palo.ESPADA,Valor.SEIS),
-		SEISDEBASTO(Palo.BASTO,Valor.SEIS),
-		SEISDEORO(Palo.ORO,Valor.SEIS),
-		SEISDECOPA(Palo.COPA,Valor.SEIS),
-		CINCODEESPADA(Palo.ESPADA,Valor.CINCO),
-		CINCODEBASTO(Palo.BASTO,Valor.CINCO),
-		CINCODEORO(Palo.ORO,Valor.CINCO),
-		CINCODECOPA(Palo.COPA,Valor.CINCO),
-		CUATRODEESPADA(Palo.ESPADA,Valor.CUATRO),
-		CUATRODEBASTO(Palo.BASTO,Valor.CUATRO),
-		CUATRODEORO(Palo.ORO,Valor.CUATRO),
-		CUATRODECOPA(Palo.COPA,Valor.CUATRO);
+public enum Carta {	
+	UNODEESPADA(Palo.ESPADA,1),
+	UNODEBASTO(Palo.BASTO,2),
+	SIETEDEESPADA(Palo.ESPADA,7),
+	SIETEDEORO(Palo.ORO,7),
+	TRESDEESPADA(Palo.ESPADA,3),
+	TRESDEBASTO(Palo.BASTO,3),
+	TRESDEORO(Palo.ORO,3),
+	TRESDECOPA(Palo.COPA,3),
+	DOSDEESPADA(Palo.ESPADA,2),
+	DOSDEBASTO(Palo.BASTO,2),
+	DOSDEORO(Palo.ORO,2),
+	DOSDECOPA(Palo.COPA,2),
+	UNODEORO(Palo.ORO,1),
+	UNODECOPA(Palo.COPA,1),
+	DOCEDEESPADA(Palo.ESPADA,12),
+	DOCEDEBASTO(Palo.BASTO,12),
+	DOCEDEORO(Palo.ORO,12),
+	DOCEDECOPA(Palo.COPA,12),
+	ONCEDEESPADA(Palo.ESPADA,12),
+	ONCEDEBASTO(Palo.BASTO,11),
+	ONCEDEORO(Palo.ORO,11),
+	ONCEDECOPA(Palo.COPA,11),
+	DIEZDEESPADA(Palo.ESPADA,10),
+	DIEZDEBASTO(Palo.BASTO,10),
+	DIEZDEORO(Palo.ORO,10),
+	DIEZDECOPA(Palo.COPA,10),
+	SIETEDEBASTO(Palo.BASTO,7),
+	SIETEDECOPA(Palo.COPA,7),
+	SEISDEESPADA(Palo.ESPADA,6),
+	SEISDEBASTO(Palo.BASTO,6),
+	SEISDEORO(Palo.ORO,6),
+	SEISDECOPA(Palo.COPA,6),
+	CINCODEESPADA(Palo.ESPADA,5),
+	CINCODEBASTO(Palo.BASTO,5),
+	CINCODEORO(Palo.ORO,5),
+	CINCODECOPA(Palo.COPA,5),
+	CUATRODEESPADA(Palo.ESPADA,4),
+	CUATRODEBASTO(Palo.BASTO,4),
+	CUATRODEORO(Palo.ORO,4),
+	CUATRODECOPA(Palo.COPA,4);
+	
 	private Palo palo;
-	private Valor valor;
-	private Carta (Palo palo,Valor valor){
+	private int valor;
+	private Carta (Palo palo,int valor){
 		this.palo = palo;
 		this.valor=valor;
 	}
 
 	public String getPalo() {
-		return palo.toString();
+		return palo.toString().toLowerCase();
 	}
-	public String getValor() {
-		return valor.toString();
+	public int getValor() {
+		return valor;
 	}
-	public int getValoracion() {
-		return valor.gatValoracion();
+	public String toString() {
+		return getValor()+" de "+getPalo();
+		
 	}
 }
