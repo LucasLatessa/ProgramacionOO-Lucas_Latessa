@@ -12,7 +12,7 @@ public class Esfera implements IFigura3D{
 		return 4 *Math.PI *(Math.pow( radio, 2));
 	}
 	public double getVolumen() {
-		return Float.valueOf(4)/3 * (Math.PI)* (Math.pow( radio, 3)) ;
+		return 4.0/3 * (Math.PI)* (Math.pow( radio, 3)) ;
 	}
 
 }

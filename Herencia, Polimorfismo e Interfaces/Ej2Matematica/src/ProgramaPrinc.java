@@ -7,7 +7,6 @@ public class ProgramaPrinc {
 		String ss="";
 		while (!(ss.equals("0"))) {
 			System.out.println("MENU(ingrese 0 para salir)");
-			System.out.println("ANDAN CIRCULO, TRIANGULO, ESFERA, CUBO");
 			System.out.println("1-círculo");
 			System.out.println("2-rectángulo");
 			System.out.println("3-cuadrado");
