@@ -1,13 +1,11 @@
 package vista;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
+import controlador.Controlador;
 import modelo.Carta;
 import modelo.Eventos;
-import controlador.Controlador;
 import modelo.IJugador;
-import observer.Observable;
 public class VistaConsola implements IVista {
 	private Controlador controlador;
 	private Scanner entrada;
@@ -22,11 +20,27 @@ public class VistaConsola implements IVista {
 		String opcion = this.entrada.nextLine();
 		switch(Integer.valueOf(opcion)) {
 		case 1:
-			controlador.quise(evento);
+			controlador.respuesta(evento,"si");
 			break;
 		case 2:
-			controlador.noQuise(evento);}
+			controlador.respuesta(evento,"no");}
 	}
+	public void menuSTMano() {
+		String opcion="0";
+		while(opcion=="0") {
+		System.out.println("Opciones");
+		Eventos jugando=controlador.queSeEstaJugando();
+		switch(jugando) {
+		case TRUCO_QUERIDO:
+			System.out.println("4-Cantar retruco");
+		case RETRUCO_QUERIDO:
+			System.out.println("4-Cantar valecuatro");
+		//case null:
+		//	System.out.println("4-Cantar retruco");
+		}
+		System.out.println("5-Tirar carta");
+		System.out.println("6-Irme al mazo");
+	}}
 	public void menuPMano() {
 		String opcion="0";
 		while(opcion=="0") {
@@ -62,8 +76,7 @@ public class VistaConsola implements IVista {
 			int carta =Integer.valueOf(new Scanner(System.in).nextLine()) ;
 			cartaTirada=controlador.tirar(carta);
 			}
-			System.out.print("\033[H\033[2J");  
-			System.out.flush(); 
+			LimpiarPantalla();  
 			System.out.println("Se tiro el "+cartaTirada.toString()); 
 			break;
 		case 6:
@@ -104,4 +117,13 @@ public class VistaConsola implements IVista {
 			System.out.println("Puntos:" + jugador.getPuntos());
 		}
 	}
+	public void LimpiarPantalla() {
+	        try {
+	            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+	        } catch (Exception e) {
+	            /*No hacer nada*/
+	        }
+	           /*Introduce tu código desde aquí*/
+	    }
 	}
+	

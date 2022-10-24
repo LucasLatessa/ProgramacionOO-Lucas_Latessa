@@ -75,4 +75,15 @@ public void preguntar(Eventos evento) {
 	this.vista.quererNoQuerer(modelo.getTurno().getNombre(), (Eventos)evento); 
 	
 }
+public void respuesta(Eventos evento, String string) {
+	if (string=="si"){
+		switch (evento){
+		case ENVIDO_QUERIDO:
+			modelo.agregarEvento(evento);
+			}
+	}
+}
+public Eventos queSeEstaJugando() {
+	return modelo.getEventos().get(modelo.getEventos().size());
+}
 }

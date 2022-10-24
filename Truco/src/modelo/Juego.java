@@ -94,6 +94,7 @@ public class Juego implements Observable{
 	}
 	public Jugador nuevaRonda() {
 		mazo=new Mazo();
+		eventosEnMano=new ArrayList<>();
 		mano=1;
 		if (jugador2.isMano()){
 			jugador2.repartir(mazo,jugador1);
@@ -157,6 +158,19 @@ public class Juego implements Observable{
 			retorno= jugador2;
 		}
 		return retorno;
+	}
+	public ArrayList<Eventos> getEventos(){
+		return this.eventosEnMano;
+}
+	public void agregarEvento(Eventos evento) {
+		if (evento==Eventos.RETRUCO_QUERIDO||evento==Eventos.VALECUATRO_QUERIDO){//si es uno de estos casos actualizo lo que se esta jugando
+			eventosEnMano.remove(eventosEnMano.size());
+			eventosEnMano.add(evento);
+		}
+		else {
+			eventosEnMano.add(evento);
+		}
+		
 	}
 	
 }
