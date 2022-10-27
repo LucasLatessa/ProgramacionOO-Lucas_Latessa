@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import controlador.Controlador;
 import modelo.Carta;
+import modelo.EstadoEnvido;
 import modelo.Eventos;
 import modelo.IJugador;
 public class VistaConsola implements IVista {
@@ -12,36 +13,35 @@ public class VistaConsola implements IVista {
 	public VistaConsola() {
 		this.entrada = new Scanner(System.in);
 	}
-	public void quererNoQuerer(String nombre,Eventos evento) {
-		System.out.println(nombre+": el contrario "+evento.getCantadoQuerido()+" "+evento.getEvento());
+	public void quererNoQuererEnvido(String nombre,EstadoEnvido estado) {
+		System.out.println(nombre+": el contrario canto " +estado.toString());
 		System.out.println("Opciones");
 		System.out.println("1-Quiero");
 		System.out.println("2-No quiero");
 		String opcion = this.entrada.nextLine();
 		switch(Integer.valueOf(opcion)) {
 		case 1:
-			controlador.respuesta(evento,"si");
+			//controlador.quiero(evento);
 			break;
 		case 2:
-			controlador.respuesta(evento,"no");}
+			//controlador.noQuiero(evento);
+			}
+			
 	}
-	public void menuSTMano() {
+	public void menuSTRonda() {
 		String opcion="0";
 		while(opcion=="0") {
 		System.out.println("Opciones");
-		Eventos jugando=controlador.queSeEstaJugando();
-		switch(jugando) {
-		case TRUCO_QUERIDO:
-			System.out.println("4-Cantar retruco");
-		case RETRUCO_QUERIDO:
-			System.out.println("4-Cantar valecuatro");
+		//Eventos jugando=controlador.queSeEstaJugando();
+		//switch(jugando) {
 		//case null:
 		//	System.out.println("4-Cantar retruco");
 		}
 		System.out.println("5-Tirar carta");
 		System.out.println("6-Irme al mazo");
-	}}
-	public void menuPMano() {
+	//}
+}
+	public void menuPRonda() {
 		String opcion="0";
 		while(opcion=="0") {
 		System.out.println("Opciones");
@@ -54,20 +54,12 @@ public class VistaConsola implements IVista {
 		opcion = this.entrada.nextLine();
 		switch(Integer.valueOf(opcion)) {
 		case 1:
-			controlador.cantar(Eventos.ENVIDO_CANTADO);
-			controlador.preguntar(Eventos.ENVIDO_CANTADO);
 			break;
 		case 2:
-			controlador.cantar(Eventos.REALENVIDO_CANTADO);
-			controlador.preguntar(Eventos.REALENVIDO_CANTADO);
 			break;
 		case 3:
-			controlador.cantar(Eventos.FALTAENVIDO_CANTADO);
-			controlador.preguntar(Eventos.FALTAENVIDO_CANTADO);
 			break;
 		case 4:
-			controlador.cantar(Eventos.TRUCO_CANTADO);
-			controlador.preguntar(Eventos.TRUCO_CANTADO);
 			break;
 		case 5:
 			Carta cartaTirada=null;
@@ -76,7 +68,7 @@ public class VistaConsola implements IVista {
 			int carta =Integer.valueOf(new Scanner(System.in).nextLine()) ;
 			cartaTirada=controlador.tirar(carta);
 			}
-			LimpiarPantalla();  
+			insertLineas(25);
 			System.out.println("Se tiro el "+cartaTirada.toString()); 
 			break;
 		case 6:
@@ -85,6 +77,11 @@ public class VistaConsola implements IVista {
 			System.out.println("Opcion invalida");
 			opcion="0";
 		}}
+	}
+	public void fin() {
+		System.out.println("El juego termino, el ganador es"+controlador.termino().getNombre());
+		System.out.println("Presione enter para salir");
+		this.entrada.nextLine();
 	}
 	public void iniciar() {
 		System.out.println("########################");
@@ -100,12 +97,20 @@ public class VistaConsola implements IVista {
 		controlador.agregarJugador(nameJ1);
 		controlador.agregarJugador(nameJ2);
 		System.out.println("Comienza tirando:"+this.controlador.getTurno().getNombre());
-		System.out.println("Cartas:"+controlador.mostrarCartas());
-		menuPMano();
-		while (!controlador.termino()) {
-			System.out.println("a");
+		while (controlador.termino()==null) {
+			System.out.println("Cartas:"+controlador.mostrarCartas());
+			menuPRonda();
+			menuSTRonda();
 		}
+		
 		}
+	public void insertLineas(int lineas)
+	{
+	 for (int i=0; i < lineas; i++)
+	 {
+	  System.out.println();
+	 }
+	}
 	@Override
 	public void setControlador(Controlador controlador) {
 		this.controlador = controlador;
@@ -117,13 +122,4 @@ public class VistaConsola implements IVista {
 			System.out.println("Puntos:" + jugador.getPuntos());
 		}
 	}
-	public void LimpiarPantalla() {
-	        try {
-	            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-	        } catch (Exception e) {
-	            /*No hacer nada*/
-	        }
-	           /*Introduce tu código desde aquí*/
-	    }
-	}
-	
+}

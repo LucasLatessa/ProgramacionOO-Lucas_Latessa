@@ -9,75 +9,33 @@ public class Juego implements Observable{
 		private Jugador jugador1;
 		private Jugador jugador2;
 		private Mazo mazo;
-		private int mano;//<1-3>
+		private ArrayList<Ronda> rondas;//<1-3>
 		private ArrayList<Observador> observadores;
-		private ArrayList<Eventos> eventosEnMano;//cada vez que reparto poner vacio
-		public Juego() {
+	
+	public Juego() {
 		observadores=new ArrayList<>();
-		
+		rondas=new ArrayList<Ronda>();
 	}
+	/**
+	 * Cambia el turno del juego, en caso de que ninguno de los dos haya sido el turno anterior
+	    es turno del mano(caso primera ronda).
+	 */
 	public void changeTurno() {
-		if (jugador1.isTurno()) {
-			jugador2.setTurno(true);
-			jugador1.setTurno(false);
-		}else if (jugador2.isTurno()) {
-			jugador1.setTurno(true);
-			jugador2.setTurno(false);
-		}else {
-			if (jugador1.isMano()){
-				jugador1.setTurno(true);}
-				else {
-					jugador2.setTurno(true);;
+		if (jugador1.isTurno()||jugador2.isTurno()) {
+			jugador2.changeTurno();
+			jugador1.changeTurno();
+		}else if (jugador1.isMano()){
+			jugador1.setTurno(true);}
+		else {
+			jugador2.setTurno(true);;
 				}
 			}
-		}
-	/**
-	 * @return devuelve el ganador del envido, para todas las variantes.falta implementar caso que tiene tres cartas del mismo palo
-	 */
-	private int calcularTantos(Jugador jugador) {
-		int sumatoriajug=0;
-		ArrayList<Carta> cartasjug=jugador.getCartas();
-		Carta carta1=cartasjug.get(0);
-		Carta carta2=cartasjug.get(1);
-		Carta carta3=null;
-		if (cartasjug.size()==3) {
-			carta3=cartasjug.get(3);
-		} else {
-			carta3=jugador.getCartaTirada();
-		}
-			int c1v=carta1.getValor();int c2v=carta1.getValor();int c3v=carta1.getValor();//valoraciones de cartas
-			if (carta1.getPalo().equals(carta2.getPalo())&&carta2.getPalo().equals(carta3.getPalo())) {//caso son las 3 cartas mismo palo			
-				sumatoriajug+=((c1v<10)&&(((c2v<10)&&(c2v<c1v))||((c3v<10)&&(c3v<c1v))))?c1v:0;
-				sumatoriajug+=((c2v<10)&&(((c1v<10)&&(c1v<c2v))||((c3v<10)&&(c3v<c2v))))?c2v:0;
-				sumatoriajug+=((c3v<10)&&(((c1v<10)&&(c1v<c3v))||((c2v<10)&&(c2v<c3v))))?c3v:0;
-				sumatoriajug+=20;} 
-			else if(carta1.getPalo().equals(carta2.getPalo())) {
-				sumatoriajug=((c1v<10)&&(c2v<10))?c1v+c2v:0;
-				sumatoriajug=((10>=c1v)&&(c2v<10))?c2v:0;
-				sumatoriajug=((10>=c2v)&&(c1v<10))?c1v:0;
-				sumatoriajug+=20;}
-			else if(carta1.getPalo().equals(carta3.getPalo())) {
-				sumatoriajug=((c1v<10)&&(c3v<10))?c1v+c3v:0;
-				sumatoriajug=((10>=c1v)&&(c3v<10))?c3v:0;
-				sumatoriajug=((10>=c3v)&&(c1v<10))?c1v:0;
-				sumatoriajug+=20;}
-			else if(carta3.getPalo().equals(carta2.getPalo())) {
-				sumatoriajug=((c3v<10)&&(c2v<10))?c3v+c2v:0;
-				sumatoriajug=((10>=c3v)&&(c2v<10))?c2v:0;
-				sumatoriajug=((10>=c2v)&&(c3v<10))?c3v:0;
-				sumatoriajug+=20;}
-			return sumatoriajug;
-	}
-	public Jugador envidos() {
-		int sumatoriajug1=calcularTantos(jugador1);
-		int sumatoriajug2=calcularTantos(jugador2);
-		if (sumatoriajug1==sumatoriajug2){
-			return jugador1.isMano()? jugador1:jugador2;//si los tantos son iguales, gana el mano
-		}else {
-			return (sumatoriajug1>sumatoriajug2)?jugador1:jugador2;//se devuelve el jugador con mas tantos
-		}
 		
-	}
+	/**
+	 * @return devuelve el ganador del envido, para todas las variantes.
+	 */
+	
+	
 	public ArrayList<Observador> getObservadores() {
 		return observadores;
 	}
@@ -89,28 +47,37 @@ public class Juego implements Observable{
 			notificar(Eventos.JUEGO_INICIADO);
 		}
 	}
+	public void newRonda() {
+		Ronda ronda=new Ronda();
+		rondas.add(ronda);
+	}
 	public void cantado(Eventos evento) {
 		notificar(evento);
 	}
-	public Jugador nuevaRonda() {
-		mazo=new Mazo();
-		eventosEnMano=new ArrayList<>();
-		mano=1;
-		if (jugador2.isMano()){
-			jugador2.repartir(mazo,jugador1);
-			jugador1.serMano();
-			changeTurno();
-			return jugador1;
+	public void nuevaMano() {
+		rondas=new ArrayList<Ronda>();
+		repartir();
+		if (!jugador1.isMano()&&!jugador2.isMano()) {
+			jugador2.changeMano();//la primer mano del juego es MANO el jugador2
 		}else {
-			jugador1.repartir(mazo,jugador2);//la primera mano del juego siempre la da el jugador 1
-			jugador2.serMano();
-			changeTurno();
-			return jugador2;
+			jugador1.changeMano();
+			jugador2.changeMano();
 		}
+		changeTurno();
+		}
+	public void repartir() {
+		mazo=new Mazo();
+		vaciarCartas();
+		for(int i = 0;i < 3;i++) {
+			jugador1.setCarta(mazo.dar());
+			jugador2.setCarta(mazo.dar());
+		};
 	}
-	public int getMano() {
-		return mano;
-	}
+	public void vaciarCartas( ) {
+			jugador1.limpiarCartas();
+			jugador2.limpiarCartas();
+		}
+		
 	public ArrayList<IJugador> listarJugadores(){
 		ArrayList<IJugador> jugadores=new ArrayList<>() ;
 		jugadores.add(jugador1);
@@ -159,18 +126,5 @@ public class Juego implements Observable{
 		}
 		return retorno;
 	}
-	public ArrayList<Eventos> getEventos(){
-		return this.eventosEnMano;
 }
-	public void agregarEvento(Eventos evento) {
-		if (evento==Eventos.RETRUCO_QUERIDO||evento==Eventos.VALECUATRO_QUERIDO){//si es uno de estos casos actualizo lo que se esta jugando
-			eventosEnMano.remove(eventosEnMano.size());
-			eventosEnMano.add(evento);
-		}
-		else {
-			eventosEnMano.add(evento);
-		}
-		
-	}
 	
-}

@@ -28,20 +28,12 @@ public void actualizar(Object evento, Observable observado) {
 	if(evento instanceof Eventos) {
 		switch((Eventos) evento) {
 			case JUEGO_INICIADO:
-				ArrayList<IJugador> jugadores = this.modelo.listarJugadores();
-				modelo.nuevaRonda();
-				this.vista.mostrarJugadores(jugadores);
+				modelo.nuevaMano();
+				modelo.newRonda();
 				break;
-			case ENVIDO_CANTADO:
-				preguntar((Eventos)evento);
-			case REALENVIDO_CANTADO:
-				preguntar((Eventos)evento);
-			case FALTAENVIDO_CANTADO:
-				preguntar((Eventos)evento);
-			case TRUCO_CANTADO:
-				preguntar((Eventos)evento);
 			case JUEGO_TERMINADO:
-				preguntar((Eventos)evento);
+				vista.fin();
+				vista.mostrarJugadores(modelo.listarJugadores());
 			default:
 			break;
 		}
@@ -50,7 +42,7 @@ public IJugador getTurno() {
 	return modelo.getTurno();
 }
 public String mostrarCartas() {
-	String ss=modelo.getTurno().getNombre()+": ";
+	String ss="("+modelo.getTurno().getNombre()+") ";
 	for (Carta carta:modelo.getTurno().getCartas()) {
 		ss+=carta.toString()+", ";
 	}
@@ -58,10 +50,10 @@ public String mostrarCartas() {
 	
 }
 /**
- * @return devuelve false si el ganador es nulo, de haber un ganador devuelve true.
+ * @return devuelve false si el ganador es nulo, de haber un ganador devuelve el jugador.
  */
-public boolean termino() {
-	return modelo.preguntarGanador()==null?false:true;
+public IJugador termino() {
+	return modelo.preguntarGanador();
 }
 public void cantar(Eventos evento) {
 	modelo.cantado(evento);
@@ -72,18 +64,6 @@ public Carta tirar(int carta) {
 }
 public void preguntar(Eventos evento) {
 	modelo.changeTurno();
-	this.vista.quererNoQuerer(modelo.getTurno().getNombre(), (Eventos)evento); 
 	
-}
-public void respuesta(Eventos evento, String string) {
-	if (string=="si"){
-		switch (evento){
-		case ENVIDO_QUERIDO:
-			modelo.agregarEvento(evento);
-			}
-	}
-}
-public Eventos queSeEstaJugando() {
-	return modelo.getEventos().get(modelo.getEventos().size());
 }
 }
