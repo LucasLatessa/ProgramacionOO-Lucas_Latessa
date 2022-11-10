@@ -2,44 +2,61 @@ package modelo;
 
 import java.util.ArrayList;
 
-public class Ronda
-	{
-	    private Jugador ganador;
-		private Envido envido;
-		private ArrayList<Jugador> jugadores;
-		private ArrayList<Carta> cartas;
-		public Ronda(Jugador j1,Jugador j2){
+
+public class Ronda{
+		    private Jugador ganador;
+			protected Envido envido;
+			private ArrayList<Jugador> jugadores;
+			private ArrayList<Carta> cartas;
+			private boolean terminada=false;
+		public boolean isTerminada() {
+				return terminada;
+			}
+		public Ronda(){
 			jugadores= new ArrayList<Jugador>();
 			cartas= new ArrayList<Carta>();
 		}
-		public void envidos(EstadoEnvido estado) {
-			envido.agregar(estado);
+		/**no devuelve el puntaje porque se pueden seguir agregando.
+		 * @param envido querido
+		 */
+		public IEnvido addEnvido(EstadoEnvido estado) {
+			if (envido==null) {
+				envido=new Envido();
+				envido.addPreguntado(estado);
+			}else {
+				envido.addQuerido(estado);
+			}
+			return envido;
 		}
-	    public void jugar(Jugador j, Carta c)
-	    {
+	    public void jugar(Jugador j, Carta c){
 	        cartas.add(c);
 	        jugadores.add(j);
+	        if (jugadores.size()==2){
+	        	terminada=true;
+	        }
 	    }
-	    
 	    /**
-	     * @return retorna el jugador ganador de la ronda, en caso de parda retorna nulo
+	     * @return jugador ganador de la ronda, en caso de parda retorna nulo
 	     */
 	    public Jugador getGanador() {
-	        ArrayList<Carta> cartasJugadas = cartas;
-	        int index=-1;
-	        Carta cartaMasAlta=new Carta(4,Palo.COPA);
-	        for (int i=0;i< cartasJugadas.size();i++) {
-	        	Carta carta=cartasJugadas.get(i);
-	            if (carta.mayor(cartaMasAlta)==carta){
-	                cartaMasAlta = carta;
-	                index=i;
-	            }else if(carta.mayor(cartaMasAlta)==null) {
-	            	index=-1;}
-	            }
-	        if (index!=-1) {
-	        	return jugadores.get(index);}
-	        else {
-	            return null;}
+	    	Carta cartaMasAlta=new Carta(4,Palo.COPA);
+	        int index=0;
+	        for (int i=0;i< cartas.size();i++) {
+	        	Carta carta=cartas.get(i);
+	        	cartaMasAlta = carta.mayor(cartaMasAlta);
+	        	index=cartaMasAlta==carta?i:index;
+	        }
+	        return (cartaMasAlta!=null)?jugadores.get(index):null;
 	    }
-	}
+	    /**
+	     * @return jugador que ya tiro en caso que uno haya tirado y el otro no, si ambos tiraron devuelve null
+	     */
+	    public Jugador jugadorYaTiro(){
+	    	Jugador jugador=null;
+	    	if (jugadores.size()==1) {
+	    		jugador=jugadores.get(0);
+	    		}
+	    	return jugador;
+	    	}
+}
 

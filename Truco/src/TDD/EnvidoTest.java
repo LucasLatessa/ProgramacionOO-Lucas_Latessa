@@ -80,29 +80,27 @@ public class EnvidoTest {
 	    @Test
 	    public void testEnvidoEnvidoRealEnvido() 
 	    {Envido envido=new Envido();
-	    	envido.agregar(EstadoEnvido.ENVIDOQ);
-	    	envido.agregar(EstadoEnvido.ENVIDOQ);
-	    	envido.agregar(EstadoEnvido.REALENVIDOQ);
+	    	envido.addQuerido(EstadoEnvido.ENVIDO);
+	    	envido.addQuerido(EstadoEnvido.ENVIDO);
+	    	envido.addQuerido(EstadoEnvido.REALENVIDO);
 	        Assert.assertEquals(7,
 	        		envido.getPuntos());
 	    }
 	    @Test
-	    public void testEnvidoEnvidoRealEnvidoNQ() 
+	    public void testEnvidoEnvido() 
 	    {Envido envido=new Envido();
-	    	envido.agregar(EstadoEnvido.ENVIDOQ);
-	    	envido.agregar(EstadoEnvido.ENVIDOQ);
-	    	envido.agregar(EstadoEnvido.REALENVIDONQ);
+	    	envido.addQuerido(EstadoEnvido.ENVIDO);
+	    	envido.addQuerido(EstadoEnvido.ENVIDO);
 	        Assert.assertEquals(4,
 	        		envido.getPuntos());
 	    }
 	    @Test
 	    public void testEnvidoEnvidoRealEnvidoFaltaEnvidoNQ() 
 	    {Envido envido=new Envido();
-		    envido.agregar(EstadoEnvido.ENVIDOQ);
-	    	envido.agregar(EstadoEnvido.ENVIDOQ);
-	    	envido.agregar(EstadoEnvido.REALENVIDOQ);
-	    	envido.agregar(EstadoEnvido.FALTAENVIDONQ);
-	        Assert.assertEquals(7,
+		    envido.addQuerido(EstadoEnvido.ENVIDO);
+	    	envido.addQuerido(EstadoEnvido.ENVIDO);
+	    	envido.addQuerido(EstadoEnvido.FALTAENVIDO);
+	        Assert.assertEquals(0,
 	        		envido.getPuntos());
 	    }
 	

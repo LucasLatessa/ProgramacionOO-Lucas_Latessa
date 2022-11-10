@@ -10,5 +10,6 @@ public interface IVista {
 	
 	public void iniciar();
 
-	public void mostrarJugadores(ArrayList<IJugador> jugadores);
+
+	public void mostrarPuntajes();
 }

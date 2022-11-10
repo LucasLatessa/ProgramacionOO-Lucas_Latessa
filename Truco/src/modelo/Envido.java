@@ -2,41 +2,44 @@ package modelo;
 
 import java.util.ArrayList;
 
-public class Envido {
-	private ArrayList<EstadoEnvido> envidosCantados;
+/** Solo instanciar si por lo menos un envido se quiere
+ * @author lucas
+ *
+ */
+public class Envido implements IEnvido {
+	private ArrayList<EstadoEnvido> envidosQueridos;
+	protected EstadoEnvido envidoPreguntado;
+	private int sumatoriajug1;
+	private int sumatoriajug2;
+	public int getSumatoriajug1() {
+		return sumatoriajug1;
+	}
+	public int getSumatoriajug2() {
+		return sumatoriajug2;
+	}
+	public EstadoEnvido getEnvidoPreguntado() {
+		return envidoPreguntado;
+	}
 	public Envido() {
-		envidosCantados=new ArrayList<EstadoEnvido>();
-		
+		envidosQueridos=new ArrayList<EstadoEnvido>();
 	}
 	public Jugador getGanador(Jugador jugador1,Jugador jugador2) {
-		int sumatoriajug1=calcularTantos(jugador1);
-		int sumatoriajug2=calcularTantos(jugador2);
+		sumatoriajug1=calcularTantos(jugador1);
+		sumatoriajug2=calcularTantos(jugador2);
 		if (sumatoriajug1==sumatoriajug2){
 			return  jugador1.isMano()? jugador1:jugador2;//si los tantos son iguales, gana el mano
 		}else {
 			return (sumatoriajug1>sumatoriajug2)?jugador1:jugador2;
 		}
 	}
-	/**
-	 * @return Retorna la sumatoria de puntos que se le tienen que sumar a quien gana el envido, o a quien lo canto y no le dieron
-	 */
-	public int getPuntos() {
-		int sumatoria=0;
-		for(EstadoEnvido estado:envidosCantados) {
-			//si hay mas de 1 canto y el ultimo no se quiso, el puntaje es la sumatoria de sus anteriores queridos
-			sumatoria+= (estado.ordinal()>3&&envidosCantados.size()>1)?0:estado.getPuntaje();
-			if (estado==EstadoEnvido.FALTAENVIDOQ) {//si se quiere falta envido la calcula el juego
-				sumatoria=0;
-				}
-			}
-		return sumatoria;
-	}
+	
 	private int calcularTantos(Jugador jugador) {
 		ArrayList<Carta> cartas=jugador.getCartas();
+		Carta carta3=cartas.size()==3?cartas.get(2):jugador.getCartaTirada();
 		return Math.max(
 				Math.max(calcularEntreDos(cartas.get(0), cartas.get(1)),
-				 calcularEntreDos(cartas.get(0), cartas.get(2))),
-				 calcularEntreDos(cartas.get(1), cartas.get(2)));}
+				 calcularEntreDos(cartas.get(0), carta3)),
+				 calcularEntreDos(cartas.get(1), carta3));}
 	
 	public static int calcularTantos(Carta c1,Carta c2,Carta c3) {//solo para pruebas
 		return Math.max(
@@ -50,8 +53,40 @@ public class Envido {
         else
             return Math.max(c1.getPuntajeEnvido(),c2.getPuntajeEnvido());
     }
-	public void agregar(EstadoEnvido estado) {
-		envidosCantados.add(estado);
-		
+	/**
+	 * @return Retorna la sumatoria de puntos que se le tienen que sumar a quien gana el envido, o a quien lo canto y no le dieron
+	 */
+	public int getPuntos() {
+		int sumatoria=0;
+		for(EstadoEnvido estado:envidosQueridos) {
+			// el puntaje es la sumatoria de los queridos
+			sumatoria+= estado.getPuntaje();
+			if (estado==EstadoEnvido.FALTAENVIDO) {//si se quiere falta envido la calcula el juego
+				sumatoria=0;
+				}
+			}
+		return sumatoria;
+	}
+	public void addPreguntado(EstadoEnvido envido) {
+		envidoPreguntado=envido;
+	}
+	public ArrayList<EstadoEnvido> addQuerido(EstadoEnvido estado) {
+		queridoElPreguntado();
+		envidosQueridos.add(estado);
+		return envidosQueridos;
+	}
+	public ArrayList<EstadoEnvido> queridoElPreguntado() {
+		if (envidoPreguntado!=null) {
+			envidosQueridos.add(envidoPreguntado);
+			envidoPreguntado=null;
+		}
+		return envidosQueridos;
+	}
+	public ArrayList<EstadoEnvido> getEnvidosQueridos() {
+		return envidosQueridos;
+	}
+	@Override
+	public boolean hayQueridos() {
+		return this.envidosQueridos.size()!=0;
 	}
 }
