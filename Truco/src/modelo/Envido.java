@@ -62,16 +62,19 @@ public class Envido implements IEnvido {
 			// el puntaje es la sumatoria de los queridos
 			sumatoria+= estado.getPuntaje();
 			if (estado==EstadoEnvido.FALTAENVIDO) {//si se quiere falta envido la calcula el juego
-				sumatoria=0;
+				sumatoria=-1;
 				}
 			}
+		sumatoria+= sumatoria==0?1:0;//cuando cantaron uno y no se quiso
 		return sumatoria;
 	}
 	public void addPreguntado(EstadoEnvido envido) {
+		if (envidoPreguntado!=null) {
+			queridoElPreguntado();
+		}
 		envidoPreguntado=envido;
 	}
 	public ArrayList<EstadoEnvido> addQuerido(EstadoEnvido estado) {
-		queridoElPreguntado();
 		envidosQueridos.add(estado);
 		return envidosQueridos;
 	}

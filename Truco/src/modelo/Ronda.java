@@ -19,13 +19,14 @@ public class Ronda{
 		/**no devuelve el puntaje porque se pueden seguir agregando.
 		 * @param envido querido
 		 */
-		public IEnvido addEnvido(EstadoEnvido estado) {
+		public IEnvido addQuerido(EstadoEnvido estado) {
+			envido.addQuerido(estado);
+			return envido;
+		}
+		public IEnvido addPreguntado(EstadoEnvido estado) {
 			if (envido==null) {
-				envido=new Envido();
-				envido.addPreguntado(estado);
-			}else {
-				envido.addQuerido(estado);
-			}
+				envido=new Envido();}
+			envido.addPreguntado(estado);
 			return envido;
 		}
 	    public void jugar(Jugador j, Carta c){
@@ -39,12 +40,12 @@ public class Ronda{
 	     * @return jugador ganador de la ronda, en caso de parda retorna nulo
 	     */
 	    public Jugador getGanador() {
-	    	Carta cartaMasAlta=new Carta(4,Palo.COPA);
+	    	Carta cartaMasAlta=cartas.get(0);
 	        int index=0;
-	        for (int i=0;i< cartas.size();i++) {
+	        for (int i=1;i< cartas.size();i++) {
 	        	Carta carta=cartas.get(i);
 	        	cartaMasAlta = carta.mayor(cartaMasAlta);
-	        	index=cartaMasAlta==carta?i:index;
+	        	index=(cartaMasAlta==carta)?i:index;
 	        }
 	        return (cartaMasAlta!=null)?jugadores.get(index):null;
 	    }
@@ -57,6 +58,9 @@ public class Ronda{
 	    		jugador=jugadores.get(0);
 	    		}
 	    	return jugador;
+	    	}
+	    public boolean unJugadorYaTiro(){
+	    	return jugadores.size()==1;
 	    	}
 }
 

@@ -34,8 +34,11 @@ import vista.VistaConsola;
 				case JUEGO_COMENZADO:
 					vista.menuRondas();
 					break;
+				case PARDA:
+					vista.avisarParda();
+					vista.menuRondas();
+					break;
 				case JUEGO_TERMINADO:
-					vista.mostrarPuntajes();
 					vista.juegoTerminado();
 					break;
 				case ESPERANDO_JUGADORES:
@@ -63,7 +66,7 @@ import vista.VistaConsola;
 		}
 		}
 	public IJugador obtenerGanadorEnvido() {
-		return modelo.ganadorEnvido();
+		return modelo.getGanadorEnvido();
 	}
 	public String nombreTurno() {
 		return modelo.getITurno().getNombre();

@@ -42,10 +42,10 @@ public class VistaConsola implements IVista {
 		}
 		}
 	public void menuRondas() {
-		limpiarPantalla();
+		separacionJug();
 		mostrarPuntajes();
 		this.mostrarCartaTirada();
-		mostrarCartas();
+		mostrarCartasEnMano();
 		System.out.println("Opciones");
 		System.out.println("1-Tirar carta \n2-Irme al mazo");
 		EstadoTruco jugando=controlador.queSeEstaJugando();
@@ -86,22 +86,16 @@ public class VistaConsola implements IVista {
 		}}
 	
 	public void quererNoQuererEnvido(String jugador,IEnvido envido) {
-		limpiarPantalla();
-		EstadoEnvido ultCantado=null;
-		if (envido.hayQueridos()) {
-			ArrayList<EstadoEnvido> queridos = envido.getEnvidosQueridos();
-			ultCantado=queridos.get(queridos.size()-1);
-		}else {
-			ultCantado=envido.getEnvidoPreguntado();
-		}
-		mostrarCartas();
+		separacionJug();
+		 EstadoEnvido ultCantado=envido.getEnvidoPreguntado();
+		 mostrar3Cartas();
 		System.out.println(jugador+": el contrario canto " +ultCantado.toString());
 		System.out.println("Opciones");
 		System.out.println("1-Quiero");
 		System.out.println("2-No quiero");
 		switch (ultCantado) {
 		case ENVIDO:
-			if (envido.getEnvidosQueridos().size()<=1) {
+			if (envido.getEnvidosQueridos().size()<=0) {
 			System.out.println("3-Cantar envido");}
 			System.out.println("4-Cantar real envido");
 		case REALENVIDO:
@@ -128,8 +122,8 @@ public class VistaConsola implements IVista {
 			}
 	}
 	public void quererNoQuererTruco(String jugador,EstadoTruco truco) {
-		limpiarPantalla();
-		this.mostrarCartas();
+		separacionJug();
+		mostrar3Cartas();
 		System.out.println(jugador+": el contrario canto " +truco.toString());
 		System.out.println("Opciones");
 		System.out.println("1-Quiero");
@@ -143,13 +137,12 @@ public class VistaConsola implements IVista {
 			System.out.println("Opcion invalida \nIngrese su opcion");
 			opcion = Integer.valueOf(this.entrada.nextLine());
 		}
-		 opcion = Integer.valueOf(this.entrada.nextLine());
 		switch(Integer.valueOf(opcion)) {
 		case 1:
 			controlador.quiero(truco);
 			break;
 		case 2:
-			controlador.alMazo();
+			controlador.alMazo();//da 2 puntos MAL
 			break;
 		case 3:
 		case 4:
@@ -157,10 +150,11 @@ public class VistaConsola implements IVista {
 			menuEnvido(opcion);
 		}
 	}
-	public void limpiarPantalla() {
+	public void separacionJug() {
+		insertLineas(30);
 		System.out.println("("+controlador.nombreTurno()+") presiona enter");
 		this.entrada.nextLine();
-		insertLineas(30);
+		
 	}
 	public void menuEnvido(int opcion) {
 		switch(opcion) {
@@ -191,12 +185,26 @@ public class VistaConsola implements IVista {
 	/**
 	 * muestra las cartas del jugador que le toca jugar
 	 */
-	public void mostrarCartas() {
-		String ss="Cartas: ";
+	public void mostrarCartasEnMano() {
+		String ss="Cartas en mano: ";
 		int cont=1;
 		System.out.println("TURNO DE "+ controlador.nombreTurno().toUpperCase());
 		for (String sCarta : controlador.listarCartas()) {
 			ss+="["+(cont++)+"] "+sCarta+", ";
+		}
+		System.out.println(ss);
+	}
+	public void mostrar3Cartas() {
+		String ss="Todas tus cartas: ";
+		int cont=1;
+		System.out.println("TURNO DE "+ controlador.nombreTurno().toUpperCase());
+		int i;
+		for ( i=0;i<controlador.listarCartas().size(); i++) {
+			String sCarta=controlador.listarCartas().get(i);
+			ss+="["+(cont++)+"] "+sCarta+", ";
+		}
+		if (i==2) {
+			ss+="["+(cont++)+"] "+controlador.turnoActual().getCartaTirada().toString();
 		}
 		System.out.println(ss);
 	}
@@ -210,17 +218,35 @@ public class VistaConsola implements IVista {
 	public void mostrarEnvido(String nombre) {
 		Integer p1= controlador.obtenerTantosEnvido().get(0);
 		Integer p2=controlador.obtenerTantosEnvido().get(1);
+		this.insertLineas(20);
 		System.out.println("Los tantos fueron :"+p1+", "+p2);
 		System.out.println( "El ganador del tanto es:"+nombre);
+		System.out.println("Presione enter");
+		this.entrada.nextLine();
+		
 	}
 	public void rondaTerminada(String nombre) {
+		this.insertLineas(20);
 		System.out.println("\n\nLa ronda termino \nEl ganador de la ronda "+controlador.rondaAnterior()+" es "+ nombre);
+		System.out.println("Presione enter");
+		this.entrada.nextLine();
+	}
+	public void avisarParda() {
+		this.insertLineas(20);
+		System.out.println("La ronda fue parda, la segunda ronda define");
+		System.out.println("Presione enter");
+		this.entrada.nextLine();
 	}
 	public void manoTerminada() {
+		this.insertLineas(20);
 		System.out.println("La mano termino");
 		mostrarPuntajes();
+		System.out.println("Presione enter para repartir la siguiente mano");
+		this.entrada.nextLine();
 	}
 	public void juegoTerminado() {
+		this.insertLineas(20);
+		mostrarPuntajes();
 		System.out.println("El juego termino, el ganador es "+controlador.termino().getNombre());
 		System.out.println("Presione enter para salir");
 		this.entrada.nextLine();
@@ -239,4 +265,5 @@ public class VistaConsola implements IVista {
 		}
 		System.out.println(ss);
 	}
+	
 }

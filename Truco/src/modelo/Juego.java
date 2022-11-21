@@ -13,6 +13,13 @@ public class Juego implements Observable{
 		private ArrayList<Observador> observadores;
 		private EstadoTruco estadoTruco=EstadoTruco.NADA;
 		private Carta cartaTirada=null;
+		private Jugador ganadorEnvido;
+		public void setGanadorEnvido(Jugador ganadorEnvido) {
+			this.ganadorEnvido = ganadorEnvido;
+		}
+		public Jugador getGanadorEnvido() {
+			return ganadorEnvido;
+		}
 	public Carta getCartaTirada() {
 			return cartaTirada;
 		}
@@ -56,14 +63,22 @@ public class Juego implements Observable{
 	public void changeTurno() {
 		Ronda ronda=rondas.get(getNroRonda()-1);
 		if (ronda.isTerminada()) {
-			ronda.getGanador().setTurno(true);
-			contra(ronda.getGanador()).setTurno(false);
-			if (rondas.size()==3){
-				finManoYSumarPuntos();
+			Jugador jugGana=ronda.getGanador();
+			if (siFinManoYSumoPuntos()) {
 				this.nuevaMano();
 				notificar(Eventos.MANO_TERMINADA);
-			}else {newRonda();}
-		}else if (jugador1.isTurno()||jugador2.isTurno()) {//mientras transcurre la mano
+			}else if (jugGana!=null){
+				jugGana.setTurno(true);
+				contra(jugGana).setTurno(false);
+				newRonda();
+			}
+			else {
+				jugador2.changeTurno();
+				jugador1.changeTurno();
+				newRonda();
+				notificar(Eventos.PARDA);
+			}
+		}else if (jugador1.isTurno()||jugador2.isTurno()) {//mientras transcurre la ronda
 			jugador2.changeTurno();
 			jugador1.changeTurno();
 		}else if (jugador1.isMano()){
@@ -77,42 +92,37 @@ public class Juego implements Observable{
 	 */
 	public void calcularEnvidoNQ() {
 		Envido envido=rondas.get(0).envido;
+		int puntos=envido.getPuntos()==1?1:envido.getPuntos();
 		if (jugador1.isTurno()) {
-			int puntos=envido==null?1:envido.getPuntos();
 			jugador2.incPuntos(puntos);
+			setGanadorEnvido(jugador2);
 		}
 		else if (jugador2.isTurno()) {
-				int puntos=envido==null?1:envido.getPuntos();
 				jugador1.incPuntos(puntos);
+				setGanadorEnvido(jugador1);
 			}
-		changeTurno();
+		turnoLuegoEnvido();
+		if(this.preguntarGanador()!=null) {
+			notificar(Eventos.JUEGO_TERMINADO);
+			}
 		notificar(Eventos.SEGUIR_JUEGO);
 	}
 	/**le suma los puntos obtenidos al jugador que gana el envido
-	 * @return devuelve el ganador(si no hubo envido devuelve null)
-	 * 
+	 * @return devuelve el ganador
 	 */
 	public void calcularEnvidoQ() {
 		Envido envido=rondas.get(0).envido;
-		IJugador ret=null;
-		if (envido!=null) {
-			if (envido.envidoPreguntado!=null) {
-				envido.queridoElPreguntado();}
-			int puntos=envido.getPuntos()==0?puntosFinales-jugador2.getPuntos():envido.getPuntos();//si los puntos es 0 es porque fue falta envido
-			envido.getGanador(jugador1, jugador2).incPuntos(puntos);
-			ret=envido.getGanador(jugador1, jugador2);
-		}
+		if (envido.envidoPreguntado!=null) {
+			envido.queridoElPreguntado();}
+		int puntos=envido.getPuntos()==-1?puntosFinales-jugador2.getPuntos():envido.getPuntos();//si los puntos es -1 es porque fue falta envido
+		Jugador ganador=envido.getGanador(jugador1, jugador2);
+		ganador.incPuntos(puntos);
+		setGanadorEnvido(ganador);
 		turnoLuegoEnvido();
+		notificar(Eventos.ENVIDO_JUGADO);
 		if(this.preguntarGanador()!=null) {
 		notificar(Eventos.JUEGO_TERMINADO);
-		}else {
-			notificar(Eventos.ENVIDO_JUGADO);
-		}
-	}
-	public IJugador ganadorEnvido() {
-		Envido envido=rondas.get(0).envido;
-		return envido==null?null:envido.getGanador(jugador1, jugador2);
-	}
+		}}
 	public ArrayList<Observador> getObservadores() {
 		return observadores;
 	}
@@ -122,7 +132,7 @@ public class Juego implements Observable{
 			Ronda ronda1=rondas.get(getNroRonda()-2);
 			Ronda ronda2=rondas.get(getNroRonda()-1);
 			if (ronda1.getGanador()==ronda2.getGanador()) {
-				finManoYSumarPuntos();
+				siFinManoYSumoPuntos();
 				this.nuevaMano();
 				notificar(Eventos.MANO_TERMINADA);
 			}
@@ -132,15 +142,12 @@ public class Juego implements Observable{
 	}
 	public void cantado(EstadoEnvido estado) {
 		changeTurno();
-		IEnvido envid=rondas.get(0).addEnvido(estado);//lo agrega 
+		IEnvido envid=rondas.get(0).addPreguntado(estado);//lo agrega 
 		notificar(envid);
 	}
 	public void cantado(EstadoTruco estado) {
 		changeTurno();
 		notificar(estado);
-	}
-	public void quiero(EstadoEnvido estado) {
-			rondas.get(0).addEnvido(estado);
 	}
 	public void quiero(EstadoTruco estado) {
 		estadoTruco=estado;
@@ -150,7 +157,14 @@ public class Juego implements Observable{
 		notificar(Eventos.SEGUIR_JUEGO);
 }
 	public void nuevaMano() {
+		if(this.preguntarGanador()!=null) {
+			notificar(Eventos.JUEGO_TERMINADO);
+			}
 		rondas=new ArrayList<Ronda>();
+		ganadorEnvido=null;
+		estadoTruco=EstadoTruco.NADA;
+		jugador1.setCantoUltimo(false);
+		jugador2.setCantoUltimo(false);
 		repartir();
 		if (!jugador1.isMano()&&!jugador2.isMano()) {
 			jugador2.invertirMano();//la primer mano del juego es MANO el jugador2
@@ -162,7 +176,6 @@ public class Juego implements Observable{
 		changeTurno();
 		}
 	public void repartir() {
-		estadoTruco=EstadoTruco.NADA;
 		mazo=new Mazo();
 		vaciarCartas();
 		for(int i = 0;i < 3;i++) {
@@ -192,7 +205,6 @@ public class Juego implements Observable{
 		}
 		return ganador;
 	}
-	
 	private Jugador getJugador1() {
 		return jugador1;
 	}
@@ -208,39 +220,45 @@ public class Juego implements Observable{
 	public EstadoTruco getEstadoTruco() {
 		return estadoTruco;
 	}
-	public boolean finManoYSumarPuntos() {
+	/**
+	 * @return si termina la mano le suma los puntos al ganador 
+	 */
+	public boolean siFinManoYSumoPuntos() {
 		boolean retorno=false;
 		int cont1=0;
+		int parda=0;
 		int cont2=0;
 		ArrayList<Jugador> ganadores=new ArrayList<Jugador>();
 		for (int i=0;i<rondas.size();i++) {//sumo los ganadores de las rondas
 			ganadores.add(rondas.get(i).getGanador());}
 		for (Jugador jug:ganadores) {
-			cont1+=jug==jugador1?1:0;
-			cont2+=jug==jugador2?1:0;
+			cont1+=(jug==jugador1)?1:0;
+			cont2+=(jug==jugador2)?1:0;
+			parda+=(jug==null)?1:0;
 		}
 		int puntos=getEstadoTruco().getPuntaje();
-		if (cont1>cont2&&cont1==2) {
+		if (cont1>cont2&&(cont1==2||parda==1)) {
 			jugador1.incPuntos(puntos);
 			retorno=true;
-		}else if (cont2>cont1&&cont2==2) {
+		}else if (cont2>cont1&&(cont2==2||parda==1)) {
 			jugador2.incPuntos(puntos);
 			retorno=true;
-		}else {
+		}else if (parda==3){
 			if (jugador1.isMano()) {
 				jugador1.incPuntos(puntos);
 			} else {
 				jugador2.incPuntos(puntos);
 			}
 		}
-		return false;
+		return retorno;
 	}
 	public void sumarPuntosAlMazo() {
 		Envido envido=rondas.get(0).envido;
 		EstadoTruco truco=getEstadoTruco();
-		int puntos=(rondas.size()==1&&envido==null)?2:truco.getPuntaje();//si es la ronda 1 y el envido no se canto son dos puntos al contra
+		int puntos=(rondas.size()==1&&envido==null&&!rondas.get(0).unJugadorYaTiro())?2:truco.getPuntaje();//si es la ronda 1 y el envido no se canto son dos puntos al contra
 		contra(getTurno()).incPuntos(puntos);
 		changeTurno();
+		nuevaMano();
 		notificar(Eventos.MANO_TERMINADA);
 	}
 	public void turnoLuegoEnvido() {
@@ -250,7 +268,7 @@ public class Juego implements Observable{
 			contra(yaTiro).setTurno(true);//si un jugador ya tiro es turno del otro jugador	
 		}else{
 			jugador1.setTurno(false);jugador2.setTurno(false);
-			changeTurno();//si uno tiro nadie es turno del mano
+			changeTurno();//si no tiro nadie es turno del mano
 		}
 	}
 	/**
