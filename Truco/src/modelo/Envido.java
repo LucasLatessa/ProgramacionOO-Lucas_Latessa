@@ -11,6 +11,13 @@ public class Envido implements IEnvido {
 	protected EstadoEnvido envidoPreguntado;
 	private int sumatoriajug1;
 	private int sumatoriajug2;
+	private Jugador ganadorEnvido;
+	public void setGanadorEnvido(Jugador ganadorEnvido) {
+		this.ganadorEnvido = ganadorEnvido;
+	}
+	public Jugador getGanadorEnvido() {
+		return ganadorEnvido;
+	}
 	public int getSumatoriajug1() {
 		return sumatoriajug1;
 	}
@@ -23,7 +30,7 @@ public class Envido implements IEnvido {
 	public Envido() {
 		envidosQueridos=new ArrayList<EstadoEnvido>();
 	}
-	public Jugador getGanador(Jugador jugador1,Jugador jugador2) {
+	public Jugador calcularGanador(Jugador jugador1,Jugador jugador2) {
 		sumatoriajug1=calcularTantos(jugador1);
 		sumatoriajug2=calcularTantos(jugador2);
 		if (sumatoriajug1==sumatoriajug2){
@@ -91,5 +98,17 @@ public class Envido implements IEnvido {
 	@Override
 	public boolean hayQueridos() {
 		return this.envidosQueridos.size()!=0;
+	}
+	public ArrayList<String> puedeCantar() {
+		ArrayList<String> puedeCantar=new ArrayList<String>();
+		switch (envidoPreguntado) {
+		case ENVIDO:
+			if (envidosQueridos.size()==0) {
+			puedeCantar.add("envido");}
+			puedeCantar.add("real envido");
+		case REALENVIDO:
+			puedeCantar.add("falta envido");
+		}
+		return puedeCantar;
 	}
 }

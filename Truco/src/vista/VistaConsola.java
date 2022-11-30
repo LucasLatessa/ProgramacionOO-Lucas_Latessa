@@ -41,84 +41,97 @@ public class VistaConsola implements IVista {
 			break;
 		}
 		}
+	public void menuCantos(String opcion) {
+		EstadoTruco jugando=controlador.queSeEstaJugando();
+		boolean valido=false;
+		while(!valido) {
+			valido=true;
+			switch(opcion) {
+			case "C":
+				pedirCarta();
+				break;
+			case "M":
+				controlador.alMazo();
+				break;
+			case "E":
+				controlador.cantar(EstadoEnvido.ENVIDO);
+				break;
+			case "RE":
+				controlador.cantar(EstadoEnvido.REALENVIDO);
+				break;
+			case "FE":
+				controlador.cantar(EstadoEnvido.FALTAENVIDO);
+				break;
+			case "T":
+			case "RT":
+			case "VC":
+				controlador.cantar(jugando.aumentar());
+				break;
+			default:
+				System.out.println("Opcion invalida \nIngrese su opcion");
+				opcion =(this.entrada.nextLine());
+				valido=false;}
+			}}
+
 	public void menuRondas() {
 		separacionJug();
 		mostrarPuntajes();
 		this.mostrarCartaTirada();
 		mostrarCartasEnMano();
 		System.out.println("Opciones");
-		System.out.println("1-Tirar carta \n2-Irme al mazo");
+		System.out.println("C-Tirar carta \nM-Irme al mazo");
 		EstadoTruco jugando=controlador.queSeEstaJugando();
 		if (controlador.obtenerGanadorEnvido()==null&&controlador.rondaAcutual()==1&&jugando==EstadoTruco.NADA) {
-			System.out.println("3-Cantar envido \n4-Cantar real envido \n5-Cantar falta envido");
+			System.out.println("E-Cantar envido \nRE-Cantar real envido \nFE-Cantar falta envido");
 		}
 		if (controlador.quienCantoUltimo()!= controlador.turnoActual()) {
 			switch(jugando) {
 			case NADA:
-				System.out.println("6-Cantar truco");
+				System.out.println("T-Cantar truco");
 				break;
 			case TRUCO:
-				System.out.println("6-Cantar retruco");
+				System.out.println("RT-Cantar retruco");
 				break;
 			case RETRUCO:
-				System.out.println("6-Cantar vale cuatro");
+				System.out.println("VC-Cantar vale cuatro");
 			}}
 		System.out.println("Ingrese opcion");
-		int opcion = Integer.valueOf(entrada.nextLine());
-		while(!valido(1,opcion,6)) {
-			System.out.println("Opcion invalida \nIngrese su opcion");
-			opcion = Integer.valueOf(this.entrada.nextLine());
-		}
-		switch(Integer.valueOf(opcion)) {
-		case 1:
-			pedirCarta();
-			break;
-		case 2:
-			controlador.alMazo();
-			break;
-		case 3:
-		case 4:
-		case 5:
-			this.menuEnvido(opcion);
-			break;
-		case 6:
-			controlador.cantar(jugando.aumentar());
-		}}
+		String opcion = entrada.nextLine();
+		menuCantos(opcion);}
 	
 	public void quererNoQuererEnvido(String jugador,IEnvido envido) {
 		separacionJug();
-		 EstadoEnvido ultCantado=envido.getEnvidoPreguntado();
-		 mostrar3Cartas();
+		mostrar3Cartas();
+		EstadoEnvido ultCantado=envido.getEnvidoPreguntado();
 		System.out.println(jugador+": el contrario canto " +ultCantado.toString());
 		System.out.println("Opciones");
-		System.out.println("1-Quiero");
-		System.out.println("2-No quiero");
-		switch (ultCantado) {
-		case ENVIDO:
-			if (envido.getEnvidosQueridos().size()<=0) {
-			System.out.println("3-Cantar envido");}
-			System.out.println("4-Cantar real envido");
-		case REALENVIDO:
-			System.out.println("5-Cantar falta envido");
+		System.out.println("S-Quiero");
+		System.out.println("N-No quiero");
+		for(String canto :envido.puedeCantar()) {
+			System.out.println(canto.substring(0,1).toUpperCase()+"-Cantar "+canto);
 		}
 		System.out.println("Ingrese opcion");
-		int opcion = Integer.valueOf(entrada.nextLine());
-		while(!valido(1,opcion,5)) {
-			System.out.println("Opcion invalida \nIngrese su opcion");
-			opcion = Integer.valueOf(this.entrada.nextLine());
-		}
+		String opcion = entrada.nextLine();
+//		while(!valido(1,opcion,5)) {
+//			System.out.println("Opcion invalida \nIngrese su opcion");
+//			opcion = Integer.valueOf(this.entrada.nextLine());
+//		}
 		switch(opcion) {
-		case 1:
+		case "S":
 			controlador.quiero();
 			mostrarPuntajes();
 			break;
-		case 2:
+		case "N":
 			controlador.noQuiero();
 			break;
-		case 3:
-		case 4:
-		case 5:
-			menuEnvido(opcion);
+		case "E":
+			controlador.cantar(EstadoEnvido.ENVIDO);
+			break;
+		case "R":
+			controlador.cantar(EstadoEnvido.REALENVIDO);
+			break;
+		case "F":
+			controlador.cantar(EstadoEnvido.FALTAENVIDO);
 			}
 	}
 	public void quererNoQuererTruco(String jugador,EstadoTruco truco) {
@@ -145,9 +158,13 @@ public class VistaConsola implements IVista {
 			controlador.alMazo();
 			break;
 		case 3:
+			controlador.cantar(EstadoEnvido.ENVIDO);
+			break;
 		case 4:
+			controlador.cantar(EstadoEnvido.REALENVIDO);
+			break;
 		case 5:
-			menuEnvido(opcion);
+			controlador.cantar(EstadoEnvido.FALTAENVIDO);
 		}
 	}
 	public void separacionJug() {
@@ -156,17 +173,7 @@ public class VistaConsola implements IVista {
 		this.entrada.nextLine();
 		
 	}
-	public void menuEnvido(int opcion) {
-		switch(opcion) {
-		case 3:
-			controlador.cantar(EstadoEnvido.ENVIDO);
-			break;
-		case 4:
-			controlador.cantar(EstadoEnvido.REALENVIDO);
-			break;
-		case 5:
-			controlador.cantar(EstadoEnvido.FALTAENVIDO);}
-	}
+	
 	public void pedirCarta() {
 		Carta cartaTirada=null;
 		int carta=4;

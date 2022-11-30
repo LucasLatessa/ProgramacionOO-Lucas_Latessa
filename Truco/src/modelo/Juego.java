@@ -13,13 +13,8 @@ public class Juego implements Observable{
 		private ArrayList<Observador> observadores;
 		private EstadoTruco estadoTruco=EstadoTruco.NADA;
 		private Carta cartaTirada=null;
-		private Jugador ganadorEnvido;
-		public void setGanadorEnvido(Jugador ganadorEnvido) {
-			this.ganadorEnvido = ganadorEnvido;
-		}
-		public Jugador getGanadorEnvido() {
-			return ganadorEnvido;
-		}
+		protected Envido envido;
+		
 	public Carta getCartaTirada() {
 			return cartaTirada;
 		}
@@ -54,7 +49,6 @@ public class Juego implements Observable{
 		if (ronda.isTerminada()){
 			notificar(Eventos.RONDA_TERMINADA);
 		}
-		notificar(Eventos.SEGUIR_JUEGO);
 	}
 	/**
 	 * Cambia el turno del juego, en caso de que ninguno de los dos haya sido el turno anterior
@@ -91,33 +85,32 @@ public class Juego implements Observable{
 	 * Le suma el/los punto/s obtenidos al jugador que no es el turno(ya que en el turno el jugador dijo no quiero)
 	 */
 	public void calcularEnvidoNQ() {
-		Envido envido=rondas.get(0).envido;
 		int puntos=envido.getPuntos()==1?1:envido.getPuntos();
 		if (jugador1.isTurno()) {
 			jugador2.incPuntos(puntos);
-			setGanadorEnvido(jugador2);
+			envido.setGanadorEnvido(jugador2);
 		}
 		else if (jugador2.isTurno()) {
 				jugador1.incPuntos(puntos);
-				setGanadorEnvido(jugador1);
+				envido.setGanadorEnvido(jugador1);
 			}
 		turnoLuegoEnvido();
 		if(this.preguntarGanador()!=null) {
 			notificar(Eventos.JUEGO_TERMINADO);
-			}
-		notificar(Eventos.SEGUIR_JUEGO);
+		}else {
+			notificar(Eventos.SEGUIR_JUEGO);
+		}
 	}
 	/**le suma los puntos obtenidos al jugador que gana el envido
 	 * @return devuelve el ganador
 	 */
 	public void calcularEnvidoQ() {
-		Envido envido=rondas.get(0).envido;
 		if (envido.envidoPreguntado!=null) {
 			envido.queridoElPreguntado();}
 		int puntos=envido.getPuntos()==-1?puntosFinales-jugador2.getPuntos():envido.getPuntos();//si los puntos es -1 es porque fue falta envido
-		Jugador ganador=envido.getGanador(jugador1, jugador2);
+		Jugador ganador=envido.calcularGanador(jugador1, jugador2);
 		ganador.incPuntos(puntos);
-		setGanadorEnvido(ganador);
+		envido.setGanadorEnvido(ganador);
 		turnoLuegoEnvido();
 		notificar(Eventos.ENVIDO_JUGADO);
 		if(this.preguntarGanador()!=null) {
@@ -142,7 +135,7 @@ public class Juego implements Observable{
 	}
 	public void cantado(EstadoEnvido estado) {
 		changeTurno();
-		IEnvido envid=rondas.get(0).addPreguntado(estado);//lo agrega 
+		IEnvido envid=addPreguntado(estado);//lo agrega 
 		notificar(envid);
 	}
 	public void cantado(EstadoTruco estado) {
@@ -161,7 +154,6 @@ public class Juego implements Observable{
 			notificar(Eventos.JUEGO_TERMINADO);
 			}
 		rondas=new ArrayList<Ronda>();
-		ganadorEnvido=null;
 		estadoTruco=EstadoTruco.NADA;
 		jugador1.setCantoUltimo(false);
 		jugador2.setCantoUltimo(false);
@@ -253,7 +245,6 @@ public class Juego implements Observable{
 		return retorno;
 	}
 	public void sumarPuntosAlMazo() {
-		Envido envido=rondas.get(0).envido;
 		EstadoTruco truco=getEstadoTruco();
 		int puntos=(rondas.size()==1&&envido==null&&!rondas.get(0).unJugadorYaTiro())?2:truco.getPuntaje();//si es la ronda 1 y el envido no se canto son dos puntos al contra
 		contra(getTurno()).incPuntos(puntos);
@@ -302,8 +293,8 @@ public class Juego implements Observable{
 	}
 	public ArrayList<Integer> obtenerTantosEnvido(){
 		ArrayList<Integer> tantos=new ArrayList();
-		tantos.add( rondas.get(0).envido.getSumatoriajug1());
-		tantos.add( rondas.get(0).envido.getSumatoriajug2());
+		tantos.add(envido.getSumatoriajug1());
+		tantos.add(envido.getSumatoriajug2());
 		return	tantos;
 	}
 	public IJugador quienCantoUltimo(){
@@ -314,6 +305,31 @@ public class Juego implements Observable{
 			ret=jugador2;
 		}
 		return ret;
+	}
+	//PASO EL ENVIDO DE RONDA AL JUEGO
+	//
+	/**no devuelve el puntaje porque se pueden seguir agregando.
+	 * @param envido querido
+	 */
+	public IEnvido addQuerido(EstadoEnvido estado) {
+		envido.addQuerido(estado);
+		return envido;
+	}
+	public IEnvido addPreguntado(EstadoEnvido estado) {
+		if (envido==null) {
+			envido=new Envido();}
+		envido.addPreguntado(estado);
+		return envido;
+	}
+	/**
+	 * @return devuelve el ganador del envido en esta mano, devuelve nulo si no hubo
+	 */
+	public IJugador getGanadorEnvido() {
+		IJugador retorno=null;
+		if (envido!=null){
+			retorno= envido.getGanadorEnvido();
+		}
+		return retorno;
 	}
 }
 	

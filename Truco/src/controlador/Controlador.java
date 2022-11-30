@@ -45,18 +45,19 @@ import vista.VistaConsola;
 					vista.iniciar();
 					break;
 				case RONDA_TERMINADA:
-						vista.rondaTerminada(modelo.obtenerGanadorDeRonda().getNombre());
-						break;
-						
-						
+					vista.rondaTerminada(modelo.obtenerGanadorDeRonda().getNombre());
+					vista.menuRondas();
+					break;
 				case MANO_TERMINADA:
 					vista.manoTerminada();
 					vista.menuRondas();
 					break;
 				case ENVIDO_JUGADO:
 					vista.mostrarEnvido(this.obtenerGanadorEnvido().getNombre());
+					vista.menuRondas();
+					break;
 				case SEGUIR_JUEGO:
-						vista.menuRondas();
+					vista.menuRondas();
 					break;
 			}
 		}

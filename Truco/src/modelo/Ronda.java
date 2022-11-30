@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 public class Ronda{
 		    private Jugador ganador;
-			protected Envido envido;
 			private ArrayList<Jugador> jugadores;
 			private ArrayList<Carta> cartas;
 			private boolean terminada=false;
@@ -15,19 +14,6 @@ public class Ronda{
 		public Ronda(){
 			jugadores= new ArrayList<Jugador>();
 			cartas= new ArrayList<Carta>();
-		}
-		/**no devuelve el puntaje porque se pueden seguir agregando.
-		 * @param envido querido
-		 */
-		public IEnvido addQuerido(EstadoEnvido estado) {
-			envido.addQuerido(estado);
-			return envido;
-		}
-		public IEnvido addPreguntado(EstadoEnvido estado) {
-			if (envido==null) {
-				envido=new Envido();}
-			envido.addPreguntado(estado);
-			return envido;
 		}
 	    public void jugar(Jugador j, Carta c){
 	        cartas.add(c);
