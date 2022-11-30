@@ -142,7 +142,7 @@ public class VistaConsola implements IVista {
 			controlador.quiero(truco);
 			break;
 		case 2:
-			controlador.alMazo();//da 2 puntos MAL
+			controlador.alMazo();
 			break;
 		case 3:
 		case 4:
@@ -201,7 +201,9 @@ public class VistaConsola implements IVista {
 		int i;
 		for ( i=0;i<controlador.listarCartas().size(); i++) {
 			String sCarta=controlador.listarCartas().get(i);
-			ss+="["+(cont++)+"] "+sCarta+", ";
+			ss+="["+(cont++)+"] "+sCarta;
+			if (cont !=4) {
+				ss+=", ";}
 		}
 		if (i==2) {
 			ss+="["+(cont++)+"] "+controlador.turnoActual().getCartaTirada().toString();

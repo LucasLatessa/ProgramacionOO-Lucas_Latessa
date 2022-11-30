@@ -47,6 +47,8 @@ import vista.VistaConsola;
 				case RONDA_TERMINADA:
 						vista.rondaTerminada(modelo.obtenerGanadorDeRonda().getNombre());
 						break;
+						
+						
 				case MANO_TERMINADA:
 					vista.manoTerminada();
 					vista.menuRondas();

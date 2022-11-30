@@ -32,7 +32,6 @@ public class Jugador implements IJugador{
 	 */
 	protected Carta tirarCarta(int carta) {
 		Carta retorno=null;
-		cartaTirada=retorno;
 		if (carta<= cartas.size()) {
 			retorno=cartas.get(carta-1);
 			cartas.remove(carta-1);}

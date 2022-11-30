@@ -1,5 +1,6 @@
 package modelo;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Mazo {
 	ArrayList<Carta> cartas = new ArrayList<Carta>();
@@ -16,11 +17,11 @@ public class Mazo {
 			}
 		}
 		int i=0;
+		Collections.shuffle(cartas);
 	}
 	public Carta dar() {
-		int index = (int)(Math.random() * cartas.size());
-		Carta devolver=cartas.get(index);
-		cartas.remove(index);
+		Carta devolver=cartas.get(0);
+		cartas.remove(0);
 		return devolver;
 	}
 	
