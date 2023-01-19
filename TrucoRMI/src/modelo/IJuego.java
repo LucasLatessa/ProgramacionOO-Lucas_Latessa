@@ -94,6 +94,6 @@ public interface IJuego extends IObservableRemoto {
 	 */
 	IJugador getGanadorEnvido() throws RemoteException;
 
-	void agregarJugador(String jugador, int puerto) throws RemoteException;
+	void agregarJugador(String jugador) throws RemoteException;
 
 }

@@ -7,5 +7,4 @@ public interface IJugador {
 	public String getNombre();
 	public  ArrayList<Carta>  getCartas();
 	public Carta getCartaTirada() ;
-	public int getPuerto();
 }

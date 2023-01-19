@@ -11,8 +11,7 @@ public interface IVista {
 	
 	public void setControlador(Controlador controlador);
 	
-	public void iniciar(int puerto);
-
+	public void iniciar();
 	public void jugar();
 	public void mostrarPuntajes();
 
@@ -32,5 +31,5 @@ public interface IVista {
 
 	public void esperandoJugadores();
 
-	public int getPuerto();
+	//public int getPuerto();
 }

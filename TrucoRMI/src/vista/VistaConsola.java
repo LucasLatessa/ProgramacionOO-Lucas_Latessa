@@ -13,15 +13,13 @@ import modelo.IJugador;
 public class VistaConsola implements IVista {
 	private Controlador controlador;
 	private Scanner entrada;
-	private int puerto;
-	public VistaConsola(int puerto) {
-		this.puerto=puerto;
+	public VistaConsola() {
 		this.entrada = new Scanner(System.in);
 	}
 	private boolean valido(int min ,int op,int max) {
 		return op>=min&&op<=max;
 	}
-	public void iniciar(int puerto) {
+	public void iniciar() {
 		System.out.println("########################");
 		System.out.println("######### TRUCO ########");
 		System.out.println("########################");
@@ -37,7 +35,7 @@ public class VistaConsola implements IVista {
 		case 1:
 			System.out.println("Ingrese nombre de jugador:");
 			String nameJ1 = this.entrada.nextLine();
-			controlador.agregarJugador(nameJ1,puerto);
+			controlador.agregarJugador(nameJ1);
 			break;
 		case 2:
 			System.exit(0);
@@ -272,8 +270,7 @@ public class VistaConsola implements IVista {
 	public void esperandoJugadores() {
 		System.out.println("Esperando otros jugadores...");
 	}
-	public int getPuerto() {
-		return puerto;
-	}
-	
+//	public int getPuerto() {
+//		return puerto;
+//	}
 }

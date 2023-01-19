@@ -28,9 +28,9 @@ import vista.IVista;
 		public void setVista(IVista vista) {
 			this.vista = vista;
 		}
-	public void agregarJugador(String jugador,int puerto) {
+	public void agregarJugador(String jugador) {
 		try {
-			modelo.agregarJugador(jugador,puerto);
+			modelo.agregarJugador(jugador);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,16 +52,6 @@ import vista.IVista;
 			e.printStackTrace();
 			return null;
 		}
-	}
-	public int puertoTurno() {
-		try {
-			return modelo.getITurno().getPuerto();
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return 0;
-		}
-		
 	}
 	/**
 	 * @return devuelve false si el ganador es nulo, de haber un ganador devuelve el jugador.
@@ -256,6 +246,7 @@ import vista.IVista;
 					break;
 				case ESPERANDO_JUGADORES:
 					vista.esperandoJugadores();
+					vista.iniciar();
 					break;
 				case PARDA:
 					

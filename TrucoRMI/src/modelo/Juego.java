@@ -37,12 +37,12 @@ public class Juego extends ObservableRemoto implements IJuego, Serializable{
 		rondas=new ArrayList<Ronda>();
 	}
 	@Override
-	public void agregarJugador(String jugador,int puerto) throws RemoteException{
+	public void agregarJugador(String jugador) throws RemoteException{
 		if (this.jugador1==null) {
-			this.jugador1=new Jugador(jugador,puerto);
+			this.jugador1=new Jugador(jugador);
 			notificarObservadores(Eventos.ESPERANDO_JUGADORES);
 		}else if (this.jugador2==null){
-			this.jugador2=new Jugador(jugador,puerto);
+			this.jugador2=new Jugador(jugador);
 			this.nuevaMano();
 			notificarObservadores(Eventos.JUEGO_COMENZADO);
 		}
@@ -62,6 +62,8 @@ public class Juego extends ObservableRemoto implements IJuego, Serializable{
 		
 		if (ronda.isTerminada()){
 			notificarObservadores(Eventos.RONDA_TERMINADA);
+		}else {
+			notificarObservadores(Eventos.SEGUIR_JUEGO);
 		}
 	}
 	/**

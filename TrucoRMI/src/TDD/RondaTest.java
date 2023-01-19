@@ -10,8 +10,8 @@ import modelo.Palo;
 import modelo.Ronda;
 
 public class RondaTest {
-	Jugador j1=new Jugador("lucas1",12001);
-	Jugador j2=new Jugador("lucas2",12000);
+	Jugador j1=new Jugador("lucas1");
+	Jugador j2=new Jugador("lucas2");
 	Ronda ronda=new Ronda();
 	@Test
     public void testUnoEspadaYUnoCopaCualEsMayorEsJugador1()

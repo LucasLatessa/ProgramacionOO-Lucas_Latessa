@@ -45,9 +45,10 @@ public class Juego implements Observable{
 		Ronda ronda=rondas.get(rondas.size()-1);
 		ronda.jugar(getTurno(), cartatirada); //juego en la ronda la carta con respectivo jugador
 		changeTurno();
-		
 		if (ronda.isTerminada()){
 			notificar(Eventos.RONDA_TERMINADA);
+		}else {
+			notificar(Eventos.SEGUIR_JUEGO);
 		}
 	}
 	/**

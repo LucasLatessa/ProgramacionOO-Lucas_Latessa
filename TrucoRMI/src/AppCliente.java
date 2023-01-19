@@ -13,13 +13,13 @@ public class AppCliente {
 		Integer puerto = Integer.valueOf(args[0]);
 		System.out.println(puerto);
 		//IVista vista = new VistaGrafica();
-		IVista vista = new VistaConsola(puerto);
+		IVista vista = new VistaConsola();
 		Controlador controlador = new Controlador(vista);
 		vista.setControlador(controlador);
 		Cliente cliente = new Cliente("127.0.0.1", puerto, "127.0.0.1", 64000);
 		try {
 			cliente.iniciar(controlador);
-			vista.iniciar(puerto);
+			vista.iniciar();
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

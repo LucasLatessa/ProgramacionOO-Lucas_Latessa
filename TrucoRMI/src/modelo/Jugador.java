@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class Jugador implements IJugador, Serializable {
 		private String nombre;
-		private int puerto;
 		private ArrayList<Carta> cartas = new ArrayList<Carta>();
 		private Carta cartaTirada;//para cuando el mano juege, el pie canta envido tener la carta
 		private int puntos;
@@ -17,9 +16,8 @@ public class Jugador implements IJugador, Serializable {
 		public void setCantoUltimo(boolean cantoUltimo) {
 			this.cantoUltimo = cantoUltimo;
 		}
-	public Jugador(String nombre,int puerto) {
+	public Jugador(String nombre) {
 		this.nombre=nombre;
-		this.puerto=puerto;
 	}
 	public ArrayList<Carta> getCartas() {
 		return cartas;
@@ -55,9 +53,6 @@ public class Jugador implements IJugador, Serializable {
 	}
 	public String getNombre() {
 		return nombre;
-	}
-	public int getPuerto() {
-		return puerto;
 	}
 	public boolean isMano() {
 		return mano;
