@@ -80,19 +80,19 @@ public class VistaConsola implements IVista {
 		mostrarCartasEnMano();
 		System.out.println("Opciones");
 		System.out.println("C-Tirar carta \nM-Irme al mazo");
-		EstadoTruco jugando=controlador.queSeEstaJugando();
-		if (controlador.obtenerGanadorEnvido()==null&&controlador.rondaAcutual()==1&&jugando==EstadoTruco.NADA) {
+		String canto=controlador.queTrucoPuedeCantar();
+		if (controlador.puedeCantarEnvidos()) {
 			System.out.println("E-Cantar envido \nRE-Cantar real envido \nFE-Cantar falta envido");
 		}
 		if (controlador.quienCantoUltimo()!= controlador.turnoActual()) {
-			switch(jugando) {
-			case NADA:
+			switch(canto) {
+			case "Truco":
 				System.out.println("T-Cantar truco");
 				break;
-			case TRUCO:
+			case "Re truco":
 				System.out.println("RT-Cantar retruco");
 				break;
-			case RETRUCO:
+			case "Vale cuatro":
 				System.out.println("VC-Cantar vale cuatro");
 			}}
 		System.out.println("Ingrese opcion");
@@ -135,35 +135,35 @@ public class VistaConsola implements IVista {
 			}
 	}
 	public void quererNoQuererTruco(String jugador,EstadoTruco truco) {
-		separacionJug();
-		mostrar3Cartas();
+		mostrarCartasEnMano();
 		System.out.println(jugador+": el contrario canto " +truco.toString());
 		System.out.println("Opciones");
-		System.out.println("1-Quiero");
-		System.out.println("2-No quiero");
-		if (truco==EstadoTruco.TRUCO&&controlador.obtenerGanadorEnvido()==null&&controlador.rondaAcutual()==1) {
-			System.out.println("3-Cantar envido \n4-Cantar real envido \n5-Cantar falta envido");
+		System.out.println("S-Quiero");
+		System.out.println("N-No quiero");
+		if (controlador.puedeCantarEnvidos()) {
+			System.out.println("E-Cantar envido \nR-Cantar real envido \nF-Cantar falta envido");
 		}
 		System.out.println("Ingrese opcion");
-		int opcion = Integer.valueOf(entrada.nextLine());
-		while(!valido(1,opcion,5)) {
-			System.out.println("Opcion invalida \nIngrese su opcion");
-			opcion = Integer.valueOf(this.entrada.nextLine());
+		String opcion =entrada.nextLine().toUpperCase();
+		while(!(opcion.equals("S")||opcion.equals("N"))&&
+			(!opcion.equals("E")&&!opcion.equals("R")&&!opcion.equals("F")&&controlador.puedeCantarEnvidos())) {
+			System.out.println("Opcion invalida \nIngrese opcion nuevamente");
+			opcion = (this.entrada.nextLine());
 		}
-		switch(Integer.valueOf(opcion)) {
-		case 1:
+		switch(opcion){
+		case "S":
 			controlador.quiero(truco);
 			break;
-		case 2:
+		case "N":
 			controlador.alMazo();
 			break;
-		case 3:
+		case "E":
 			controlador.cantar(EstadoEnvido.ENVIDO);
 			break;
-		case 4:
+		case "R":
 			controlador.cantar(EstadoEnvido.REALENVIDO);
 			break;
-		case 5:
+		case "F":
 			controlador.cantar(EstadoEnvido.FALTAENVIDO);
 		}
 	}

@@ -2,7 +2,7 @@ package modelo;
 
 import java.io.Serializable;
 
-public class  Carta implements Serializable {
+public class Carta implements Serializable{
 	private int valor;
 	private int orden;
 	private int puntajeEnvido;
@@ -68,7 +68,7 @@ public class  Carta implements Serializable {
 		return palo;
 	}
 	public String toString() {
-		return valor+" de "+palo;
+		return valor+" DE "+palo;
 	}
 
 }

@@ -1,6 +1,8 @@
 package modelo;
 
-public enum Eventos {
+import java.io.Serializable;
+
+public enum Eventos implements Serializable{
 	JUEGO_COMENZADO,
 	JUEGO_TERMINADO,
 	SEGUIR_JUEGO,

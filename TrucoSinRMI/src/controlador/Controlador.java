@@ -1,5 +1,6 @@
 package controlador;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import modelo.Eventos;
@@ -24,7 +25,7 @@ import vista.VistaConsola;
 		this.vista.setControlador(this);
 		this.modelo.agregarObservador(this);
 	}
-	public void agregarJugador(String jugador) {
+	public void agregarJugador(String jugador)  {
 		modelo.agregarJugador(jugador);
 	}
 	@Override
@@ -45,7 +46,7 @@ import vista.VistaConsola;
 					vista.iniciar();
 					break;
 				case RONDA_TERMINADA:
-					vista.rondaTerminada(modelo.obtenerGanadorDeRonda().getNombre());
+					vista.rondaTerminada(obtenerGanadorDeRonda());
 					vista.menuRondas();
 					break;
 				case MANO_TERMINADA:
@@ -75,10 +76,12 @@ import vista.VistaConsola;
 		return modelo.getITurno().getNombre();
 	}
 	/**
-	 * @return devuelve false si el ganador es nulo, de haber un ganador devuelve el jugador.
+	 * @return devuelve el IJugador ganador.
 	 */
 	public IJugador termino() {
-		return modelo.preguntarGanador();
+		IJugador jug1=darJugadores().get(0);
+		IJugador jug2=darJugadores().get(1);
+		return jug1.getPuntos()>=15?jug1:jug2;
 	}
 	public void cantar(EstadoEnvido estado) {
 		modelo.cantado(estado);
@@ -132,13 +135,41 @@ import vista.VistaConsola;
 	public int obtenerCantCartasJugActual() {
 		return modelo.getITurno().getCartas().size();
 	}
+	public String obtenerGanadorDeRonda() {
+		return modelo.getGanadorDeRonda().getNombre();
+	}
+	public String queTrucoPuedeCantar() {
+		String retorno = "";
+		if (quienCantoUltimo()!= turnoActual()) {
+		EstadoTruco estado= modelo.getEstadoTruco();
+		switch(estado) {
+		case NADA:
+			retorno="Truco";
+			break;
+		case TRUCO:
+			retorno="Re truco";
+			break;
+		case RETRUCO:
+			retorno="Vale cuatro";
+		}}
+		return retorno;
+		
+	}
 	public ArrayList<Integer> obtenerTantosEnvido(){
-		return modelo.obtenerTantosEnvido();
+		return modelo.getTantosEnvido();
 	}
 	public IJugador turnoActual() {
 		return modelo.getITurno();
 	}
 	public IJugador quienCantoUltimo() {
 		return modelo.quienCantoUltimo();
+	}
+
+	/**
+	 * @return true si el jugador actual puede cantar envidos
+	 */
+	public boolean puedeCantarEnvidos() {
+		return (rondaAcutual()==1)&&(obtenerGanadorEnvido()==null)&&(queSeEstaJugando()==EstadoTruco.NADA);
+
 	}
 }

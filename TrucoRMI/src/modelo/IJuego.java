@@ -1,11 +1,12 @@
 package modelo;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 
-public interface IJuego extends IObservableRemoto {
+public interface IJuego extends IObservableRemoto, Serializable {
 
 	Carta getCartaTirada() throws RemoteException;
 
@@ -57,7 +58,7 @@ public interface IJuego extends IObservableRemoto {
 	/**
 	 * @return devuelve el ganador del juego, en caso de no haberlo devuelve nulo
 	 */
-	IJugador preguntarGanador() throws RemoteException;
+	void preguntarGanador() throws RemoteException;
 
 	IJugador getITurno() throws RemoteException;
 
@@ -74,9 +75,9 @@ public interface IJuego extends IObservableRemoto {
 
 	int getNroRonda() throws RemoteException;
 
-	IJugador obtenerGanadorDeRonda() throws RemoteException;
+	IJugador getGanadorDeRonda() throws RemoteException;
 
-	ArrayList<Integer> obtenerTantosEnvido() throws RemoteException;
+	ArrayList<Integer> getTantosEnvido() throws RemoteException;
 
 	IJugador quienCantoUltimo() throws RemoteException;
 
@@ -95,5 +96,12 @@ public interface IJuego extends IObservableRemoto {
 	IJugador getGanadorEnvido() throws RemoteException;
 
 	void agregarJugador(String jugador) throws RemoteException;
+
+	String getJugadorUltAgregado()throws RemoteException;
+
+	boolean isJugadoresCompletos() throws RemoteException;
+
+	ArrayList<String> getCartasDeRonda() throws RemoteException;
+
 
 }

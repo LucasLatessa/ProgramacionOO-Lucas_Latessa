@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author lucas
  *
  */
-public class Envido implements IEnvido,Serializable {
+public class Envido implements IEnvido , Serializable{
 	private ArrayList<EstadoEnvido> envidosQueridos;
 	protected EstadoEnvido envidoPreguntado;
 	private int sumatoriajug1;
@@ -105,10 +105,10 @@ public class Envido implements IEnvido,Serializable {
 		switch (envidoPreguntado) {
 		case ENVIDO:
 			if (envidosQueridos.size()==0) {
-			puedeCantar.add("envido");}
-			puedeCantar.add("real envido");
+			puedeCantar.add("Envido");}
+			puedeCantar.add("Real envido");
 		case REALENVIDO:
-			puedeCantar.add("falta envido");
+			puedeCantar.add("Falta envido");
 		}
 		return puedeCantar;
 	}

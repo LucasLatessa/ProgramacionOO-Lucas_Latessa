@@ -4,9 +4,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import controlador.Controlador;
+import modelo.EstadoEnvido;
 import modelo.EstadoTruco;
 import modelo.IEnvido;
 import modelo.IJuego;
@@ -17,33 +19,83 @@ public class VistaGrafica implements IVista {
 	private VentanaInicioSesion vInicioSesion;
 	private VentanaPrincipal vPrincipal;
 	private Controlador controlador;
+	private String nameJugador;//PARA PRUEBAS EL ATRIBUTO,SACAR PARA INSERTAR NOMBRES DE JUGADORES
 
-	public VistaGrafica() {
+	public VistaGrafica(String nameJugador) {//String nameJugadorPARA PRUEBAS EL PARAMETRO,SACAR PARA INSERTAR NOMBRES DE JUGADORES
 		super();
 		this.vInicioSesion = new VentanaInicioSesion();
 		this.vPrincipal = new VentanaPrincipal();
+		this.nameJugador=nameJugador;//PARA PRUEBAS
+
+		mostrarInicioSesion();
 		
-		this.vPrincipal.onClickEnviar(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
-		this.vPrincipal.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent arg0) {
-			}			
-		});
 		this.vInicioSesion.onClickIniciar(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
-				mostrarChat();
+				//PARA INSERTAR NOMBRES DE JUGADORES DESCOMENTAR ABAJO
+				//controlador.agregarJugador(vInicioSesion.getGetNombreUsuario());
 			}
 		});
-	}
-	@Override
-	public void iniciar(int puerto) {
-		this.mostrarInicioSesion();
+		this.vPrincipal.onClickTirarCarta(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlador.tirar(vPrincipal.getCartaSeleccionada());
+				vPrincipal.ocultarNotificaciones();
+				
+			}
+		});
+
+		this.vPrincipal.onClickEnvido(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlador.cantar(EstadoEnvido.ENVIDO);
+				vPrincipal.ocultarBotonesEnvido();
+			}
+		});
+		this.vPrincipal.onClickRealEnvido(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlador.cantar(EstadoEnvido.REALENVIDO);
+				vPrincipal.ocultarBotonesEnvido();
+			}
+		});
+		
+		this.vPrincipal.onClickFaltaEnvido(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlador.cantar(EstadoEnvido.FALTAENVIDO);
+				vPrincipal.ocultarBotonesEnvido();
+			}
+		});
+		this.vPrincipal.onClickMazo(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlador.alMazo();
+				vPrincipal.ocultarNotificaciones();
+			}
+		});
+		this.vPrincipal.onClickTruco(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlador.cantar(EstadoTruco.TRUCO);
+				vPrincipal.ocultarNotificaciones();
+			}
+		});
+		this.vPrincipal.onClickReTruco(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlador.cantar(EstadoTruco.RETRUCO);
+				vPrincipal.ocultarNotificaciones();
+			}
+		});
+		this.vPrincipal.onClickValeCuatro(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlador.cantar(EstadoTruco.VALECUATRO);
+				vPrincipal.ocultarNotificaciones();
+			}
+		});
+		
 		
 	}
 	
@@ -51,28 +103,24 @@ public class VistaGrafica implements IVista {
 		this.vInicioSesion.setVisible(true);
 		this.vPrincipal.setVisible(false);
 	}
-	
-	private void mostrarChat() {
-		this.vInicioSesion.setVisible(false);
-		this.vPrincipal.setVisible(true);
-	}
 
 	@Override
 	public void setControlador(Controlador controlador) {
 		this.controlador = controlador;
-		this.controlador.setVista(this);
+		
 	}
 
 	@Override
-	public void jugar() {
-		// TODO Auto-generated method stub
-		
+	public void iniciar() {
+		controlador.agregarJugador(nameJugador);//PARA PRUEBAS RAPIDAS
 	}
 
 	@Override
 	public void mostrarPuntajes() {
-		// TODO Auto-generated method stub
-		
+		ArrayList<IJugador> jugadores=controlador.darJugadores();
+		int puntos1=jugadores.get(0).getPuntos();
+		int puntos2=jugadores.get(1).getPuntos();
+		this.vPrincipal.actualizarPuntos(puntos1,puntos2);
 	}
 
 	@Override
@@ -83,43 +131,125 @@ public class VistaGrafica implements IVista {
 
 	@Override
 	public void avisarParda() {
-		// TODO Auto-generated method stub
-		
+		this.vPrincipal.pardaRonda();
 	}
 
 	@Override
-	public void rondaTerminada(String nombre) {
-		// TODO Auto-generated method stub
+	public void rondaTerminada(boolean ganador) {
+		if (ganador) {
+			this.vPrincipal.ganoRonda();
+		}else {
+			this.vPrincipal.perdioRonda();
+		}
 		
 	}
 
 	@Override
 	public void manoTerminada() {
-		// TODO Auto-generated method stub
-		
-	}
+		mostrarPuntajes();
+		vPrincipal.laManoTermino();
+		vPrincipal.limpiarVista();
+		}
 
 	@Override
 	public void mostrarEnvido(String nombre) {
-		// TODO Auto-generated method stub
-		
+		Integer p1= controlador.obtenerTantosEnvido().get(0);
+		Integer p2=controlador.obtenerTantosEnvido().get(1);
+		this.vPrincipal.mostrarGanadorEnvido(nombre,p1,p2);
 	}
 
 	@Override
-	public void quererNoQuererEnvido(String nombreTurno, IEnvido evento) {
-		// TODO Auto-generated method stub
-		
+	public void quererNoQuererEnvido(String nombreTurno, IEnvido envido) {
+		EstadoEnvido ultCantado=envido.getEnvidoPreguntado();
+		this.vPrincipal.notificarCanto(ultCantado.toString());
+		this.vPrincipal.mostrarBotonesEnvido(envido.puedeCantar());
+		mostrarCartasEnMano();
+		this.vPrincipal.onClickQuiero(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlador.quiero();
+				vPrincipal.ocultarBotonesEnvido();
+			}
+		});
+		this.vPrincipal.onClickNoQuiero(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlador.noQuiero();
+				vPrincipal.ocultarBotonesEnvido();
+			}
+		});
 	}
 
 	@Override
-	public void quererNoQuererTruco(String nombreTurno, EstadoTruco evento) {
-		// TODO Auto-generated method stub
+	public void quererNoQuererTruco(String nombreTurno, EstadoTruco truco) {
+		this.vPrincipal.notificarCanto(truco.toString());
+		boolean puedeCantarEnvido=controlador.puedeCantarEnvidos();
+		this.vPrincipal.mostrarBotonesTruco(puedeCantarEnvido);
+		this.vPrincipal.onClickQuiero(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlador.quiero(truco);
+				vPrincipal.ocultarBotonesTruco();
+			}
+		});
+		this.vPrincipal.onClickNoQuiero(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlador.alMazo();
+				vPrincipal.ocultarBotonesTruco();
+			}
+		});
 		
 	}
 
 	@Override
 	public void esperandoJugadores() {
-		// TODO Auto-generated method stub
+		this.vInicioSesion.esperandoOtrosJugadores();
+		}
+	@Override
+	public void jugar() {
+		this.vInicioSesion.setVisible(false);
+		this.vPrincipal.setVisible(true);
+		if(!vPrincipal.jugadoresCargados()) {//es porque es la primera mano
+			String str1=controlador.darJugadores().get(0).getNombre();
+			String str2=controlador.darJugadores().get(1).getNombre();
+			this.vPrincipal.setJugadores(str1,str2);
+			this.vPrincipal.botonesComienzo();
+		}
+		mostrarPuntajes();
+		mostrarCartasEnMano();
+		if (controlador.puedeCantarEnvidos()) {
+			this.vPrincipal.mostrarBotonesEnvido();
+		}
+		String canto=controlador.queTrucoPuedeCantar();
+		this.vPrincipal.turnoActual(canto,controlador.nombreTurno());
+		mostrarCartaTirada();
+	}
+	@Override
+	public void esperarJugandoOponente() {
+		this.vInicioSesion.setVisible(false);
+		this.vPrincipal.setVisible(true);
+		if(!vPrincipal.jugadoresCargados()) {//es porque es la primera mano
+			String str1=controlador.darJugadores().get(0).getNombre();
+			String str2=controlador.darJugadores().get(1).getNombre();
+			this.vPrincipal.setJugadores(str1,str2);
+			this.vPrincipal.botonesComienzo();
+		}
+		;
+		this.vPrincipal.esperarJugandoOponente(this.controlador.nombreTurno());
+		mostrarCartaTirada();
+		this.mostrarPuntajes();
+	}
+	@Override
+	public void mostrarCartasEnMano() {
+		this.vPrincipal.mostrarCartas(controlador.listarCartas());
+	}
+	@Override
+	public void mostrarCartaTirada() {
+		String cartaTirada=controlador.getCartaTirada();
+		if (cartaTirada!=null){
+			this.vPrincipal.mostrarCartaTirada(cartaTirada);
+			}
 		
 	}
 }

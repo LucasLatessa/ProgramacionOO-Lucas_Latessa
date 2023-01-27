@@ -19,7 +19,7 @@ public class VentanaInicioSesion extends JFrame {
 	private JPanel contentPane;
 	private JTextField textUsuario;
 	private JButton btnIniciar;
-
+	private JLabel lblUsuario;
 	/**
 	 * Create the frame.
 	 */
@@ -33,7 +33,7 @@ public class VentanaInicioSesion extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new MigLayout("", "[][grow]", "[][]"));
 		
-		JLabel lblUsuario = new JLabel("Usuario");
+		lblUsuario = new JLabel("Usuario");
 		contentPane.add(lblUsuario, "cell 0 0,alignx trailing");
 		
 		textUsuario = new JTextField();
@@ -52,5 +52,12 @@ public class VentanaInicioSesion extends JFrame {
 	
 	public String getGetNombreUsuario() {
 		return this.textUsuario.getText();
+	}
+	public void esperandoOtrosJugadores() {
+		this.btnIniciar.setVisible(false);
+		this.textUsuario.setVisible(false);
+		this.lblUsuario.setText("Esperando jugadores...");
+		
+		
 	}
 }

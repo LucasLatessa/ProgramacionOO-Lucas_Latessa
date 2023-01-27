@@ -48,5 +48,8 @@ public class Ronda{
 	    public boolean unJugadorYaTiro(){
 	    	return jugadores.size()==1;
 	    	}
+	    public ArrayList<Carta> getCartas() {
+	    	return cartas;
+	    }
 }
 

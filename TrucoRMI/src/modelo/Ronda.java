@@ -1,9 +1,10 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class Ronda{
+public class Ronda implements Serializable{
 		    private Jugador ganador;
 			private ArrayList<Jugador> jugadores;
 			private ArrayList<Carta> cartas;
@@ -34,6 +35,9 @@ public class Ronda{
 	        	index=(cartaMasAlta==carta)?i:index;
 	        }
 	        return (cartaMasAlta!=null)?jugadores.get(index):null;
+	    }
+	    public ArrayList<Carta> getCartas() {
+	    	return cartas;
 	    }
 	    /**
 	     * @return jugador que ya tiro en caso que uno haya tirado y el otro no, si ambos tiraron devuelve null
