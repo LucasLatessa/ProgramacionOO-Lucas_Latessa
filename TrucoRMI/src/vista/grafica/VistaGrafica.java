@@ -183,6 +183,7 @@ public class VistaGrafica implements IVista {
 			public void actionPerformed(ActionEvent arg0) {
 				controlador.noQuiero();
 				vPrincipal.ocultarBotonesEnvido();
+				vPrincipal.ocultarNotificaciones();
 			}
 		});
 	}
