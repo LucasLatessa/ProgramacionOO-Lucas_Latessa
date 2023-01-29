@@ -270,7 +270,9 @@ import vista.VistaConsola;
 	public String queTrucoPuedeCantar() {
 		String retorno = "";
 		try {
-			if (quienCantoUltimo()!= turnoActual()) {
+			IJugador cantoUlt=quienCantoUltimo();
+			boolean puedeCantar=cantoUlt!=null?!(cantoUlt.getNombre()).equals(jugador):true;
+			if (puedeCantar) {
 			EstadoTruco estado= modelo.getEstadoTruco();
 			switch(estado) {
 			case NADA:
@@ -384,6 +386,9 @@ import vista.VistaConsola;
 	public boolean puedeCantarEnvidos() {
 		return (rondaAcutual()==1)&&(obtenerGanadorEnvido()==null)&&(queSeEstaJugando()==EstadoTruco.NADA);
 
+	}
+	public boolean noNombreRepetido(String nombre) throws RemoteException {
+		return modelo.verificarNombre(nombre);
 	}
 	
 }

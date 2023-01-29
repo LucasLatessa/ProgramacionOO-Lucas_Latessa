@@ -322,6 +322,17 @@ public class Juego  extends ObservableRemoto implements IJuego{
 		}else {
 		return jugador2.getNombre();}
 	}
+	@Override
+	public boolean verificarNombre(String nombre)  throws RemoteException{
+		boolean puedeUsarEsteNombre=true;
+		if (jugador1!=null) {
+			puedeUsarEsteNombre=!nombre.equals(jugador1.getNombre());
+		}
+		if (jugador2!=null) {
+			puedeUsarEsteNombre=!nombre.equals(jugador2.getNombre());
+		}
+		return puedeUsarEsteNombre;
+	}
 	
 }
 	

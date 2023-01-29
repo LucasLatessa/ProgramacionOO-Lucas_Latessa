@@ -53,6 +53,9 @@ public class VentanaInicioSesion extends JFrame {
 	public String getGetNombreUsuario() {
 		return this.textUsuario.getText();
 	}
+	public void nombreRepetido() {
+		this.textUsuario.setText("El nombre de usuario ya esta usado");
+	}
 	public void esperandoOtrosJugadores() {
 		this.btnIniciar.setVisible(false);
 		this.textUsuario.setVisible(false);

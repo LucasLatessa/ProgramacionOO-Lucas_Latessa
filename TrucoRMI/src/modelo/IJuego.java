@@ -103,5 +103,7 @@ public interface IJuego extends IObservableRemoto, Serializable {
 
 	ArrayList<String> getCartasDeRonda() throws RemoteException;
 
+	boolean verificarNombre(String nombre) throws RemoteException;
+
 
 }

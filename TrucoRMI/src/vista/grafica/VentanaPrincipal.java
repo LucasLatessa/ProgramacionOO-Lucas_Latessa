@@ -67,9 +67,10 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lblPuntosJ2;
 	private JLabel lblNameJugador1;
 	private JLabel lblPuntosJ1;
-	private JPanel panelArriba;
+	private JPanel panelBajo_Cartas;
 	private JLabel lblNotificaciones;
 	private JSeparator separator;
+	private JLabel lblNotificacionFinal;
 	public VentanaPrincipal() {
 		setTitle("Truco");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -165,7 +166,7 @@ public class VentanaPrincipal extends JFrame {
 		btnMazo = new JButton("Mazo");
 		panelAbajo_Cantos.add(btnMazo);
 		
-		JPanel panelBajo_Cartas = new JPanel();
+		panelBajo_Cartas = new JPanel();
 		contentPane.add(panelBajo_Cartas, BorderLayout.SOUTH);
 		
 		carta1 = new JRadioButton("");
@@ -302,11 +303,14 @@ public class VentanaPrincipal extends JFrame {
 		cartaTiradaJ2_3.setHorizontalAlignment(SwingConstants.CENTER);
 		panelCartaTiradaJ2_3.add(cartaTiradaJ2_3);
 		
-		panelArriba = new JPanel();
+		JPanel panelArriba = new JPanel();
 		contentPane.add(panelArriba, BorderLayout.NORTH);
 		
 		lblNotificaciones = new JLabel("");
 		panelArriba.add(lblNotificaciones);
+		
+		lblNotificacionFinal = new JLabel("");
+		panelArriba.add(lblNotificacionFinal);
 	}
 	public void onClickTirarCarta(ActionListener listener) {
 		this.btnTirarCarta.addActionListener(listener);
@@ -530,7 +534,6 @@ public class VentanaPrincipal extends JFrame {
 		btnEnvido.setVisible(false);
 		btnRealEnvido.setVisible(false);
 		btnFaltaEnvido.setVisible(false);
-		ocultarNotificaciones();
 	}
 	public void mostrarBotonesTruco(boolean puedeCantarEnvido) {
 		if (puedeCantarEnvido) {
@@ -548,10 +551,13 @@ public class VentanaPrincipal extends JFrame {
 		lblNotificaciones.setVisible(false);
 	}
 	public void mostrarGanadorEnvido(String nombre,Integer p1, Integer p2) {
-		lblNotificaciones.setText( "El ganador del tanto es "+nombre+". Los tantos fueron :"+p1+", "+p2);
+		lblNotificaciones.setText( "El ganador del tanto es "+nombre+". Los tantos fueron :"+p1+", "+p2+". ");
 		lblNotificaciones.setVisible(true);
 	}
 	public void laManoTermino() {
 		lblNotificaciones.setText( "La mano termino");
 	}
+	public void juegoTerminado(String ganador) {
+		lblNotificacionFinal.setText("El juego termino, el ganador es "+ ganador);
+		this.panelBajo_Cartas.setVisible(false);	}
 }
