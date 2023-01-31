@@ -1,10 +1,9 @@
 package modelo;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class Ronda implements Serializable{
+public class Ronda {
 		    private Jugador ganador;
 			private ArrayList<Jugador> jugadores;
 			private ArrayList<Carta> cartas;

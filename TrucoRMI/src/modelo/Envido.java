@@ -8,6 +8,7 @@ import java.util.ArrayList;
  *
  */
 public class Envido implements IEnvido , Serializable{
+	private static final long serialVersionUID = 1L;
 	private ArrayList<EstadoEnvido> envidosQueridos;
 	protected EstadoEnvido envidoPreguntado;
 	private int sumatoriajug1;

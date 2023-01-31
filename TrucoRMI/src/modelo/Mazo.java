@@ -1,9 +1,9 @@
 package modelo;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Mazo implements Serializable{
+public class Mazo {
 	ArrayList<Carta> cartas = new ArrayList<Carta>();
 	public Mazo() {
 		for(Palo palo: Palo.values()) {

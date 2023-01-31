@@ -3,6 +3,7 @@ package modelo;
 import java.io.Serializable;
 
 public class Carta implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private int valor;
 	private int orden;
 	private int puntajeEnvido;

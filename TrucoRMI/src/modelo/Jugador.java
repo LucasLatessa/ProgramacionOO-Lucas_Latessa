@@ -3,6 +3,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Jugador implements IJugador,Serializable{
+	private static final long serialVersionUID = 1L;
 		private String nombre;
 		private ArrayList<Carta> cartas = new ArrayList<Carta>();
 		private Carta cartaTirada;//para cuando el mano juege, el pie canta envido tener la carta

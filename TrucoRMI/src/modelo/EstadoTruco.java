@@ -7,6 +7,7 @@ public enum EstadoTruco implements Serializable{
 	TRUCO(2),
 	RETRUCO(3),
 	VALECUATRO(4);
+	private static final long serialVersionUID = 1L;
 	private int puntaje;
 	private EstadoTruco(int puntaje) {
 		this.puntaje=puntaje;
