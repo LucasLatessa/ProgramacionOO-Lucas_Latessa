@@ -55,19 +55,20 @@ public class VistaConsola implements IVista {
 			case "E":
 				controlador.cantar(EstadoEnvido.ENVIDO);
 				break;
-			case "RE":
-				controlador.cantar(EstadoEnvido.REALENVIDO);
+			case "R":
+				if (controlador.queTrucoPuedeCantar().equals("Re truco")) {
+					controlador.cantar(EstadoTruco.RETRUCO);
+				}else {
+					controlador.cantar(EstadoEnvido.REALENVIDO);
+				}
 				break;
-			case "FE":
+			case "F":
 				controlador.cantar(EstadoEnvido.FALTAENVIDO);
 				break;
 			case "T":
 				controlador.cantar(EstadoTruco.TRUCO);
 				break;
-			case "RT":
-				controlador.cantar(EstadoTruco.RETRUCO);
-				break;
-			case "VC":
+			case "V":
 				controlador.cantar(EstadoTruco.VALECUATRO);
 				break;
 			default:
@@ -77,34 +78,34 @@ public class VistaConsola implements IVista {
 			}}
 
 	public void jugar() {
-			mostrarPuntajes();
-			this.mostrarCartaTirada();
-			mostrarCartasEnMano();
-			System.out.println("Opciones");
-			System.out.println("C-Tirar carta \nM-Irme al mazo");
-			String canto=controlador.queTrucoPuedeCantar();
-			if (controlador.puedeCantarEnvidos()) {
-				System.out.println("E-Cantar envido \nRE-Cantar real envido \nFE-Cantar falta envido");
-			}
-			if (controlador.quienCantoUltimo()!= controlador.turnoActual()) {
-				switch(canto) {
-				case "Truco":
-					System.out.println("T-Cantar truco");
-					break;
-				case "Re truco":
-					System.out.println("RT-Cantar retruco");
-					break;
-				case "Vale cuatro":
-					System.out.println("VC-Cantar vale cuatro");
-				}}
-			System.out.println("Ingrese opcion");
-			String opcion = entrada.nextLine().toUpperCase();
-			while(!opcion.equals("C")&&!opcion.equals("M")&&!opcion.equals("E")&&!opcion.equals("RE")&&!opcion.equals("FE")
-					&&!opcion.equals("T")&&!opcion.equals("RT")&&!opcion.equals("VC")) {
-				System.out.println("Opcion invalida \nIngrese opcion nuevamente");
-				opcion = entrada.nextLine().toUpperCase();
-			}
-			menuCantos(opcion);}
+		mostrarPuntajes();
+		this.mostrarCartaTirada();
+		mostrarCartasEnMano();
+		System.out.println("Opciones");
+		System.out.println("C-Tirar carta \nM-Irme al mazo");
+		String canto=controlador.queTrucoPuedeCantar();
+		if (controlador.puedeCantarEnvidos()) {
+			System.out.println("E-Cantar envido \nR-Cantar real envido \nF-Cantar falta envido");
+		}
+		if (controlador.quienCantoUltimo()!= controlador.turnoActual()) {
+			switch(canto) {
+			case "Truco":
+				System.out.println("T-Cantar truco");
+				break;
+			case "Re truco":
+				System.out.println("R-Cantar retruco");
+				break;
+			case "Vale cuatro":
+				System.out.println("V-Cantar vale cuatro");
+			}}
+		System.out.println("Ingrese opcion");
+		String opcion = entrada.nextLine().toUpperCase();
+		while(!opcion.equals("C")&&!opcion.equals("M")&&!opcion.equals("E")&&!opcion.equals("R")&&!opcion.equals("F")
+				&&!opcion.equals("T")&&!opcion.equals("V")) {
+			System.out.println("Opcion invalida \nIngrese opcion nuevamente");
+			opcion = entrada.nextLine().toUpperCase();
+		}
+		menuCantos(opcion);}
 	
 	public void quererNoQuererEnvido(String jugador,IEnvido envido) {
 		mostrarCartasEnMano();
@@ -224,7 +225,7 @@ public class VistaConsola implements IVista {
 			}
 		System.out.println("\n\nLa ronda termino "
 				+"\nCartas de la ronda:"+mostrar
-				+ "\nEl ganador de la ronda "+controlador.rondaAnterior()+" es "+ ganador);
+				+ "\nEl ganador de la ronda "+controlador.rondaAcutual()+" es "+ ganador);
 
 	}
 	@Override

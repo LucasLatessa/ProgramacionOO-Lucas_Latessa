@@ -15,7 +15,7 @@ public class Juego implements Observable{
 		private Carta cartaTirada=null;
 		protected Envido envido;
 		
-	public Carta getCartaTirada() {
+	public Carta getCartaTirada(){
 			return cartaTirada;
 		}
 	public void trucos(){
@@ -41,14 +41,21 @@ public class Juego implements Observable{
 	 * @return carta tirada(si no la encuentra devuelve nulo)
 	 */
 	public void tirarCarta(int carta){
-		Carta cartatirada=getTurno().tirarCarta(carta);
-		cartaTirada=cartatirada;
+		cartaTirada=getTurno().tirarCarta(carta);
 		Ronda ronda=rondas.get(rondas.size()-1);
-		ronda.jugar(getTurno(), cartatirada); //juego en la ronda la carta con respectivo jugador
+		if (ronda.isTerminada()){
+			newRonda();
+			ronda=rondas.get(rondas.size()-1);
+		}
+		ronda.jugar(getTurno(), cartaTirada); //juego en la ronda la carta con respectivo jugador
 		changeTurno();
 		if (ronda.isTerminada()){
-			notificar(Eventos.RONDA_TERMINADA);
-		}else {
+			if (isFinManoYSumaPuntos()) {
+				this.nuevaMano();
+				notificar(Eventos.MANO_TERMINADA);}
+			else {
+				notificar(Eventos.RONDA_TERMINADA);}}
+		else {
 			notificar(Eventos.SEGUIR_JUEGO);
 		}
 	}
@@ -68,7 +75,7 @@ public class Juego implements Observable{
 	/**le suma los puntos obtenidos al jugador que gana el envido
 	 * @return devuelve el ganador
 	 */
-	public void calcularEnvidoQ() {
+	public void calcularEnvidoQ(){
 		if (envido.envidoPreguntado!=null) {
 			envido.queridoElPreguntado();}
 		int puntos=envido.getPuntos()==-1?puntosFinales-jugador2.getPuntos():envido.getPuntos();//si los puntos es -1 es porque fue falta envido
@@ -83,7 +90,7 @@ public class Juego implements Observable{
 			Ronda ronda1=rondas.get(getNroRonda()-2);
 			Ronda ronda2=rondas.get(getNroRonda()-1);
 			if (ronda1.getGanador()==ronda2.getGanador()) {
-				siFinManoYSumoPuntos();
+				isFinManoYSumaPuntos();
 				this.nuevaMano();
 				notificar(Eventos.MANO_TERMINADA);
 			}
@@ -91,23 +98,23 @@ public class Juego implements Observable{
 		Ronda ronda=new Ronda();
 		rondas.add(ronda);
 	}
-	public void cantado(EstadoEnvido estado) {
+	public void cantado(EstadoEnvido estado){
 		changeTurno();
 		IEnvido envid=addPreguntado(estado);//lo agrega 
 		notificar(envid);
 	}
-	public void cantado(EstadoTruco estado) {
+	public void cantado(EstadoTruco estado){
 		changeTurno();
 		notificar(estado);
 	}
-	public void quiero(EstadoTruco estado) {
+	public void quiero(EstadoTruco estado){
 		estadoTruco=estado;
 		changeTurno();
 		getTurno().setCantoUltimo(true);
 		getJugadorContra(getTurno()).setCantoUltimo(false);
 		notificar(Eventos.SEGUIR_JUEGO);
 }
-	public void nuevaMano() {
+	public void nuevaMano(){
 		this.preguntarGanador();
 		this.cartaTirada=null;
 		rondas=new ArrayList<Ronda>();
@@ -125,7 +132,7 @@ public class Juego implements Observable{
 		newRonda();
 		changeTurno();
 		}
-	public void repartir() {
+	public void repartir(){
 		mazo=new Mazo();
 		vaciarCartas();
 		for(int i = 0;i < 3;i++) {
@@ -146,7 +153,7 @@ public class Juego implements Observable{
 	/**
 	 * @return devuelve el ganador del juego, en caso de no haberlo devuelve nulo
 	 */
-	public void preguntarGanador() {
+	public void preguntarGanador(){
 		if (jugador1.getPuntos()>=puntosFinales) {
 			notificar(Eventos.JUEGO_TERMINADO);
 		}else if (jugador2.getPuntos()>=puntosFinales){
@@ -156,23 +163,19 @@ public class Juego implements Observable{
 	/**
 	 * Cambia el turno del juego, en caso de que ninguno de los dos haya sido el turno anterior
 	    es turno del mano(caso primera ronda).
+	 * @throws RemoteException 
 	 */
-	public void changeTurno() {
+	public void changeTurno(){
 		Ronda ronda=rondas.get(getNroRonda()-1);
 		if (ronda.isTerminada()) {
 			Jugador jugGana=ronda.getGanador();
-			if (siFinManoYSumoPuntos()) {
-				this.nuevaMano();
-				notificar(Eventos.MANO_TERMINADA);
-			}else if (jugGana!=null){
+			if (jugGana!=null){
 				jugGana.setTurno(true);
 				getJugadorContra(jugGana).setTurno(false);
-				newRonda();
 			}
 			else {
 				jugador2.changeTurno();
 				jugador1.changeTurno();
-				newRonda();
 				notificar(Eventos.PARDA);
 			}
 		}else if (jugador1.isTurno()||jugador2.isTurno()) {//mientras transcurre la ronda
@@ -197,7 +200,7 @@ public class Juego implements Observable{
 	/**
 	 * @return si termina la mano le suma los puntos al ganador 
 	 */
-	public boolean siFinManoYSumoPuntos(){
+	public boolean isFinManoYSumaPuntos(){
 		boolean retorno=false;
 		int cont1=0;
 		int parda=0;
@@ -226,7 +229,7 @@ public class Juego implements Observable{
 		}
 		return retorno;
 	}
-	public void sumarPuntosAlMazo() {
+	public void sumarPuntosAlMazo(){
 		EstadoTruco truco=getEstadoTruco();
 		int puntos=(rondas.size()==1&&envido==null&&!rondas.get(0).unJugadorYaTiro())?2:truco.getPuntaje();//si es la ronda 1 y el envido no se canto son dos puntos al contra
 		getJugadorContra(getTurno()).incPuntos(puntos);
@@ -279,15 +282,15 @@ public class Juego implements Observable{
 		}
 		return retorno;
 	}
-	public int getNroRonda() {
+	public int getNroRonda(){
 		return rondas.size();
 	}
-	public IJugador getGanadorDeRonda() {
-		return rondas.get(rondas.size()-2).getGanador();
+	public IJugador getGanadorDeRonda(){
+		return rondas.get(rondas.size()-1).getGanador();
 	}
-	public ArrayList<String> getCartasDeRonda() {
+	public ArrayList<String> getCartasDeRonda(){
 		ArrayList<String> retornar=new ArrayList<String>();
-		for(Carta carta: rondas.get(rondas.size()-2).getCartas()) {
+		for(Carta carta: rondas.get(rondas.size()-1).getCartas()) {
 			retornar.add(carta.toString());
 		}
 		return retornar;
@@ -304,20 +307,30 @@ public class Juego implements Observable{
 	public IJugador getITurno(){
 		return jugador1.isTurno()?jugador1:jugador2;
 	}
-	public EstadoTruco getEstadoTruco() {
+	public EstadoTruco getEstadoTruco(){
 		return estadoTruco;
 	}
 	public ArrayList<Observador> getObservadores() {
 		return observadores;
 	}
-	public boolean isJugadoresCompletos() {
+	public boolean isJugadoresCompletos(){
 		return (this.jugador1!=null &&this.jugador2!=null);
 	}
-	public String getJugadorUltAgregado()  {
+	public String getJugadorUltAgregado(){
 		if (jugador2==null) {
 			return jugador1.getNombre();
 		}else {
 		return jugador2.getNombre();}
+	}
+	public boolean verificarNombre(String nombre){
+		boolean puedeUsarEsteNombre=true;
+		if (jugador1!=null) {
+			puedeUsarEsteNombre=!nombre.equals(jugador1.getNombre());
+		}
+		if (jugador2!=null) {
+			puedeUsarEsteNombre=!nombre.equals(jugador2.getNombre());
+		}
+		return puedeUsarEsteNombre;
 	}
 	@Override
 	public void notificar(Object evento) {
@@ -329,6 +342,4 @@ public class Juego implements Observable{
 	public void agregarObservador(Observador observador) {
 		this.observadores.add(observador);
 	}
-	
 }
-	

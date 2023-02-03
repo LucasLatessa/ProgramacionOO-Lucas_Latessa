@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -49,7 +50,14 @@ public class VistaGrafica implements IVista {
 		this.vPrincipal.onClickTirarCarta(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				controlador.tirar(vPrincipal.getCartaSeleccionada());
+				
+				try {
+					controlador.tirar(vPrincipal.getCartaSeleccionada());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				vPrincipal.ocultarBotonesEnvido();
 				vPrincipal.ocultarNotificaciones();
 				
 			}
@@ -191,7 +199,13 @@ public class VistaGrafica implements IVista {
 	@Override
 	public void quererNoQuererTruco(String nombreTurno, EstadoTruco truco) {
 		this.vPrincipal.notificarCanto(truco.toString());
-		boolean puedeCantarEnvido=controlador.puedeCantarEnvidos();
+		boolean puedeCantarEnvido = false;
+		try {
+			puedeCantarEnvido = controlador.puedeCantarEnvidos();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		mostrarCartasEnMano();
 		this.vPrincipal.mostrarBotonesTruco(puedeCantarEnvido);
 		this.vPrincipal.onClickQuiero(new ActionListener() {
@@ -227,8 +241,13 @@ public class VistaGrafica implements IVista {
 		}
 		mostrarPuntajes();
 		mostrarCartasEnMano();
-		if (controlador.puedeCantarEnvidos()) {
-			this.vPrincipal.mostrarBotonesEnvido();
+		try {
+			if (controlador.puedeCantarEnvidos()) {
+				this.vPrincipal.mostrarBotonesEnvido();
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		String canto=controlador.queTrucoPuedeCantar();
 		this.vPrincipal.turnoActual(canto,controlador.nombreTurno());
@@ -251,13 +270,23 @@ public class VistaGrafica implements IVista {
 	}
 	@Override
 	public void mostrarCartasEnMano() {
-		this.vPrincipal.mostrarCartas(controlador.listarCartas());
+		try {
+			this.vPrincipal.mostrarCartas(controlador.listarCartas());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	@Override
 	public void mostrarCartaTirada() {
 		String cartaTirada=controlador.getCartaTirada();
 		if (cartaTirada!=null){
-			this.vPrincipal.mostrarCartaTirada(cartaTirada);
+			try {
+				this.vPrincipal.mostrarCartaTirada(cartaTirada);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			}
 		
 	}

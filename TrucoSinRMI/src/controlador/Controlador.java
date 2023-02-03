@@ -129,9 +129,6 @@ import vista.VistaConsola;
 	public int rondaAcutual() {
 		return modelo.getNroRonda();		
 	}
-	public int rondaAnterior() {
-		return modelo.getNroRonda()-1;
-	}
 	public int obtenerCantCartasJugActual() {
 		return modelo.getITurno().getCartas().size();
 	}

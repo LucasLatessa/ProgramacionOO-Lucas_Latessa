@@ -15,4 +15,16 @@ public enum EstadoEnvido implements Serializable {
 	public int getPuntaje() {
 		return puntaje;
 	}
+	@Override
+	public String toString() {
+		switch(puntaje) {
+		case 2:
+			return "envido";
+		case 3:
+			return "real envido";
+		case 0:
+			return "falta envido";
+		}
+		return null;
+	}
 }

@@ -1,4 +1,5 @@
 package vista;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -56,19 +57,20 @@ public class VistaConsola implements IVista {
 			case "E":
 				controlador.cantar(EstadoEnvido.ENVIDO);
 				break;
-			case "RE":
-				controlador.cantar(EstadoEnvido.REALENVIDO);
+			case "R":
+				if (controlador.queTrucoPuedeCantar().equals("Re truco")) {
+					controlador.cantar(EstadoTruco.RETRUCO);
+				}else {
+					controlador.cantar(EstadoEnvido.REALENVIDO);
+				}
 				break;
-			case "FE":
+			case "F":
 				controlador.cantar(EstadoEnvido.FALTAENVIDO);
 				break;
 			case "T":
 				controlador.cantar(EstadoTruco.TRUCO);
 				break;
-			case "RT":
-				controlador.cantar(EstadoTruco.RETRUCO);
-				break;
-			case "VC":
+			case "V":
 				controlador.cantar(EstadoTruco.VALECUATRO);
 				break;
 			default:
@@ -84,8 +86,13 @@ public class VistaConsola implements IVista {
 			System.out.println("Opciones");
 			System.out.println("C-Tirar carta \nM-Irme al mazo");
 			String canto=controlador.queTrucoPuedeCantar();
-			if (controlador.puedeCantarEnvidos()) {
-				System.out.println("E-Cantar envido \nRE-Cantar real envido \nFE-Cantar falta envido");
+			try {
+				if (controlador.puedeCantarEnvidos()) {
+					System.out.println("E-Cantar envido \nR-Cantar real envido \nF-Cantar falta envido");
+				}
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			if (controlador.quienCantoUltimo()!= controlador.turnoActual()) {
 				switch(canto) {
@@ -93,15 +100,15 @@ public class VistaConsola implements IVista {
 					System.out.println("T-Cantar truco");
 					break;
 				case "Re truco":
-					System.out.println("RT-Cantar retruco");
+					System.out.println("R-Cantar retruco");
 					break;
 				case "Vale cuatro":
-					System.out.println("VC-Cantar vale cuatro");
+					System.out.println("V-Cantar vale cuatro");
 				}}
 			System.out.println("Ingrese opcion");
 			String opcion = entrada.nextLine().toUpperCase();
-			while(!opcion.equals("C")&&!opcion.equals("M")&&!opcion.equals("E")&&!opcion.equals("RE")&&!opcion.equals("FE")
-					&&!opcion.equals("T")&&!opcion.equals("RT")&&!opcion.equals("VC")) {
+			while(!opcion.equals("C")&&!opcion.equals("M")&&!opcion.equals("E")&&!opcion.equals("R")&&!opcion.equals("F")
+					&&!opcion.equals("T")&&!opcion.equals("V")) {
 				System.out.println("Opcion invalida \nIngrese opcion nuevamente");
 				opcion = entrada.nextLine().toUpperCase();
 			}
@@ -147,13 +154,20 @@ public class VistaConsola implements IVista {
 		System.out.println("Opciones");
 		System.out.println("S-Quiero");
 		System.out.println("N-No quiero");
-		if (controlador.puedeCantarEnvidos()) {
+		boolean puedeCantarEnvidos = false;
+		try {
+			puedeCantarEnvidos = controlador.puedeCantarEnvidos();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (puedeCantarEnvidos) {
 			System.out.println("E-Cantar envido \nR-Cantar real envido \nF-Cantar falta envido");
 		}
 		System.out.println("Ingrese opcion");
 		String opcion =entrada.nextLine().toUpperCase();
 		while(!(opcion.equals("S")||opcion.equals("N"))&&
-				(!opcion.equals("E")&&!opcion.equals("R")&&!opcion.equals("F")&&controlador.puedeCantarEnvidos())) {
+				(!opcion.equals("E")&&!opcion.equals("R")&&!opcion.equals("F")&&puedeCantarEnvidos)) {
 			System.out.println("Opcion invalida \nIngrese opcion nuevamente");
 			opcion = (this.entrada.nextLine());
 		}
@@ -210,9 +224,8 @@ public class VistaConsola implements IVista {
 		Integer p1= controlador.obtenerTantosEnvido().get(0);
 		Integer p2=controlador.obtenerTantosEnvido().get(1);
 		System.out.println("Los tantos fueron :"+p1+", "+p2);
-		System.out.println( "El ganador del tanto es "+nombre);
-		System.out.println("Presione enter");
-		this.entrada.nextLine();
+		System.out.println( "El ganador del tanto es "+nombre+"\n");
+
 		
 	}
 	@Override
@@ -225,7 +238,7 @@ public class VistaConsola implements IVista {
 			}
 		System.out.println("\n\nLa ronda termino "
 				+"\nCartas de la ronda:"+mostrar
-				+ "\nEl ganador de la ronda "+controlador.rondaAnterior()+" es "+ controlador.obtenerGanadorDeRonda());
+				+ "\nEl ganador de la ronda "+controlador.rondaActual()+" es "+ controlador.obtenerGanadorDeRonda());
 
 	}
 	@Override
@@ -237,15 +250,11 @@ public class VistaConsola implements IVista {
 	public void manoTerminada() {
 		System.out.println("La mano termino");
 		mostrarPuntajes();
-		System.out.println("Presione enter para repartir la siguiente mano");
-		this.entrada.nextLine();
 	}
 	@Override
 	public void juegoTerminado() {
 		mostrarPuntajes();
 		System.out.println("El juego termino, el ganador es "+controlador.termino().getNombre());
-		System.out.println("Presione enter para salir");
-		this.entrada.nextLine();
 		System.exit(0);
 	}
 	@Override
@@ -263,7 +272,6 @@ public class VistaConsola implements IVista {
 	}
 	@Override
 	public void esperandoJugadores() {
-		
 		System.out.println("Esperando otros jugadores...");
 	}
 	@Override

@@ -44,14 +44,21 @@ public class Juego  extends ObservableRemoto implements IJuego{
 	 * @return carta tirada(si no la encuentra devuelve nulo)
 	 */
 	public void tirarCarta(int carta) throws RemoteException{
-		Carta cartatirada=getTurno().tirarCarta(carta);
-		cartaTirada=cartatirada;
+		cartaTirada=getTurno().tirarCarta(carta);
 		Ronda ronda=rondas.get(rondas.size()-1);
-		ronda.jugar(getTurno(), cartatirada); //juego en la ronda la carta con respectivo jugador
+		if (ronda.isTerminada()){
+			newRonda();
+			ronda=rondas.get(rondas.size()-1);
+		}
+		ronda.jugar(getTurno(), cartaTirada); //juego en la ronda la carta con respectivo jugador
 		changeTurno();
 		if (ronda.isTerminada()){
-			notificarObservadores(Eventos.RONDA_TERMINADA);
-		}else {
+			if (isFinManoYSumaPuntos()) {
+				this.nuevaMano();
+				notificarObservadores(Eventos.MANO_TERMINADA);}
+			else {
+				notificarObservadores(Eventos.RONDA_TERMINADA);}}
+		else {
 			notificarObservadores(Eventos.SEGUIR_JUEGO);
 		}
 	}
@@ -86,7 +93,7 @@ public class Juego  extends ObservableRemoto implements IJuego{
 			Ronda ronda1=rondas.get(getNroRonda()-2);
 			Ronda ronda2=rondas.get(getNroRonda()-1);
 			if (ronda1.getGanador()==ronda2.getGanador()) {
-				siFinManoYSumoPuntos();
+				isFinManoYSumaPuntos();
 				this.nuevaMano();
 				notificarObservadores(Eventos.MANO_TERMINADA);
 			}
@@ -100,7 +107,7 @@ public class Juego  extends ObservableRemoto implements IJuego{
 		notificarObservadores(envid);
 	}
 	public void cantado(EstadoTruco estado) throws RemoteException {
-		changeTurno();
+		turnoPregTruco();
 		notificarObservadores(estado);
 	}
 	public void quiero(EstadoTruco estado) throws RemoteException{
@@ -159,23 +166,19 @@ public class Juego  extends ObservableRemoto implements IJuego{
 	/**
 	 * Cambia el turno del juego, en caso de que ninguno de los dos haya sido el turno anterior
 	    es turno del mano(caso primera ronda).
+	 * @throws RemoteException 
 	 */
-	public void changeTurno() throws RemoteException{
+	public void changeTurno() throws RemoteException {
 		Ronda ronda=rondas.get(getNroRonda()-1);
 		if (ronda.isTerminada()) {
 			Jugador jugGana=ronda.getGanador();
-			if (siFinManoYSumoPuntos()) {
-				this.nuevaMano();
-				notificarObservadores(Eventos.MANO_TERMINADA);
-			}else if (jugGana!=null){
+			if (jugGana!=null){
 				jugGana.setTurno(true);
 				getJugadorContra(jugGana).setTurno(false);
-				newRonda();
 			}
 			else {
 				jugador2.changeTurno();
 				jugador1.changeTurno();
-				newRonda();
 				notificarObservadores(Eventos.PARDA);
 			}
 		}else if (jugador1.isTurno()||jugador2.isTurno()) {//mientras transcurre la ronda
@@ -187,6 +190,11 @@ public class Juego  extends ObservableRemoto implements IJuego{
 			jugador2.setTurno(true);;
 				}
 			}
+	@Override
+	public void turnoPregTruco() throws RemoteException {
+		jugador2.changeTurno();
+		jugador1.changeTurno();
+	}
 	public void turnoLuegoEnvido()throws RemoteException {
 		Jugador yaTiro=rondas.get(0).jugadorYaTiro();
 		if (yaTiro!=null){
@@ -200,7 +208,7 @@ public class Juego  extends ObservableRemoto implements IJuego{
 	/**
 	 * @return si termina la mano le suma los puntos al ganador 
 	 */
-	public boolean siFinManoYSumoPuntos()throws RemoteException {
+	public boolean isFinManoYSumaPuntos()throws RemoteException {
 		boolean retorno=false;
 		int cont1=0;
 		int parda=0;
@@ -286,11 +294,11 @@ public class Juego  extends ObservableRemoto implements IJuego{
 		return rondas.size();
 	}
 	public IJugador getGanadorDeRonda() throws RemoteException{
-		return rondas.get(rondas.size()-2).getGanador();
+		return rondas.get(rondas.size()-1).getGanador();
 	}
 	public ArrayList<String> getCartasDeRonda() throws RemoteException{
 		ArrayList<String> retornar=new ArrayList<String>();
-		for(Carta carta: rondas.get(rondas.size()-2).getCartas()) {
+		for(Carta carta: rondas.get(rondas.size()-1).getCartas()) {
 			retornar.add(carta.toString());
 		}
 		return retornar;
@@ -333,6 +341,10 @@ public class Juego  extends ObservableRemoto implements IJuego{
 		}
 		return puedeUsarEsteNombre;
 	}
+	@Override
+	public boolean rondaActualTerminada()  throws RemoteException{
+		Ronda ronda=rondas.get(rondas.size()-1);
+		return ronda.isTerminada();
+	}
 	
 }
-	

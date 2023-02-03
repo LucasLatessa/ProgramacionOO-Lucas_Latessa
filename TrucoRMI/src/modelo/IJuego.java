@@ -67,7 +67,7 @@ public interface IJuego extends IObservableRemoto, Serializable {
 	/**
 	 * @return si termina la mano le suma los puntos al ganador 
 	 */
-	boolean siFinManoYSumoPuntos() throws RemoteException;
+	boolean isFinManoYSumaPuntos() throws RemoteException;
 
 	void sumarPuntosAlMazo() throws RemoteException;
 
@@ -104,6 +104,10 @@ public interface IJuego extends IObservableRemoto, Serializable {
 	ArrayList<String> getCartasDeRonda() throws RemoteException;
 
 	boolean verificarNombre(String nombre) throws RemoteException;
+
+	void turnoPregTruco() throws RemoteException;
+
+	boolean rondaActualTerminada() throws RemoteException;
 
 
 }

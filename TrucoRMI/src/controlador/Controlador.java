@@ -144,7 +144,8 @@ import vista.VistaConsola;
 	}
 	public String obtenerGanadorDeRonda() {
 		try {
-			return modelo.getGanadorDeRonda().getNombre();
+			IJugador ganador=modelo.getGanadorDeRonda();
+			return ganador!=null?ganador.getNombre():"";
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -196,14 +197,6 @@ import vista.VistaConsola;
 	public void tirar(int carta) {
 		 try {
 			modelo.tirarCarta(carta);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-	}
-	public void preguntar(Eventos evento) {
-		try {
-			modelo.changeTurno();
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -312,7 +305,7 @@ import vista.VistaConsola;
 		}
 		return null;
 	}
-	public int rondaAcutual()  {
+	public int rondaActual()  {
 		try {
 			return modelo.getNroRonda();
 		} catch (RemoteException e) {
@@ -320,15 +313,6 @@ import vista.VistaConsola;
 			e.printStackTrace();
 		}
 		return 0;		
-	}
-	public int rondaAnterior()  {
-		try {
-			return modelo.getNroRonda()-1;
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return 0;
 	}
 	public int obtenerCantCartasJugActual()  {
 		try {
@@ -382,9 +366,10 @@ import vista.VistaConsola;
 	}
 	/**
 	 * @return true si el jugador actual puede cantar envidos
+	 * @throws RemoteException 
 	 */
-	public boolean puedeCantarEnvidos() {
-		return (rondaAcutual()==1)&&(obtenerGanadorEnvido()==null)&&(queSeEstaJugando()==EstadoTruco.NADA);
+	public boolean puedeCantarEnvidos() throws RemoteException {
+		return (rondaActual()==1)&&(!modelo.rondaActualTerminada())&&(obtenerGanadorEnvido()==null)&&(queSeEstaJugando()==EstadoTruco.NADA);
 
 	}
 	public boolean noNombreRepetido(String nombre) throws RemoteException {

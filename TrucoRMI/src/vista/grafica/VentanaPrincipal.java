@@ -8,6 +8,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
+
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
@@ -16,7 +18,10 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -30,8 +35,13 @@ import java.awt.Insets;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
 import java.awt.Font;
 import javax.swing.JSeparator;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -46,8 +56,6 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btnNoQuiero;
 	private JButton btnMazo;
 	private JButton btnTirarCarta;
-	private JRadioButton carta1;
-	private JRadioButton carta2;
 	private JRadioButton carta3;
 	private ButtonGroup grupo;
 	private JLabel cartasTiradasJ2;
@@ -69,24 +77,42 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lblPuntosJ1;
 	private JPanel panelBajo_Cartas;
 	private JLabel lblNotificaciones;
-	private JSeparator separator;
 	private JLabel lblNotificacionFinal;
-	public VentanaPrincipal() {
+	private JPanel panelC1;
+	private JPanel panelC2;
+	private JPanel panelC3;
+	private JRadioButton carta1;
+	private JRadioButton carta2;
+	private JLabel lblCarta1;
+	private JLabel lblCarta2;
+	private JLabel lblCarta3;
+	private JPanel panelRadioBt1;
+	private JPanel panelRadioBt2;
+	private JPanel panelRadioBt3;
+	private JPanel panel_Separador;
+	public VentanaPrincipal(){
+		Image imagenVerde = null;
+		Image imagenMarron = null;
+		try {
+			imagenVerde = ImageIO.read(new File("src/Imagenes/FondoVerde.png"));
+			imagenMarron = ImageIO.read(new File("src/Imagenes/FondoMarron.png"));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		setTitle("Truco");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 568, 389);
-		
-		contentPane = new JPanel();
+		setBounds(100, 100, 800, 600);
+		contentPane = new JPanelConFondo(imagenMarron);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(10, 0));
-		
+		contentPane.setLayout(new BorderLayout(0, 0));
 		JPanel panelDerecha = new JPanel();
 		contentPane.add(panelDerecha, BorderLayout.EAST);
 		panelDerecha.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JPanel panelPuntosArriba = new JPanel();
+		JPanel panelPuntosArriba = new JPanelConFondo(imagenMarron);
 		panelDerecha.add(panelPuntosArriba);
 		panelPuntosArriba.setLayout(new BorderLayout(0, 0));
 		
@@ -96,15 +122,15 @@ public class VentanaPrincipal extends JFrame {
 		lblNewLabel.setAlignmentY(2.0f);
 		lblNewLabel.setAlignmentX(0.5f);
 		panelPuntosArriba.add(lblNewLabel, BorderLayout.NORTH);
-		
-		JPanel panelPuntosAbajo = new JPanel();
+    	
+		JPanel panelPuntosAbajo = new JPanelConFondo(imagenMarron);
 		panelPuntosArriba.add(panelPuntosAbajo, BorderLayout.CENTER);
 		panelPuntosAbajo.setLayout(new BorderLayout(0, 0));
 		
-		JPanel panel_3 = new JPanel();
+		JPanel panel_3 = new JPanelConFondo(imagenMarron);
 		panelPuntosAbajo.add(panel_3, BorderLayout.NORTH);
 		
-		JPanel panelPuntosJ2 = new JPanel();
+		JPanel panelPuntosJ2 = new JPanelConFondo(imagenMarron);
 		panel_3.add(panelPuntosJ2);
 		panelPuntosJ2.setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -119,7 +145,7 @@ public class VentanaPrincipal extends JFrame {
 		lblPuntosJ2.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		panelPuntosJ2.add(lblPuntosJ2);
 		
-		JPanel panelPuntosJ1 = new JPanel();
+		JPanel panelPuntosJ1 = new JPanelConFondo(imagenMarron);
 		panel_3.add(panelPuntosJ1);
 		panelPuntosJ1.setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -135,7 +161,7 @@ public class VentanaPrincipal extends JFrame {
 		lblPuntosJ1.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		panelPuntosJ1.add(lblPuntosJ1);
 		
-		JPanel panelAbajo_Cantos = new JPanel();
+		JPanel panelAbajo_Cantos = new JPanelConFondo(imagenMarron);
 		panelDerecha.add(panelAbajo_Cantos);
 		panelAbajo_Cantos.setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -166,20 +192,80 @@ public class VentanaPrincipal extends JFrame {
 		btnMazo = new JButton("Mazo");
 		panelAbajo_Cantos.add(btnMazo);
 		
-		panelBajo_Cartas = new JPanel();
+		panelBajo_Cartas = new JPanelConFondo(imagenMarron);
+		FlowLayout flowLayout = (FlowLayout) panelBajo_Cartas.getLayout();
+		flowLayout.setVgap(0);
+		flowLayout.setHgap(0);
 		contentPane.add(panelBajo_Cartas, BorderLayout.SOUTH);
+		grupo= new ButtonGroup();
+			
+		panelC1 = new JPanelConFondo(imagenMarron);
+		panelBajo_Cartas.add(panelC1);
+		panelC1.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		lblCarta1 = new JLabel("");
+		lblCarta1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				carta1.setSelected(true);
+			}
+		});
+		lblCarta1.setHorizontalAlignment(SwingConstants.CENTER);
+		panelC1.add(lblCarta1);
+		
+		panelRadioBt1 = new JPanelConFondo(imagenMarron);
+		panelC1.add(panelRadioBt1);
 		
 		carta1 = new JRadioButton("");
-		carta2 = new JRadioButton("");
-		carta3 = new JRadioButton("");
-		 grupo= new ButtonGroup(); 
+		carta1.setVerticalAlignment(SwingConstants.BOTTOM);
+		panelRadioBt1.add(carta1);
+		carta1.setHorizontalAlignment(SwingConstants.CENTER);
 		grupo.add(carta1);
-		grupo.add(carta2);
-		grupo.add(carta3);
-		panelBajo_Cartas.add(carta1);
-		panelBajo_Cartas.add(carta2);
-		panelBajo_Cartas.add(carta3);
 		
+		panelC2 = new JPanelConFondo(imagenMarron);
+		panelBajo_Cartas.add(panelC2);
+		panelC2.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		lblCarta2 = new JLabel("");
+		lblCarta2.setHorizontalAlignment(SwingConstants.CENTER);
+		panelC2.add(lblCarta2);
+		
+		panelRadioBt2 = new JPanelConFondo(imagenMarron);
+		panelC2.add(panelRadioBt2);
+		
+		carta2 = new JRadioButton("");
+		carta2.setVerticalAlignment(SwingConstants.BOTTOM);
+		panelRadioBt2.add(carta2);
+		carta2.setHorizontalAlignment(SwingConstants.CENTER);
+		grupo.add(carta2);
+		lblCarta2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				carta2.setSelected(true);
+			}
+		});
+		
+		panelC3 = new JPanelConFondo(imagenMarron);
+		panelBajo_Cartas.add(panelC3);
+		panelC3.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		lblCarta3 = new JLabel("");
+		lblCarta3.setHorizontalAlignment(SwingConstants.CENTER);
+		panelC3.add(lblCarta3);
+		
+		panelRadioBt3 = new JPanelConFondo(imagenMarron);
+		panelC3.add(panelRadioBt3);
+		carta3 = new JRadioButton("");
+		carta3.setVerticalAlignment(SwingConstants.BOTTOM);
+		panelRadioBt3.add(carta3);
+		carta3.setHorizontalAlignment(SwingConstants.CENTER);
+		grupo.add(carta3);
+		lblCarta3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				carta3.setSelected(true);
+			}
+		});
 		btnTirarCarta = new JButton("Tirar Carta");
 		
 		panelBajo_Cartas.add(btnTirarCarta);
@@ -192,23 +278,22 @@ public class VentanaPrincipal extends JFrame {
 		panelCentro.add(panelCartasTiradasIzq);
 		panelCartasTiradasIzq.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JPanel panelCartasTiradasJ1 = new JPanel();
+		JPanel panelCartasTiradasJ1 = new JPanelConFondo(imagenMarron);
 		panelCartasTiradasIzq.add(panelCartasTiradasJ1);
 		panelCartasTiradasJ1.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		separator = new JSeparator();
-		separator.setOrientation(SwingConstants.VERTICAL);
-		panelCartasTiradasJ1.add(separator);
+		panel_Separador = new JPanelConFondo(imagenMarron);
+		panelCartasTiradasJ1.add(panel_Separador);
 		
 		JLabel cartasTiradasJ1 = new JLabel("Tus cartas tiradas");
 		cartasTiradasJ1.setHorizontalAlignment(SwingConstants.CENTER);
 		panelCartasTiradasJ1.add(cartasTiradasJ1);
 		
-		JPanel panelCartaTiradaJ1_1 = new JPanel();
+		JPanel panelCartaTiradaJ1_1 = new JPanelConFondo(imagenVerde);
 		panelCartasTiradasIzq.add(panelCartaTiradaJ1_1);
 		panelCartaTiradaJ1_1.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		JPanel panel = new JPanel();
+		JPanel panel = new JPanelConFondo(imagenMarron);
 		panelCartaTiradaJ1_1.add(panel);
 		panel.setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -225,11 +310,11 @@ public class VentanaPrincipal extends JFrame {
 		cartaTiradaJ1_1.setHorizontalAlignment(SwingConstants.CENTER);
 		panelCartaTiradaJ1_1.add(cartaTiradaJ1_1);
 		
-		JPanel panelCartaTiradaJ1_2 = new JPanel();
+		JPanel panelCartaTiradaJ1_2 = new JPanelConFondo(imagenVerde);
 		panelCartasTiradasIzq.add(panelCartaTiradaJ1_2);
 		panelCartaTiradaJ1_2.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		JPanel panel_1 = new JPanel();
+		JPanel panel_1 = new JPanelConFondo(imagenMarron);
 		panelCartaTiradaJ1_2.add(panel_1);
 		panel_1.setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -246,11 +331,11 @@ public class VentanaPrincipal extends JFrame {
 		cartaTiradaJ1_2.setHorizontalAlignment(SwingConstants.CENTER);
 		panelCartaTiradaJ1_2.add(cartaTiradaJ1_2);
 		
-		JPanel panelCartaTiradaJ1_3 = new JPanel();
+		JPanel panelCartaTiradaJ1_3 = new JPanelConFondo(imagenVerde);
 		panelCartasTiradasIzq.add(panelCartaTiradaJ1_3);
 		panelCartaTiradaJ1_3.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		JPanel panel_2 = new JPanel();
+		JPanel panel_2 = new JPanelConFondo(imagenMarron);
 		panelCartaTiradaJ1_3.add(panel_2);
 		panel_2.setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -271,7 +356,7 @@ public class VentanaPrincipal extends JFrame {
 		panelCentro.add(panelCartasTiradaDer);
 		panelCartasTiradaDer.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JPanel panelCartasTiradasJ2 = new JPanel();
+		JPanel panelCartasTiradasJ2 = new JPanelConFondo(imagenMarron);
 		panelCartasTiradaDer.add(panelCartasTiradasJ2);
 		panelCartasTiradasJ2.setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -279,7 +364,7 @@ public class VentanaPrincipal extends JFrame {
 		cartasTiradasJ2.setHorizontalAlignment(SwingConstants.CENTER);
 		panelCartasTiradasJ2.add(cartasTiradasJ2);
 		
-		JPanel panelCartaTiradaJ2_1 = new JPanel();
+		JPanel panelCartaTiradaJ2_1 = new JPanelConFondo(imagenVerde);
 		panelCartasTiradaDer.add(panelCartaTiradaJ2_1);
 		panelCartaTiradaJ2_1.setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -287,7 +372,7 @@ public class VentanaPrincipal extends JFrame {
 		cartaTiradaJ2_1.setHorizontalAlignment(SwingConstants.CENTER);
 		panelCartaTiradaJ2_1.add(cartaTiradaJ2_1);
 		
-		JPanel panelCartaTiradaJ2_2 = new JPanel();
+		JPanel panelCartaTiradaJ2_2 = new JPanelConFondo(imagenVerde);
 		panelCartasTiradaDer.add(panelCartaTiradaJ2_2);
 		panelCartaTiradaJ2_2.setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -295,7 +380,7 @@ public class VentanaPrincipal extends JFrame {
 		cartaTiradaJ2_2.setHorizontalAlignment(SwingConstants.CENTER);
 		panelCartaTiradaJ2_2.add(cartaTiradaJ2_2);
 		
-		JPanel panelCartaTiradaJ2_3 = new JPanel();
+		JPanel panelCartaTiradaJ2_3 = new JPanelConFondo(imagenVerde);
 		panelCartasTiradaDer.add(panelCartaTiradaJ2_3);
 		panelCartaTiradaJ2_3.setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -303,7 +388,10 @@ public class VentanaPrincipal extends JFrame {
 		cartaTiradaJ2_3.setHorizontalAlignment(SwingConstants.CENTER);
 		panelCartaTiradaJ2_3.add(cartaTiradaJ2_3);
 		
-		JPanel panelArriba = new JPanel();
+		JPanel panelArriba = new JPanelConFondo(imagenMarron);
+		FlowLayout flowLayout_1 = (FlowLayout) panelArriba.getLayout();
+		flowLayout_1.setVgap(0);
+		flowLayout_1.setHgap(0);
 		contentPane.add(panelArriba, BorderLayout.NORTH);
 		
 		lblNotificaciones = new JLabel("");
@@ -386,21 +474,33 @@ public class VentanaPrincipal extends JFrame {
 		cartaTiradaJ2_1.setText("");
 		cartaTiradaJ2_2.setText("");
 		cartaTiradaJ2_3.setText("");
+		cartaTiradaJ1_1.setIcon(null);
+		cartaTiradaJ1_2.setIcon(null);
+		cartaTiradaJ1_3.setIcon(null);
+		cartaTiradaJ2_1.setIcon(null);
+		cartaTiradaJ2_2.setIcon(null);
+		cartaTiradaJ2_3.setIcon(null);
 	}
-	public void mostrarCartas(ArrayList<String> cartas) {
+	public void mostrarCartas(ArrayList<String> cartas) throws IOException {
 		String c1;String c2;String c3;
 		switch(cartas.size()) {
 		case 3:
 			carta3.setVisible(true);
 			c3=cartas.get(2);
+			lblCarta3.setVisible(true);
+			lblCarta3.setIcon(new ImageIcon(ImageIO.read(new File("src/Imagenes/"+c3+".png")).getScaledInstance(70, 100, Image.SCALE_SMOOTH)));
 			carta3.setText(c3);
 		case 2:
 			carta2.setVisible(true);
 			c2=cartas.get(1);
+			lblCarta2.setVisible(true);
+			lblCarta2.setIcon(new ImageIcon(ImageIO.read(new File("src/Imagenes/"+c2+".png")).getScaledInstance(70, 100, Image.SCALE_SMOOTH)));
 			carta2.setText(c2);
 		case 1:
 			carta1.setVisible(true);
 			c1=cartas.get(0);
+			lblCarta1.setVisible(true);
+			lblCarta1.setIcon(new ImageIcon(ImageIO.read(new File("src/Imagenes/"+c1+".png")).getScaledInstance(70, 100, Image.SCALE_SMOOTH)));
 			carta1.setText(c1);
 		}
 	}
@@ -419,6 +519,9 @@ public class VentanaPrincipal extends JFrame {
 		carta1.setVisible(false);
 		carta2.setVisible(false);
 		carta3.setVisible(false);
+		lblCarta1.setVisible(false);
+		lblCarta2.setVisible(false);
+		lblCarta3.setVisible(false);
 	}
 	public void turnoActual(String trucoPuedeCantar,String nombreTurno) {
 		setTitle("Truco(TURNO ACTUAL, "+nombreTurno+")");
@@ -443,7 +546,7 @@ public class VentanaPrincipal extends JFrame {
 		btnRealEnvido.setVisible(true);
 		btnFaltaEnvido.setVisible(true);
 	}
-	public int getCartaSeleccionada() {
+	public int getCartaSeleccionada() throws IOException {
 		JRadioButton seleccionado=getSelection(grupo);
 		int retornar=0;
 		if (seleccionado==carta1) {
@@ -455,29 +558,38 @@ public class VentanaPrincipal extends JFrame {
 		}
 		if (!carta3.isVisible()) {
 			carta2.setVisible(false);
+			this.lblCarta2.setIcon(null);;
 		}
 		carta3.setVisible(false);
-		if (cartaTiradaJ1_1.getText().equals("")) {
-			cartaTiradaJ1_1.setText(seleccionado.getText());}
-		else if(cartaTiradaJ1_2.getText().equals("")) {
-			cartaTiradaJ1_2.setText(seleccionado.getText());}
-		else if (cartaTiradaJ1_3.getText().equals("")) {
-			cartaTiradaJ1_3.setText(seleccionado.getText());}
-
+		this.lblCarta3.setIcon(null);
+		ImageIcon iconCarta=new ImageIcon(ImageIO.read(new File("src/Imagenes/"+seleccionado.getText()+".png")).getScaledInstance(50, 80, Image.SCALE_SMOOTH));
+		if (cartaTiradaJ1_1.getIcon()==null) {
+			cartaTiradaJ1_1.setText(seleccionado.getText());
+			cartaTiradaJ1_1.setIcon(iconCarta);}
+		else if(cartaTiradaJ1_2.getIcon()==null) {
+			cartaTiradaJ1_2.setText(seleccionado.getText());
+			cartaTiradaJ1_2.setIcon(iconCarta);}
+		else if (cartaTiradaJ1_3.getIcon()==null) {
+			cartaTiradaJ1_3.setText(seleccionado.getText());
+			cartaTiradaJ1_3.setIcon(iconCarta);}
 		return retornar;
 		
 	}
 	public boolean jugadoresCargados() {
 		return !(lblNameJugador1.getText().equals("") && lblNameJugador2.getText().equals(""));
 	}
-	public void mostrarCartaTirada(String cartaTirada) {
+	public void mostrarCartaTirada(String cartaTirada) throws IOException {
+		ImageIcon iconCarta=new ImageIcon(ImageIO.read(new File("src/Imagenes/"+cartaTirada+".png")).getScaledInstance(50, 80, Image.SCALE_SMOOTH));
 		if(noEsNingunaQueYoTire(cartaTirada)&&noEsNingunaQueContraTiro(cartaTirada)) {
-			if (cartaTiradaJ2_1.getText().equals("")) {
-				cartaTiradaJ2_1.setText(cartaTirada);}
-			else if(cartaTiradaJ2_2.getText().equals("")) {
-				cartaTiradaJ2_2.setText(cartaTirada);}
-			else if (cartaTiradaJ2_3.getText().equals("")) {
-				cartaTiradaJ2_3.setText(cartaTirada);}
+			if (cartaTiradaJ2_1.getIcon() == null) {
+				cartaTiradaJ2_1.setText(cartaTirada);
+				cartaTiradaJ2_1.setIcon(iconCarta);}
+			else if(cartaTiradaJ2_2.getIcon() == null) {
+				cartaTiradaJ2_2.setText(cartaTirada);
+				cartaTiradaJ2_2.setIcon(iconCarta);}
+			else if (cartaTiradaJ2_3.getIcon() == null) {
+				cartaTiradaJ2_3.setText(cartaTirada);
+				cartaTiradaJ2_3.setIcon(iconCarta);}
 	}}
 	private boolean noEsNingunaQueContraTiro(String cartaTirada) {
 		return (!(cartaTirada.equals(cartaTiradaJ2_1.getText()))&&!(cartaTirada.equals(cartaTiradaJ2_2.getText()))&&!(cartaTirada.equals(cartaTiradaJ2_3.getText())));
@@ -490,7 +602,7 @@ public class VentanaPrincipal extends JFrame {
 			lblResultadoRonda1.setText("Ganaste la ronda");}
 		else if (lblResultadoRonda2.getText().equals("")) {
 			lblResultadoRonda2.setText("Ganaste la ronda");}
-		else if (lblResultadoRonda3.getText().equals("")) {
+		else if (lblResultadoRonda3.getText().equals("")&&cartaTiradaJ1_3.getText()!="") {
 			lblResultadoRonda3.setText("Ganaste la ronda");}
 	}
 	public void perdioRonda() {
@@ -498,7 +610,7 @@ public class VentanaPrincipal extends JFrame {
 			lblResultadoRonda1.setText("Perdiste la ronda");}
 		else if (lblResultadoRonda2.getText().equals("")) {
 			lblResultadoRonda2.setText("Perdiste la ronda");}
-		else if (lblResultadoRonda3.getText().equals("")) {
+		else if (lblResultadoRonda3.getText().equals("")&&cartaTiradaJ1_3.getText()!="") {
 			lblResultadoRonda3.setText("Perdiste la ronda");}
 	}
 	public void pardaRonda() {
@@ -507,7 +619,7 @@ public class VentanaPrincipal extends JFrame {
 			lblResultadoRonda2.setText("Segunda define");}
 		else if (lblResultadoRonda2.getText().equals("")) {
 			lblResultadoRonda2.setText("Ronda parda");}
-		else if (lblResultadoRonda3.getText().equals("")) {
+		else if (lblResultadoRonda3.getText().equals("")&&cartaTiradaJ1_3.getText()!="") {
 			lblResultadoRonda3.setText("Ronda parda");}
 	}
 	public boolean isPrimeraRonda() {
@@ -560,4 +672,9 @@ public class VentanaPrincipal extends JFrame {
 	public void juegoTerminado(String ganador) {
 		lblNotificacionFinal.setText("El juego termino, el ganador es "+ ganador);
 		this.panelBajo_Cartas.setVisible(false);	}
+	public void pedirDeNuevoCarta() {
+		this.lblNotificaciones.setVisible(true);
+		lblNotificaciones.setText( "Selecciona una carta para tirar");
+		
+	}
 }
