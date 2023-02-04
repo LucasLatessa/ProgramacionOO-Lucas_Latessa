@@ -18,36 +18,40 @@ public class VentanaInicioSesion extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textUsuario;
-	private JButton btnIniciar;
+	private JButton btnNuevaPartida;
 	private JLabel lblUsuario;
+	private JButton btnCargarPartida;
 	/**
 	 * Create the frame.
 	 */
 	public VentanaInicioSesion() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 247, 109);
+		setBounds(100, 100, 300, 110);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[][grow]", "[][]"));
+		contentPane.setLayout(new MigLayout("", "[][][][grow]", "[][]"));
 		
 		lblUsuario = new JLabel("Usuario");
 		contentPane.add(lblUsuario, "cell 0 0,alignx trailing");
 		
 		textUsuario = new JTextField();
-		contentPane.add(textUsuario, "cell 1 0,growx");
+		contentPane.add(textUsuario, "cell 3 0,growx");
 		textUsuario.setColumns(10);
 		
-		btnIniciar = new JButton("Iniciar");
-		contentPane.add(btnIniciar, "cell 1 1,alignx right");
+		btnCargarPartida = new JButton("Cargar partida");
+		contentPane.add(btnCargarPartida, "flowx,cell 3 1");
 		
-		SwingUtilities.getRootPane(btnIniciar).setDefaultButton(btnIniciar);
+		btnNuevaPartida = new JButton("Nueva partida");
+		contentPane.add(btnNuevaPartida, "cell 3 1,alignx right");
+		
+		SwingUtilities.getRootPane(btnNuevaPartida).setDefaultButton(btnNuevaPartida);
 	}
 	
 	public void onClickIniciar(ActionListener listener) {
-		this.btnIniciar.addActionListener(listener);
+		this.btnNuevaPartida.addActionListener(listener);
 	}
 	
 	public String getGetNombreUsuario() {
@@ -57,7 +61,7 @@ public class VentanaInicioSesion extends JFrame {
 		this.textUsuario.setText("El nombre de usuario ya esta usado");
 	}
 	public void esperandoOtrosJugadores() {
-		this.btnIniciar.setVisible(false);
+		this.btnNuevaPartida.setVisible(false);
 		this.textUsuario.setVisible(false);
 		this.lblUsuario.setText("Esperando jugadores...");
 		

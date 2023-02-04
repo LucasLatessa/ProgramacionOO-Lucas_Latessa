@@ -126,7 +126,7 @@ import vista.VistaConsola;
 	public String getCartaTirada() {
 		return modelo.getCartaTirada()==null?null:modelo.getCartaTirada().toString();
 	}
-	public int rondaAcutual() {
+	public int rondaActual() {
 		return modelo.getNroRonda();		
 	}
 	public int obtenerCantCartasJugActual() {
@@ -165,8 +165,8 @@ import vista.VistaConsola;
 	/**
 	 * @return true si el jugador actual puede cantar envidos
 	 */
-	public boolean puedeCantarEnvidos() {
-		return (rondaAcutual()==1)&&(obtenerGanadorEnvido()==null)&&(queSeEstaJugando()==EstadoTruco.NADA);
+	public boolean puedeCantarEnvidos(){
+		return (rondaActual()==1)&&(!modelo.rondaActualTerminada())&&(obtenerGanadorEnvido()==null)&&(queSeEstaJugando()==EstadoTruco.NADA);
 
 	}
 	public ArrayList<String> obtenerCartasRonda() {

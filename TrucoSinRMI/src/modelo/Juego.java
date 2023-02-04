@@ -1,4 +1,5 @@
 package modelo;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -341,5 +342,9 @@ public class Juego implements Observable{
 	@Override
 	public void agregarObservador(Observador observador) {
 		this.observadores.add(observador);
+	}
+	public boolean rondaActualTerminada() {
+		Ronda ronda=rondas.get(rondas.size()-1);
+		return ronda.isTerminada();
 	}
 }

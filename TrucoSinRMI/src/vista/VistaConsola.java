@@ -225,7 +225,7 @@ public class VistaConsola implements IVista {
 			}
 		System.out.println("\n\nLa ronda termino "
 				+"\nCartas de la ronda:"+mostrar
-				+ "\nEl ganador de la ronda "+controlador.rondaAcutual()+" es "+ ganador);
+				+ "\nEl ganador de la ronda "+controlador.rondaActual()+" es "+ ganador);
 
 	}
 	@Override

@@ -108,7 +108,7 @@ public class VentanaPrincipal extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
-		JPanel panelDerecha = new JPanel();
+		JPanel panelDerecha = new JPanelConFondo(imagenMarron);
 		contentPane.add(panelDerecha, BorderLayout.EAST);
 		panelDerecha.setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -270,11 +270,11 @@ public class VentanaPrincipal extends JFrame {
 		
 		panelBajo_Cartas.add(btnTirarCarta);
 		
-		JPanel panelCentro = new JPanel();
+		JPanel panelCentro = new JPanelConFondo(imagenMarron);
 		contentPane.add(panelCentro, BorderLayout.CENTER);
 		panelCentro.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		JPanel panelCartasTiradasIzq = new JPanel();
+		JPanel panelCartasTiradasIzq = new JPanelConFondo(imagenMarron);
 		panelCentro.add(panelCartasTiradasIzq);
 		panelCartasTiradasIzq.setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -286,6 +286,7 @@ public class VentanaPrincipal extends JFrame {
 		panelCartasTiradasJ1.add(panel_Separador);
 		
 		JLabel cartasTiradasJ1 = new JLabel("Tus cartas tiradas");
+		cartasTiradasJ1.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
 		cartasTiradasJ1.setHorizontalAlignment(SwingConstants.CENTER);
 		panelCartasTiradasJ1.add(cartasTiradasJ1);
 		
@@ -298,6 +299,7 @@ public class VentanaPrincipal extends JFrame {
 		panel.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		ronda1 = new JLabel("Ronda 1");
+		ronda1.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
 		panel.add(ronda1);
 		ronda1.setVerticalAlignment(SwingConstants.TOP);
 		ronda1.setHorizontalAlignment(SwingConstants.LEFT);
@@ -307,6 +309,7 @@ public class VentanaPrincipal extends JFrame {
 		panel.add(lblResultadoRonda1);
 		
 		cartaTiradaJ1_1 = new JLabel("");
+		cartaTiradaJ1_1.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
 		cartaTiradaJ1_1.setHorizontalAlignment(SwingConstants.CENTER);
 		panelCartaTiradaJ1_1.add(cartaTiradaJ1_1);
 		
@@ -319,6 +322,7 @@ public class VentanaPrincipal extends JFrame {
 		panel_1.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		ronda2 = new JLabel("Ronda 2");
+		ronda2.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
 		panel_1.add(ronda2);
 		ronda2.setVerticalAlignment(SwingConstants.TOP);
 		ronda2.setHorizontalAlignment(SwingConstants.LEFT);
@@ -328,6 +332,7 @@ public class VentanaPrincipal extends JFrame {
 		panel_1.add(lblResultadoRonda2);
 		
 		cartaTiradaJ1_2 = new JLabel("");
+		cartaTiradaJ1_2.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
 		cartaTiradaJ1_2.setHorizontalAlignment(SwingConstants.CENTER);
 		panelCartaTiradaJ1_2.add(cartaTiradaJ1_2);
 		
@@ -340,6 +345,7 @@ public class VentanaPrincipal extends JFrame {
 		panel_2.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		ronda3 = new JLabel("Ronda 3");
+		ronda3.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
 		panel_2.add(ronda3);
 		ronda3.setVerticalAlignment(SwingConstants.TOP);
 		ronda3.setHorizontalAlignment(SwingConstants.LEFT);
@@ -349,10 +355,11 @@ public class VentanaPrincipal extends JFrame {
 		panel_2.add(lblResultadoRonda3);
 		
 		cartaTiradaJ1_3 = new JLabel("");
+		cartaTiradaJ1_3.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
 		cartaTiradaJ1_3.setHorizontalAlignment(SwingConstants.CENTER);
 		panelCartaTiradaJ1_3.add(cartaTiradaJ1_3);
 		
-		JPanel panelCartasTiradaDer = new JPanel();
+		JPanel panelCartasTiradaDer = new JPanelConFondo(imagenMarron);
 		panelCentro.add(panelCartasTiradaDer);
 		panelCartasTiradaDer.setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -361,6 +368,7 @@ public class VentanaPrincipal extends JFrame {
 		panelCartasTiradasJ2.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		cartasTiradasJ2 = new JLabel("Cartas tiradas del oponente");
+		cartasTiradasJ2.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
 		cartasTiradasJ2.setHorizontalAlignment(SwingConstants.CENTER);
 		panelCartasTiradasJ2.add(cartasTiradasJ2);
 		
@@ -369,6 +377,7 @@ public class VentanaPrincipal extends JFrame {
 		panelCartaTiradaJ2_1.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		cartaTiradaJ2_1 = new JLabel("");
+		cartaTiradaJ2_1.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
 		cartaTiradaJ2_1.setHorizontalAlignment(SwingConstants.CENTER);
 		panelCartaTiradaJ2_1.add(cartaTiradaJ2_1);
 		
@@ -377,6 +386,7 @@ public class VentanaPrincipal extends JFrame {
 		panelCartaTiradaJ2_2.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		cartaTiradaJ2_2 = new JLabel("");
+		cartaTiradaJ2_2.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
 		cartaTiradaJ2_2.setHorizontalAlignment(SwingConstants.CENTER);
 		panelCartaTiradaJ2_2.add(cartaTiradaJ2_2);
 		
@@ -385,6 +395,7 @@ public class VentanaPrincipal extends JFrame {
 		panelCartaTiradaJ2_3.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		cartaTiradaJ2_3 = new JLabel("");
+		cartaTiradaJ2_3.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
 		cartaTiradaJ2_3.setHorizontalAlignment(SwingConstants.CENTER);
 		panelCartaTiradaJ2_3.add(cartaTiradaJ2_3);
 		
@@ -671,7 +682,8 @@ public class VentanaPrincipal extends JFrame {
 	}
 	public void juegoTerminado(String ganador) {
 		lblNotificacionFinal.setText("El juego termino, el ganador es "+ ganador);
-		this.panelBajo_Cartas.setVisible(false);	}
+		this.panelBajo_Cartas.setVisible(false);
+		ocultarBotonesEnvido();}
 	public void pedirDeNuevoCarta() {
 		this.lblNotificaciones.setVisible(true);
 		lblNotificaciones.setText( "Selecciona una carta para tirar");
