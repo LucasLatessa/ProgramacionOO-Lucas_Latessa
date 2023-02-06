@@ -14,8 +14,8 @@ public class TrucoAppCliente {
 		Integer puerto = Integer.valueOf(args[0]);
 		//System.out.println(puerto); PARA MOSTRAR EL PUERTO EN CONSOLA
 		
-		//IVista vista = new VistaGrafica();
-		IVista vista = new VistaGrafica(Integer.toString(puerto));//PARA PRUEBAS USO PUERTO PARA EL NOMBRE DEL JUGADOR
+		IVista vista = new VistaGrafica();
+		//IVista vista = new VistaGrafica(Integer.toString(puerto));//PARA PRUEBAS USO PUERTO PARA EL NOMBRE DEL JUGADOR
 		//IVista vista = new VistaConsola();
 		IControladorRemoto controlador = new Controlador(vista);
 		Cliente cliente = new Cliente("127.0.0.1", puerto, "127.0.0.1", 64000);

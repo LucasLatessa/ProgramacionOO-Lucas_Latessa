@@ -59,6 +59,7 @@ public interface IJuego extends IObservableRemoto, Serializable {
 	 * @return devuelve el ganador del juego, en caso de no haberlo devuelve nulo
 	 */
 	void preguntarGanador() throws RemoteException;
+	boolean isTerminado()throws RemoteException;
 
 	IJugador getITurno() throws RemoteException;
 
@@ -88,7 +89,6 @@ public interface IJuego extends IObservableRemoto, Serializable {
 	 */
 	IEnvido addQuerido(EstadoEnvido estado) throws RemoteException;
 
-	IEnvido addPreguntado(EstadoEnvido estado) throws RemoteException;
 
 	/**
 	 * @return devuelve el ganador del envido en esta mano, devuelve nulo si no hubo

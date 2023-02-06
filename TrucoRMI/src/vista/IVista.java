@@ -28,4 +28,6 @@ public interface IVista {
 	 * muestra la carta tirada en caso de que haya
 	 */
 	void mostrarCartaTirada();
+
+	void serializar(String ganador);
 }

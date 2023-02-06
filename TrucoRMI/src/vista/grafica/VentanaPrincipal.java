@@ -65,17 +65,11 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel cartaTiradaJ1_1;
 	private JLabel cartaTiradaJ1_2;
 	private JLabel cartaTiradaJ1_3;
-	private JLabel ronda1;
-	private JLabel ronda2;
-	private JLabel ronda3;
-	private JLabel lblResultadoRonda1;
-	private JLabel lblResultadoRonda2;
-	private JLabel lblResultadoRonda3;
 	private JLabel lblNameJugador2;
 	private JLabel lblPuntosJ2;
 	private JLabel lblNameJugador1;
 	private JLabel lblPuntosJ1;
-	private JPanel panelBajo_Cartas;
+	private JPanel panelSur;
 	private JLabel lblNotificaciones;
 	private JLabel lblNotificacionFinal;
 	private JPanel panelC1;
@@ -89,13 +83,25 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panelRadioBt1;
 	private JPanel panelRadioBt2;
 	private JPanel panelRadioBt3;
-	private JPanel panel_Separador;
+	private JPanel panelIzq;
+	private JPanelConFondo panel_Separador;
+	private JPanelConFondo panel;
+	private JLabel ronda1;
+	private JLabel lblResultadoRonda1;
+	private JPanelConFondo panel_1;
+	private JLabel ronda2;
+	private JLabel lblResultadoRonda2;
+	private JPanelConFondo panel_2;
+	private JLabel ronda3;
+	private JLabel lblResultadoRonda3;
 	public VentanaPrincipal(){
 		Image imagenVerde = null;
 		Image imagenMarron = null;
+		Image imagenNegro = null;
 		try {
 			imagenVerde = ImageIO.read(new File("src/Imagenes/FondoVerde.png"));
 			imagenMarron = ImageIO.read(new File("src/Imagenes/FondoMarron.png"));
+			imagenNegro = ImageIO.read(new File("src/Imagenes/FondoNegro.png"));
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -108,12 +114,12 @@ public class VentanaPrincipal extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
-		JPanel panelDerecha = new JPanelConFondo(imagenMarron);
-		contentPane.add(panelDerecha, BorderLayout.EAST);
-		panelDerecha.setLayout(new GridLayout(0, 1, 0, 0));
+		JPanel panelDer = new JPanelConFondo(imagenMarron);
+		contentPane.add(panelDer, BorderLayout.EAST);
+		panelDer.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		JPanel panelPuntosArriba = new JPanelConFondo(imagenMarron);
-		panelDerecha.add(panelPuntosArriba);
+		panelDer.add(panelPuntosArriba);
 		panelPuntosArriba.setLayout(new BorderLayout(0, 0));
 		
 		JLabel lblNewLabel = new JLabel("Puntos");
@@ -162,7 +168,7 @@ public class VentanaPrincipal extends JFrame {
 		panelPuntosJ1.add(lblPuntosJ1);
 		
 		JPanel panelAbajo_Cantos = new JPanelConFondo(imagenMarron);
-		panelDerecha.add(panelAbajo_Cantos);
+		panelDer.add(panelAbajo_Cantos);
 		panelAbajo_Cantos.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		btnEnvido = new JButton("Envido");
@@ -192,15 +198,15 @@ public class VentanaPrincipal extends JFrame {
 		btnMazo = new JButton("Mazo");
 		panelAbajo_Cantos.add(btnMazo);
 		
-		panelBajo_Cartas = new JPanelConFondo(imagenMarron);
-		FlowLayout flowLayout = (FlowLayout) panelBajo_Cartas.getLayout();
-		flowLayout.setVgap(0);
-		flowLayout.setHgap(0);
-		contentPane.add(panelBajo_Cartas, BorderLayout.SOUTH);
+		panelSur = new JPanelConFondo(imagenMarron);
+		FlowLayout fl_panelSur = (FlowLayout) panelSur.getLayout();
+		fl_panelSur.setVgap(0);
+		fl_panelSur.setHgap(0);
+		contentPane.add(panelSur, BorderLayout.SOUTH);
 		grupo= new ButtonGroup();
 			
 		panelC1 = new JPanelConFondo(imagenMarron);
-		panelBajo_Cartas.add(panelC1);
+		panelSur.add(panelC1);
 		panelC1.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		lblCarta1 = new JLabel("");
@@ -223,7 +229,7 @@ public class VentanaPrincipal extends JFrame {
 		grupo.add(carta1);
 		
 		panelC2 = new JPanelConFondo(imagenMarron);
-		panelBajo_Cartas.add(panelC2);
+		panelSur.add(panelC2);
 		panelC2.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		lblCarta2 = new JLabel("");
@@ -246,7 +252,7 @@ public class VentanaPrincipal extends JFrame {
 		});
 		
 		panelC3 = new JPanelConFondo(imagenMarron);
-		panelBajo_Cartas.add(panelC3);
+		panelSur.add(panelC3);
 		panelC3.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		lblCarta3 = new JLabel("");
@@ -268,7 +274,7 @@ public class VentanaPrincipal extends JFrame {
 		});
 		btnTirarCarta = new JButton("Tirar Carta");
 		
-		panelBajo_Cartas.add(btnTirarCarta);
+		panelSur.add(btnTirarCarta);
 		
 		JPanel panelCentro = new JPanelConFondo(imagenMarron);
 		contentPane.add(panelCentro, BorderLayout.CENTER);
@@ -280,10 +286,7 @@ public class VentanaPrincipal extends JFrame {
 		
 		JPanel panelCartasTiradasJ1 = new JPanelConFondo(imagenMarron);
 		panelCartasTiradasIzq.add(panelCartasTiradasJ1);
-		panelCartasTiradasJ1.setLayout(new GridLayout(0, 2, 0, 0));
-		
-		panel_Separador = new JPanelConFondo(imagenMarron);
-		panelCartasTiradasJ1.add(panel_Separador);
+		panelCartasTiradasJ1.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		JLabel cartasTiradasJ1 = new JLabel("Tus cartas tiradas");
 		cartasTiradasJ1.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
@@ -294,20 +297,6 @@ public class VentanaPrincipal extends JFrame {
 		panelCartasTiradasIzq.add(panelCartaTiradaJ1_1);
 		panelCartaTiradaJ1_1.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		JPanel panel = new JPanelConFondo(imagenMarron);
-		panelCartaTiradaJ1_1.add(panel);
-		panel.setLayout(new GridLayout(0, 1, 0, 0));
-		
-		ronda1 = new JLabel("Ronda 1");
-		ronda1.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
-		panel.add(ronda1);
-		ronda1.setVerticalAlignment(SwingConstants.TOP);
-		ronda1.setHorizontalAlignment(SwingConstants.LEFT);
-		
-		lblResultadoRonda1 = new JLabel("");
-		lblResultadoRonda1.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(lblResultadoRonda1);
-		
 		cartaTiradaJ1_1 = new JLabel("");
 		cartaTiradaJ1_1.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
 		cartaTiradaJ1_1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -317,20 +306,6 @@ public class VentanaPrincipal extends JFrame {
 		panelCartasTiradasIzq.add(panelCartaTiradaJ1_2);
 		panelCartaTiradaJ1_2.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		JPanel panel_1 = new JPanelConFondo(imagenMarron);
-		panelCartaTiradaJ1_2.add(panel_1);
-		panel_1.setLayout(new GridLayout(0, 1, 0, 0));
-		
-		ronda2 = new JLabel("Ronda 2");
-		ronda2.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
-		panel_1.add(ronda2);
-		ronda2.setVerticalAlignment(SwingConstants.TOP);
-		ronda2.setHorizontalAlignment(SwingConstants.LEFT);
-		
-		lblResultadoRonda2 = new JLabel("");
-		lblResultadoRonda2.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_1.add(lblResultadoRonda2);
-		
 		cartaTiradaJ1_2 = new JLabel("");
 		cartaTiradaJ1_2.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
 		cartaTiradaJ1_2.setHorizontalAlignment(SwingConstants.CENTER);
@@ -339,20 +314,6 @@ public class VentanaPrincipal extends JFrame {
 		JPanel panelCartaTiradaJ1_3 = new JPanelConFondo(imagenVerde);
 		panelCartasTiradasIzq.add(panelCartaTiradaJ1_3);
 		panelCartaTiradaJ1_3.setLayout(new GridLayout(0, 2, 0, 0));
-		
-		JPanel panel_2 = new JPanelConFondo(imagenMarron);
-		panelCartaTiradaJ1_3.add(panel_2);
-		panel_2.setLayout(new GridLayout(0, 1, 0, 0));
-		
-		ronda3 = new JLabel("Ronda 3");
-		ronda3.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
-		panel_2.add(ronda3);
-		ronda3.setVerticalAlignment(SwingConstants.TOP);
-		ronda3.setHorizontalAlignment(SwingConstants.LEFT);
-		
-		lblResultadoRonda3 = new JLabel("");
-		lblResultadoRonda3.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_2.add(lblResultadoRonda3);
 		
 		cartaTiradaJ1_3 = new JLabel("");
 		cartaTiradaJ1_3.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
@@ -399,17 +360,68 @@ public class VentanaPrincipal extends JFrame {
 		cartaTiradaJ2_3.setHorizontalAlignment(SwingConstants.CENTER);
 		panelCartaTiradaJ2_3.add(cartaTiradaJ2_3);
 		
-		JPanel panelArriba = new JPanelConFondo(imagenMarron);
-		FlowLayout flowLayout_1 = (FlowLayout) panelArriba.getLayout();
-		flowLayout_1.setVgap(0);
-		flowLayout_1.setHgap(0);
-		contentPane.add(panelArriba, BorderLayout.NORTH);
+		JPanel panelNorte = new JPanelConFondo(imagenMarron);
+		FlowLayout fl_panelNorte = (FlowLayout) panelNorte.getLayout();
+		fl_panelNorte.setVgap(0);
+		fl_panelNorte.setHgap(0);
+		contentPane.add(panelNorte, BorderLayout.NORTH);
 		
 		lblNotificaciones = new JLabel("");
-		panelArriba.add(lblNotificaciones);
+		lblNotificaciones.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		panelNorte.add(lblNotificaciones);
 		
 		lblNotificacionFinal = new JLabel("");
-		panelArriba.add(lblNotificacionFinal);
+		lblNotificacionFinal.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		panelNorte.add(lblNotificacionFinal);
+		
+		panelIzq = new JPanelConFondo(imagenMarron);
+		contentPane.add(panelIzq, BorderLayout.WEST);
+		panelIzq.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		panel_Separador = new JPanelConFondo(imagenMarron);
+		panelIzq.add(panel_Separador);
+		
+		panel = new JPanelConFondo(imagenMarron);
+		panelIzq.add(panel);
+		panel.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		ronda1 = new JLabel("Ronda 1");
+		ronda1.setVerticalAlignment(SwingConstants.TOP);
+		ronda1.setHorizontalAlignment(SwingConstants.LEFT);
+		ronda1.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		panel.add(ronda1);
+		
+		lblResultadoRonda1 = new JLabel("");
+		lblResultadoRonda1.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(lblResultadoRonda1);
+		
+		panel_1 = new JPanelConFondo(imagenMarron);
+		panelIzq.add(panel_1);
+		panel_1.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		ronda2 = new JLabel("Ronda 2");
+		ronda2.setVerticalAlignment(SwingConstants.TOP);
+		ronda2.setHorizontalAlignment(SwingConstants.LEFT);
+		ronda2.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		panel_1.add(ronda2);
+		
+		lblResultadoRonda2 = new JLabel("");
+		lblResultadoRonda2.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_1.add(lblResultadoRonda2);
+		
+		panel_2 = new JPanelConFondo(imagenMarron);
+		panelIzq.add(panel_2);
+		panel_2.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		ronda3 = new JLabel("Ronda 3");
+		ronda3.setVerticalAlignment(SwingConstants.TOP);
+		ronda3.setHorizontalAlignment(SwingConstants.LEFT);
+		ronda3.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		panel_2.add(ronda3);
+		
+		lblResultadoRonda3 = new JLabel("");
+		lblResultadoRonda3.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2.add(lblResultadoRonda3);
 	}
 	public void onClickTirarCarta(ActionListener listener) {
 		this.btnTirarCarta.addActionListener(listener);
@@ -640,10 +652,12 @@ public class VentanaPrincipal extends JFrame {
 		lblNotificaciones.setVisible(true);
 		lblNotificaciones.setText("El contrario canto "+string.toLowerCase());
 	}
-	public void mostrarBotonesEnvido(ArrayList<String> puedeCantar) {
+	public void mostrarBotonesEnvido(ArrayList<String> puedeCantar,String nombreTurno) {
+		setTitle("Truco(TURNO ACTUAL, "+nombreTurno+")");
 		btnTirarCarta.setVisible(false);
-		btnQuiero.setVisible(true);
+		btnQuiero.setVisible(true); 
 		btnNoQuiero.setVisible(true);
+		btnTruco.setVisible(true);
 		for(String canto :puedeCantar) {
 			if (canto.equals(btnEnvido.getText())) {
 				btnEnvido.setVisible(true);}
@@ -668,6 +682,10 @@ public class VentanaPrincipal extends JFrame {
 		btnNoQuiero.setVisible(true);
 	}
 	public void ocultarBotonesTruco() {
+		btnTruco.setVisible(false);
+		btnReTruco.setVisible(false);
+		btnValeCuatro.setVisible(false);
+		btnMazo.setVisible(false);
 		ocultarNotificaciones();
 	}
 	public void ocultarNotificaciones() {
@@ -682,8 +700,10 @@ public class VentanaPrincipal extends JFrame {
 	}
 	public void juegoTerminado(String ganador) {
 		lblNotificacionFinal.setText("El juego termino, el ganador es "+ ganador);
-		this.panelBajo_Cartas.setVisible(false);
-		ocultarBotonesEnvido();}
+		this.panelSur.setVisible(false);
+		ocultarBotonesEnvido();
+		ocultarBotonesTruco();
+		lblNotificaciones.setVisible(true);}
 	public void pedirDeNuevoCarta() {
 		this.lblNotificaciones.setVisible(true);
 		lblNotificaciones.setText( "Selecciona una carta para tirar");

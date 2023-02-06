@@ -70,6 +70,9 @@ import vista.VistaConsola;
 					break;
 				case JUEGO_TERMINADO:
 					vista.juegoTerminado();
+					if(this.termino().getNombre().equals(jugador)) {
+						vista.serializar(jugador);
+					}
 					break;
 				case ESPERANDO_JUGADORES:
 					if (jugador!=null) {
@@ -86,7 +89,7 @@ import vista.VistaConsola;
 					break;
 				case MANO_TERMINADA:
 					vista.manoTerminada();
-					if (esTurnoEsteJugador()) {
+					if (esTurnoEsteJugador()&&!modelo.isTerminado()) {
 						vista.jugar();
 						}
 					else {
@@ -96,7 +99,7 @@ import vista.VistaConsola;
 				case ENVIDO_JUGADO:
 					vista.mostrarEnvido(this.obtenerGanadorEnvido().getNombre());
 					modelo.preguntarGanador();
-					if (esTurnoEsteJugador()) {
+					if (esTurnoEsteJugador()&&!modelo.isTerminado()) {
 						vista.jugar();
 						}
 					else {

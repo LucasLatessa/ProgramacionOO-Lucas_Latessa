@@ -15,19 +15,24 @@ import modelo.EstadoTruco;
 import modelo.IEnvido;
 import modelo.IJuego;
 import modelo.IJugador;
+import serializacion.AdministradorDeGanadores;
+import serializacion.Serializador;
 import vista.IVista;
 
 public class VistaGrafica implements IVista {
+	private static Serializador serializador=new Serializador("src/datos.dat");
 	private VentanaInicioSesion vInicioSesion;
 	private VentanaPrincipal vPrincipal;
+	private VentanaRanking vRanking;
 	private Controlador controlador;
-	private String nameJugador;//PARA PRUEBAS EL ATRIBUTO,SACAR PARA INSERTAR NOMBRES DE JUGADORES
+	//private String nameJugador;//PARA PRUEBAS EL ATRIBUTO,SACAR PARA INSERTAR NOMBRES DE JUGADORES
 
-	public VistaGrafica(String nameJugador) {//String nameJugadorPARA PRUEBAS EL PARAMETRO,SACAR PARA INSERTAR NOMBRES DE JUGADORES
+	public VistaGrafica() {//String nameJugadorPARA PRUEBAS EL PARAMETRO,SACAR PARA INSERTAR NOMBRES DE JUGADORES
 		super();
 		this.vInicioSesion = new VentanaInicioSesion();
 		this.vPrincipal = new VentanaPrincipal();
-		this.nameJugador=nameJugador;//PARA PRUEBAS
+		this.vRanking = new VentanaRanking();
+		//this.nameJugador=nameJugador;//PARA PRUEBAS
 
 		mostrarInicioSesion();
 		
@@ -35,16 +40,16 @@ public class VistaGrafica implements IVista {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				//PARA INSERTAR NOMBRES DE JUGADORES DESCOMENTAR ABAJO
-//				try {
-//					if(controlador.noNombreRepetido(vInicioSesion.getGetNombreUsuario())) {
-//					controlador.agregarJugador(vInicioSesion.getGetNombreUsuario());}
-//					else {
-//						vInicioSesion.nombreRepetido();
-//					}
-//				} catch (RemoteException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
+				try {
+					if(controlador.noNombreRepetido(vInicioSesion.getGetNombreUsuario())) {
+					controlador.agregarJugador(vInicioSesion.getGetNombreUsuario());}
+					else {
+						vInicioSesion.nombreRepetido();
+					}
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		this.vPrincipal.onClickTirarCarta(new ActionListener() {
@@ -70,6 +75,7 @@ public class VistaGrafica implements IVista {
 				vPrincipal.ocultarBotonesEnvido();
 			}
 		});
+		
 		this.vPrincipal.onClickRealEnvido(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -113,6 +119,14 @@ public class VistaGrafica implements IVista {
 				vPrincipal.ocultarNotificaciones();
 			}
 		});
+		this.vInicioSesion.onClickVerRanking(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				AdministradorDeGanadores lista=(AdministradorDeGanadores) serializador.readFirstObject();
+				vRanking.setVisible(true);
+				vRanking.mostrarTabla(lista.getNombresGanadores(),lista.getCantGanadas());
+			}
+		});
 	}
 	
 	private void mostrarInicioSesion() {
@@ -128,7 +142,7 @@ public class VistaGrafica implements IVista {
 
 	@Override
 	public void iniciar() {
-		controlador.agregarJugador(nameJugador);//PARA PRUEBAS RAPIDAS
+		//controlador.agregarJugador(nameJugador);//PARA PRUEBAS RAPIDAS
 	}
 
 	@Override
@@ -142,8 +156,8 @@ public class VistaGrafica implements IVista {
 	@Override
 	public void juegoTerminado() {
 		mostrarPuntajes();
-		this.vPrincipal.juegoTerminado(controlador.termino().getNombre());
-	}
+		String ganador=controlador.termino().getNombre();
+		this.vPrincipal.juegoTerminado(ganador);}
 	@Override
 	public void avisarParda() {
 		this.vPrincipal.pardaRonda();
@@ -177,7 +191,7 @@ public class VistaGrafica implements IVista {
 	public void quererNoQuererEnvido(String nombreTurno, IEnvido envido) {
 		EstadoEnvido ultCantado=envido.getEnvidoPreguntado();
 		this.vPrincipal.notificarCanto(ultCantado.toString());
-		this.vPrincipal.mostrarBotonesEnvido(envido.puedeCantar());
+		this.vPrincipal.mostrarBotonesEnvido(envido.puedeCantar(),controlador.nombreTurno());
 		mostrarCartasEnMano();
 		this.vPrincipal.onClickQuiero(new ActionListener() {
 			@Override
@@ -289,5 +303,13 @@ public class VistaGrafica implements IVista {
 			}
 			}
 		
+	}
+	@Override
+	public void serializar(String ganador) {
+		if (serializador!=null) {
+		AdministradorDeGanadores lista=(AdministradorDeGanadores) serializador.readFirstObject();
+		lista.addGanador(ganador);
+		serializador.writeOneObject(lista);
+		serializador=null;}
 	}
 }

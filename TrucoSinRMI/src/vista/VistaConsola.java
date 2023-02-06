@@ -126,7 +126,6 @@ public class VistaConsola implements IVista {
 		switch(opcion) {
 		case "S":
 			controlador.quiero();
-			mostrarPuntajes();
 			break;
 		case "N":
 			controlador.noQuiero();

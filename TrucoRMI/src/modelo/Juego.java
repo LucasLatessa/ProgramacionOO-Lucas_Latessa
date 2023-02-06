@@ -56,8 +56,11 @@ public class Juego  extends ObservableRemoto implements IJuego{
 			if (isFinManoYSumaPuntos()) {
 				this.nuevaMano();
 				notificarObservadores(Eventos.MANO_TERMINADA);}
-			else {
-				notificarObservadores(Eventos.RONDA_TERMINADA);}}
+			else if (ronda.getGanador()!=null){
+				notificarObservadores(Eventos.RONDA_TERMINADA);}
+			else{
+				notificarObservadores(Eventos.PARDA);}
+			}
 		else {
 			notificarObservadores(Eventos.SEGUIR_JUEGO);
 		}
@@ -89,6 +92,7 @@ public class Juego  extends ObservableRemoto implements IJuego{
 		notificarObservadores(Eventos.ENVIDO_JUGADO);
 		}
 	public void newRonda() throws RemoteException{
+		Ronda ronda=new Ronda();
 		if (rondas.size()==2) {
 			Ronda ronda1=rondas.get(getNroRonda()-2);
 			Ronda ronda2=rondas.get(getNroRonda()-1);
@@ -96,10 +100,12 @@ public class Juego  extends ObservableRemoto implements IJuego{
 				isFinManoYSumaPuntos();
 				this.nuevaMano();
 				notificarObservadores(Eventos.MANO_TERMINADA);
+			}else {
+				rondas.add(ronda);
 			}
+		}else {
+			rondas.add(ronda);
 		}
-		Ronda ronda=new Ronda();
-		rondas.add(ronda);
 	}
 	public void cantado(EstadoEnvido estado) throws RemoteException{
 		changeTurno();
@@ -117,6 +123,19 @@ public class Juego  extends ObservableRemoto implements IJuego{
 		getJugadorContra(getTurno()).setCantoUltimo(false);
 		notificarObservadores(Eventos.SEGUIR_JUEGO);
 }
+	/**no devuelve el puntaje porque se pueden seguir agregando.
+	 * @param envido querido
+	 */
+	public IEnvido addQuerido(EstadoEnvido estado) throws RemoteException{
+		envido.addQuerido(estado);
+		return envido;
+	}
+	private IEnvido addPreguntado(EstadoEnvido estado) throws RemoteException{
+		if (envido==null) {
+			envido=new Envido();}
+		envido.addPreguntado(estado);
+		return envido;
+	}
 	public void nuevaMano() throws RemoteException{
 		this.preguntarGanador();
 		this.cartaTirada=null;
@@ -158,10 +177,23 @@ public class Juego  extends ObservableRemoto implements IJuego{
 	 */
 	public void preguntarGanador() throws RemoteException{
 		if (jugador1.getPuntos()>=puntosFinales) {
+			jugador1.setTurno(false);
+			jugador2.setTurno(false);
 			notificarObservadores(Eventos.JUEGO_TERMINADO);
 		}else if (jugador2.getPuntos()>=puntosFinales){
+			jugador1.setTurno(false);
+			jugador2.setTurno(false);
 			notificarObservadores(Eventos.JUEGO_TERMINADO);
 		}
+	}
+	public boolean isTerminado() throws RemoteException{
+		boolean retorno=false;
+		if (jugador1.getPuntos()>=puntosFinales) {
+			retorno= true;
+		}else if (jugador2.getPuntos()>=puntosFinales){
+			retorno= true;
+		}
+		return retorno;
 	}
 	/**
 	 * Cambia el turno del juego, en caso de que ninguno de los dos haya sido el turno anterior
@@ -179,7 +211,6 @@ public class Juego  extends ObservableRemoto implements IJuego{
 			else {
 				jugador2.changeTurno();
 				jugador1.changeTurno();
-				notificarObservadores(Eventos.PARDA);
 			}
 		}else if (jugador1.isTurno()||jugador2.isTurno()) {//mientras transcurre la ronda
 			jugador2.changeTurno();
@@ -253,19 +284,6 @@ public class Juego  extends ObservableRemoto implements IJuego{
 			ret=jugador2;
 		}
 		return ret;
-	}
-	/**no devuelve el puntaje porque se pueden seguir agregando.
-	 * @param envido querido
-	 */
-	public IEnvido addQuerido(EstadoEnvido estado) throws RemoteException{
-		envido.addQuerido(estado);
-		return envido;
-	}
-	public IEnvido addPreguntado(EstadoEnvido estado) throws RemoteException{
-		if (envido==null) {
-			envido=new Envido();}
-		envido.addPreguntado(estado);
-		return envido;
 	}
 	/**
 	 * @param jugador

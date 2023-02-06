@@ -55,7 +55,9 @@ import vista.VistaConsola;
 					break;
 				case ENVIDO_JUGADO:
 					vista.mostrarEnvido(this.obtenerGanadorEnvido().getNombre());
-					vista.jugar();
+					modelo.preguntarGanador();
+					if (!modelo.isTerminado()) {
+						vista.jugar();}
 					break;
 				case SEGUIR_JUEGO:
 					vista.jugar();

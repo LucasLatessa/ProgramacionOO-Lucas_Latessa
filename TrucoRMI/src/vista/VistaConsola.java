@@ -133,7 +133,6 @@ public class VistaConsola implements IVista {
 		switch(opcion) {
 		case "S":
 			controlador.quiero();
-			mostrarPuntajes();
 			break;
 		case "N":
 			controlador.noQuiero();
@@ -277,6 +276,11 @@ public class VistaConsola implements IVista {
 	@Override
 	public void esperarJugandoOponente() {
 		System.out.println("Esperando que juegue oponente...");
+		
+	}
+	@Override
+	public void serializar(String ganador) {
+		// TODO Auto-generated method stub
 		
 	}
 }
