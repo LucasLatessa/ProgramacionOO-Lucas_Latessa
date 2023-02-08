@@ -11,7 +11,6 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 
 import javax.swing.JTable;
-import javax.swing.JLabel;
 
 public class VentanaRanking extends JFrame{
 	DefaultTableModel modelo;
@@ -24,7 +23,7 @@ public class VentanaRanking extends JFrame{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         modelo = new DefaultTableModel();
 		modelo.addColumn("Nombre");
-		modelo.addColumn("Cantidad partidas ganadas");
+		modelo.addColumn("Partidas ganadas");
         tabla = new JTable (modelo);
         tabla.setPreferredScrollableViewportSize(new Dimension(250, 100));
         JScrollPane scrollPane = new JScrollPane(tabla);
@@ -32,7 +31,7 @@ public class VentanaRanking extends JFrame{
        
     }
 
-	public void mostrarTabla(ArrayList listaGanadores,ArrayList listaCantidad) {
+	public void mostrarTabla(ArrayList<String> listaGanadores,ArrayList<Integer> listaCantidad) {
 		modelo.setRowCount(0);
 		for(int x=0;x<listaGanadores.size();x++) {
 			Object[] data = 

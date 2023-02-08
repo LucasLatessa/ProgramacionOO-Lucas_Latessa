@@ -17,7 +17,6 @@ public class Mazo {
 			
 			}
 		}
-		int i=0;
 		Collections.shuffle(cartas);
 	}
 	public Carta dar() {

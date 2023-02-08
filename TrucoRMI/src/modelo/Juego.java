@@ -1,13 +1,11 @@
 package modelo;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Scanner;
-
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 import observer.Observador;
-import observer.Observable;
-public class Juego  extends ObservableRemoto implements IJuego{
+public class Juego  extends ObservableRemoto implements IJuego,Serializable{
+	private static final long serialVersionUID = 1L;
 		private static final int puntosFinales = 15;
 		private Jugador jugador1;
 		private Jugador jugador2;
@@ -17,17 +15,14 @@ public class Juego  extends ObservableRemoto implements IJuego{
 		private EstadoTruco estadoTruco=EstadoTruco.NADA;
 		private Carta cartaTirada=null;
 		protected Envido envido;
-		
+	public Juego() {
+			observadores=new ArrayList<>();
+			rondas=new ArrayList<Ronda>();
+		}	
 	public Carta getCartaTirada() throws RemoteException{
 			return cartaTirada;
 		}
-	public void trucos() throws RemoteException{
-		estadoTruco=estadoTruco.aumentar();
-	}
-	public Juego() {
-		observadores=new ArrayList<>();
-		rondas=new ArrayList<Ronda>();
-	}
+	
 	public void agregarJugador(String jugador)throws RemoteException{
 		if (this.jugador1==null) {
 			this.jugador1=new Jugador(jugador);
@@ -109,7 +104,10 @@ public class Juego  extends ObservableRemoto implements IJuego{
 	}
 	public void cantado(EstadoEnvido estado) throws RemoteException{
 		changeTurno();
-		IEnvido envid=addPreguntado(estado);//lo agrega 
+		if (envido==null) {
+			envido=new Envido();}
+		envido.addPreguntado(estado);
+		IEnvido envid=envido;//lo agrega 
 		notificarObservadores(envid);
 	}
 	public void cantado(EstadoTruco estado) throws RemoteException {
@@ -123,19 +121,6 @@ public class Juego  extends ObservableRemoto implements IJuego{
 		getJugadorContra(getTurno()).setCantoUltimo(false);
 		notificarObservadores(Eventos.SEGUIR_JUEGO);
 }
-	/**no devuelve el puntaje porque se pueden seguir agregando.
-	 * @param envido querido
-	 */
-	public IEnvido addQuerido(EstadoEnvido estado) throws RemoteException{
-		envido.addQuerido(estado);
-		return envido;
-	}
-	private IEnvido addPreguntado(EstadoEnvido estado) throws RemoteException{
-		if (envido==null) {
-			envido=new Envido();}
-		envido.addPreguntado(estado);
-		return envido;
-	}
 	public void nuevaMano() throws RemoteException{
 		this.preguntarGanador();
 		this.cartaTirada=null;
@@ -285,6 +270,9 @@ public class Juego  extends ObservableRemoto implements IJuego{
 		}
 		return ret;
 	}
+	public boolean isJugadoresCompletos() throws RemoteException{
+		return (this.jugador1!=null &&this.jugador2!=null);
+	}
 	/**
 	 * @param jugador
 	 * @return devuelve el jugador contrario de un jugador
@@ -322,7 +310,7 @@ public class Juego  extends ObservableRemoto implements IJuego{
 		return retornar;
 	}
 	public ArrayList<Integer> getTantosEnvido()throws RemoteException{
-		ArrayList<Integer> tantos=new ArrayList();
+		ArrayList<Integer> tantos=new ArrayList<Integer>();
 		tantos.add(envido.getSumatoriajug1());
 		tantos.add(envido.getSumatoriajug2());
 		return	tantos;
@@ -339,9 +327,7 @@ public class Juego  extends ObservableRemoto implements IJuego{
 	public ArrayList<Observador> getObservadores() {
 		return observadores;
 	}
-	public boolean isJugadoresCompletos() throws RemoteException{
-		return (this.jugador1!=null &&this.jugador2!=null);
-	}
+	
 	public String getJugadorUltAgregado() throws RemoteException {
 		if (jugador2==null) {
 			return jugador1.getNombre();

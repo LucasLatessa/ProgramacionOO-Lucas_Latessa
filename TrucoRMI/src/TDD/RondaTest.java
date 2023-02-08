@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import modelo.Carta;
-import modelo.Envido;
 import modelo.Jugador;
 import modelo.Palo;
 import modelo.Ronda;

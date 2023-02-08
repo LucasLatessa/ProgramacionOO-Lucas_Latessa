@@ -2,18 +2,14 @@ package vista.grafica;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import controlador.Controlador;
 import modelo.EstadoEnvido;
 import modelo.EstadoTruco;
 import modelo.IEnvido;
-import modelo.IJuego;
 import modelo.IJugador;
 import serializacion.AdministradorDeGanadores;
 import serializacion.Serializador;
@@ -55,40 +51,41 @@ public class VistaGrafica implements IVista {
 		this.vPrincipal.onClickTirarCarta(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
+				vPrincipal.ocultarBotonesEnvido();
+				vPrincipal.ocultarNotificaciones();
 				try {
 					controlador.tirar(vPrincipal.getCartaSeleccionada());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				vPrincipal.ocultarBotonesEnvido();
-				vPrincipal.ocultarNotificaciones();
-				
 			}
 		});
 
 		this.vPrincipal.onClickEnvido(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				controlador.cantar(EstadoEnvido.ENVIDO);
 				vPrincipal.ocultarBotonesEnvido();
+				controlador.cantar(EstadoEnvido.ENVIDO);
+				
 			}
 		});
 		
 		this.vPrincipal.onClickRealEnvido(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				controlador.cantar(EstadoEnvido.REALENVIDO);
 				vPrincipal.ocultarBotonesEnvido();
+				controlador.cantar(EstadoEnvido.REALENVIDO);
+				
 			}
 		});
 		
 		this.vPrincipal.onClickFaltaEnvido(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				controlador.cantar(EstadoEnvido.FALTAENVIDO);
 				vPrincipal.ocultarBotonesEnvido();
+				controlador.cantar(EstadoEnvido.FALTAENVIDO);
+				
 			}
 		});
 		this.vPrincipal.onClickMazo(new ActionListener() {
@@ -101,22 +98,25 @@ public class VistaGrafica implements IVista {
 		this.vPrincipal.onClickTruco(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				controlador.cantar(EstadoTruco.TRUCO);
 				vPrincipal.ocultarNotificaciones();
+				controlador.cantar(EstadoTruco.TRUCO);
+				
 			}
 		});
 		this.vPrincipal.onClickReTruco(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				controlador.cantar(EstadoTruco.RETRUCO);
 				vPrincipal.ocultarNotificaciones();
+				controlador.cantar(EstadoTruco.RETRUCO);
+				
 			}
 		});
 		this.vPrincipal.onClickValeCuatro(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				controlador.cantar(EstadoTruco.VALECUATRO);
 				vPrincipal.ocultarNotificaciones();
+				controlador.cantar(EstadoTruco.VALECUATRO);
+				
 			}
 		});
 		this.vInicioSesion.onClickVerRanking(new ActionListener() {
@@ -125,6 +125,31 @@ public class VistaGrafica implements IVista {
 				AdministradorDeGanadores lista=(AdministradorDeGanadores) serializador.readFirstObject();
 				vRanking.setVisible(true);
 				vRanking.mostrarTabla(lista.getNombresGanadores(),lista.getCantGanadas());
+			}
+		});
+		this.vPrincipal.onClickQuieroEnv(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlador.quiero();
+				vPrincipal.ocultarBotonesEnvido();
+				return;
+			}
+		});
+		this.vPrincipal.onClickNoQuieroEnv(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlador.noQuiero();
+				vPrincipal.ocultarBotonesEnvido();
+				vPrincipal.ocultarNotificaciones();
+				return;
+			}
+		});
+		
+		this.vPrincipal.onClickNoQuieroTru(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlador.alMazo();
+				vPrincipal.ocultarBotonesTruco();
 			}
 		});
 	}
@@ -193,21 +218,7 @@ public class VistaGrafica implements IVista {
 		this.vPrincipal.notificarCanto(ultCantado.toString());
 		this.vPrincipal.mostrarBotonesEnvido(envido.puedeCantar(),controlador.nombreTurno());
 		mostrarCartasEnMano();
-		this.vPrincipal.onClickQuiero(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				controlador.quiero();
-				vPrincipal.ocultarBotonesEnvido();
-			}
-		});
-		this.vPrincipal.onClickNoQuiero(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				controlador.noQuiero();
-				vPrincipal.ocultarBotonesEnvido();
-				vPrincipal.ocultarNotificaciones();
-			}
-		});
+		
 	}
 
 	@Override
@@ -222,21 +233,14 @@ public class VistaGrafica implements IVista {
 		}
 		mostrarCartasEnMano();
 		this.vPrincipal.mostrarBotonesTruco(puedeCantarEnvido);
-		this.vPrincipal.onClickQuiero(new ActionListener() {
+		
+		this.vPrincipal.onClickQuieroTru(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				controlador.quiero(truco);
 				vPrincipal.ocultarBotonesTruco();
 			}
 		});
-		this.vPrincipal.onClickNoQuiero(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				controlador.alMazo();
-				vPrincipal.ocultarBotonesTruco();
-			}
-		});
-		
 	}
 
 	@Override

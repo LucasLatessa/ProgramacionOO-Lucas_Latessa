@@ -10,7 +10,6 @@ public interface IJuego extends IObservableRemoto, Serializable {
 
 	Carta getCartaTirada() throws RemoteException;
 
-	void trucos() throws RemoteException;
 
 
 	/**tira carta y ya cambia el turno(si no es nula)
@@ -81,14 +80,6 @@ public interface IJuego extends IObservableRemoto, Serializable {
 	ArrayList<Integer> getTantosEnvido() throws RemoteException;
 
 	IJugador quienCantoUltimo() throws RemoteException;
-
-	//PASO EL ENVIDO DE RONDA AL JUEGO
-	//
-	/**no devuelve el puntaje porque se pueden seguir agregando.
-	 * @param envido querido
-	 */
-	IEnvido addQuerido(EstadoEnvido estado) throws RemoteException;
-
 
 	/**
 	 * @return devuelve el ganador del envido en esta mano, devuelve nulo si no hubo

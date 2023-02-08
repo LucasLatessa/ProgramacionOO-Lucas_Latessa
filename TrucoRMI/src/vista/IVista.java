@@ -1,11 +1,7 @@
 package vista;
 
-import java.util.ArrayList;
-
-import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import modelo.EstadoTruco;
 import modelo.IEnvido;
-import modelo.IJugador;
 import controlador.Controlador;
 public interface IVista {
 	

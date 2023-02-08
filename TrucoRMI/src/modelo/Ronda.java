@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 
 public class Ronda {
-		    private Jugador ganador;
 			private ArrayList<Jugador> jugadores;
 			private ArrayList<Carta> cartas;
 			private boolean terminada=false;

@@ -5,20 +5,15 @@ import java.util.ArrayList;
 
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
-import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 import modelo.Eventos;
 import modelo.IEnvido;
 import modelo.IJuego;
 import modelo.IJugador;
 import modelo.Juego;
-import modelo.Ronda;
 import modelo.Carta;
 import modelo.EstadoEnvido;
 import modelo.EstadoTruco;
-import observer.Observable;
-import observer.Observador;
 import vista.IVista;
-import vista.VistaConsola;
 
 	public class Controlador implements IControladorRemoto{
 		private IJuego modelo;
@@ -377,6 +372,9 @@ import vista.VistaConsola;
 	}
 	public boolean noNombreRepetido(String nombre) throws RemoteException {
 		return modelo.verificarNombre(nombre);
+	}
+	public boolean rondaTerminada() throws RemoteException {
+		return modelo.rondaActualTerminada();
 	}
 	
 }

@@ -1,8 +1,4 @@
 package vista.grafica;
-import modelo.EstadoTruco;
-import modelo.IJuego;
-import modelo.IJugador;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -10,13 +6,11 @@ import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 
 import javax.imageio.ImageIO;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
-import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionListener;
@@ -24,22 +18,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-
-import javax.swing.JTable;
 import javax.swing.JRadioButton;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import net.miginfocom.swing.MigLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-
 import java.awt.Font;
-import javax.swing.JSeparator;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -52,8 +33,8 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btnTruco;
 	private JButton btnReTruco;
 	private JButton btnValeCuatro;
-	private JButton btnQuiero;
-	private JButton btnNoQuiero;
+	private JButton btnQuieroEnv;
+	private JButton btnNoQuieroEnv;
 	private JButton btnMazo;
 	private JButton btnTirarCarta;
 	private JRadioButton carta3;
@@ -94,14 +75,14 @@ public class VentanaPrincipal extends JFrame {
 	private JPanelConFondo panel_2;
 	private JLabel ronda3;
 	private JLabel lblResultadoRonda3;
+	private JButton btnQuieroTru;
+	private JButton btnNoQuieroTru;
 	public VentanaPrincipal(){
 		Image imagenVerde = null;
 		Image imagenMarron = null;
-		Image imagenNegro = null;
 		try {
 			imagenVerde = ImageIO.read(new File("src/Imagenes/FondoVerde.png"));
 			imagenMarron = ImageIO.read(new File("src/Imagenes/FondoMarron.png"));
-			imagenNegro = ImageIO.read(new File("src/Imagenes/FondoNegro.png"));
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -116,10 +97,10 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		JPanel panelDer = new JPanelConFondo(imagenMarron);
 		contentPane.add(panelDer, BorderLayout.EAST);
-		panelDer.setLayout(new GridLayout(0, 1, 0, 0));
+		panelDer.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panelPuntosArriba = new JPanelConFondo(imagenMarron);
-		panelDer.add(panelPuntosArriba);
+		panelDer.add(panelPuntosArriba, BorderLayout.NORTH);
 		panelPuntosArriba.setLayout(new BorderLayout(0, 0));
 		
 		JLabel lblNewLabel = new JLabel("Puntos");
@@ -168,7 +149,7 @@ public class VentanaPrincipal extends JFrame {
 		panelPuntosJ1.add(lblPuntosJ1);
 		
 		JPanel panelAbajo_Cantos = new JPanelConFondo(imagenMarron);
-		panelDer.add(panelAbajo_Cantos);
+		panelDer.add(panelAbajo_Cantos, BorderLayout.CENTER);
 		panelAbajo_Cantos.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		btnEnvido = new JButton("Envido");
@@ -189,14 +170,20 @@ public class VentanaPrincipal extends JFrame {
 		btnValeCuatro = new JButton("Vale cuatro");
 		panelAbajo_Cantos.add(btnValeCuatro);
 		
-		btnQuiero = new JButton("Quiero");
-		panelAbajo_Cantos.add(btnQuiero);
+		btnQuieroEnv = new JButton("Quiero");
+		panelAbajo_Cantos.add(btnQuieroEnv);
 		
-		btnNoQuiero = new JButton("No quiero");
-		panelAbajo_Cantos.add(btnNoQuiero);
+		btnNoQuieroEnv = new JButton("No quiero");
+		panelAbajo_Cantos.add(btnNoQuieroEnv);
 		
 		btnMazo = new JButton("Mazo");
 		panelAbajo_Cantos.add(btnMazo);
+		
+		btnQuieroTru = new JButton("Quiero");
+		panelAbajo_Cantos.add(btnQuieroTru);
+		
+		btnNoQuieroTru = new JButton("No quiero");
+		panelAbajo_Cantos.add(btnNoQuieroTru);
 		
 		panelSur = new JPanelConFondo(imagenMarron);
 		FlowLayout fl_panelSur = (FlowLayout) panelSur.getLayout();
@@ -447,11 +434,17 @@ public class VentanaPrincipal extends JFrame {
 	public void onClickValeCuatro(ActionListener listener) {
 		this.btnValeCuatro.addActionListener(listener);
 	}
-	public void onClickQuiero(ActionListener listener) {
-		this.btnQuiero.addActionListener(listener);
+	public void onClickQuieroEnv(ActionListener listener) {
+		this.btnQuieroEnv.addActionListener(listener);
 	}
-	public void onClickNoQuiero(ActionListener listener) {
-		this.btnNoQuiero.addActionListener(listener);
+	public void onClickNoQuieroEnv(ActionListener listener) {
+		this.btnNoQuieroEnv.addActionListener(listener);
+	}
+	public void onClickQuieroTru(ActionListener listener) {
+		this.btnQuieroTru.addActionListener(listener);
+	}
+	public void onClickNoQuieroTru(ActionListener listener) {
+		this.btnNoQuieroTru.addActionListener(listener);
 	}
 	public static JRadioButton getSelection(ButtonGroup group)
 	{
@@ -483,8 +476,8 @@ public class VentanaPrincipal extends JFrame {
 		
 		btnReTruco.setVisible(false);
 		btnValeCuatro.setVisible(false);
-		btnQuiero.setVisible(false);
-		btnNoQuiero.setVisible(false);
+		btnQuieroEnv.setVisible(false);
+		btnNoQuieroEnv.setVisible(false);
 	}
 	public void limpiarVista() {
 		lblResultadoRonda1.setText("");
@@ -535,8 +528,10 @@ public class VentanaPrincipal extends JFrame {
 		btnTruco.setVisible(false);
 		btnReTruco.setVisible(false);
 		btnValeCuatro.setVisible(false);
-		btnQuiero.setVisible(false);
-		btnNoQuiero.setVisible(false);
+		btnQuieroEnv.setVisible(false);
+		btnNoQuieroEnv.setVisible(false);
+		btnQuieroTru.setVisible(false);
+		btnNoQuieroTru.setVisible(false);
 		btnMazo.setVisible(false);
 		btnTirarCarta.setVisible(false);
 		carta1.setVisible(false);
@@ -548,8 +543,10 @@ public class VentanaPrincipal extends JFrame {
 	}
 	public void turnoActual(String trucoPuedeCantar,String nombreTurno) {
 		setTitle("Truco(TURNO ACTUAL, "+nombreTurno+")");
-		btnQuiero.setVisible(false);
-		btnNoQuiero.setVisible(false);
+		btnQuieroEnv.setVisible(false);
+		btnNoQuieroEnv.setVisible(false);
+		btnQuieroTru.setVisible(false);
+		btnNoQuieroTru.setVisible(false);
 			switch(trucoPuedeCantar) {
 			case "Truco":
 				btnTruco.setVisible(true);
@@ -564,11 +561,7 @@ public class VentanaPrincipal extends JFrame {
 		btnMazo.setVisible(true);
 		btnTirarCarta.setVisible(true);
 	}
-	public void mostrarBotonesEnvido() {
-		btnEnvido.setVisible(true);
-		btnRealEnvido.setVisible(true);
-		btnFaltaEnvido.setVisible(true);
-	}
+	
 	public int getCartaSeleccionada() throws IOException {
 		JRadioButton seleccionado=getSelection(grupo);
 		int retornar=0;
@@ -655,8 +648,8 @@ public class VentanaPrincipal extends JFrame {
 	public void mostrarBotonesEnvido(ArrayList<String> puedeCantar,String nombreTurno) {
 		setTitle("Truco(TURNO ACTUAL, "+nombreTurno+")");
 		btnTirarCarta.setVisible(false);
-		btnQuiero.setVisible(true); 
-		btnNoQuiero.setVisible(true);
+		btnQuieroEnv.setVisible(true); 
+		btnNoQuieroEnv.setVisible(true);
 		btnTruco.setVisible(true);
 		for(String canto :puedeCantar) {
 			if (canto.equals(btnEnvido.getText())) {
@@ -667,10 +660,21 @@ public class VentanaPrincipal extends JFrame {
 				btnFaltaEnvido.setVisible(true);}
 		}
 	}
+	public void mostrarBotonesEnvido() {
+		btnEnvido.setVisible(true);
+		btnRealEnvido.setVisible(true);
+		btnFaltaEnvido.setVisible(true);
+		btnTirarCarta.setVisible(false);
+		btnQuieroEnv.setVisible(true); 
+		btnNoQuieroEnv.setVisible(true);
+		btnTruco.setVisible(true);
+	}
 	public void ocultarBotonesEnvido() {
 		btnEnvido.setVisible(false);
 		btnRealEnvido.setVisible(false);
 		btnFaltaEnvido.setVisible(false);
+		btnQuieroEnv.setVisible(false);
+		btnNoQuieroEnv.setVisible(false);
 	}
 	public void mostrarBotonesTruco(boolean puedeCantarEnvido) {
 		if (puedeCantarEnvido) {
@@ -678,14 +682,16 @@ public class VentanaPrincipal extends JFrame {
 			btnRealEnvido.setVisible(true);
 			btnFaltaEnvido.setVisible(true);
 		}
-		btnQuiero.setVisible(true);
-		btnNoQuiero.setVisible(true);
+		btnQuieroTru.setVisible(true);
+		btnNoQuieroTru.setVisible(true);
 	}
 	public void ocultarBotonesTruco() {
 		btnTruco.setVisible(false);
 		btnReTruco.setVisible(false);
 		btnValeCuatro.setVisible(false);
 		btnMazo.setVisible(false);
+		btnQuieroTru.setVisible(false);
+		btnNoQuieroTru.setVisible(false);
 		ocultarNotificaciones();
 	}
 	public void ocultarNotificaciones() {
@@ -696,6 +702,7 @@ public class VentanaPrincipal extends JFrame {
 		lblNotificaciones.setVisible(true);
 	}
 	public void laManoTermino() {
+		lblNotificaciones.setVisible(true);
 		lblNotificaciones.setText( "La mano termino");
 	}
 	public void juegoTerminado(String ganador) {

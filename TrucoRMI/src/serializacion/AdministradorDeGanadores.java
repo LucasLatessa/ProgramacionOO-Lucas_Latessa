@@ -1,8 +1,8 @@
 package serializacion;
 import java.io.Serializable;
 import java.util.ArrayList;
-import modelo.Juego;
 public class AdministradorDeGanadores implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private ArrayList<String> nombres;
 	private ArrayList<Integer> cantidad;
 	public AdministradorDeGanadores() {

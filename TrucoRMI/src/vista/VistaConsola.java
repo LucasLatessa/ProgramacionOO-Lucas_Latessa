@@ -3,15 +3,15 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import controlador.Controlador;
-import modelo.Carta;
 import modelo.EstadoEnvido;
 import modelo.EstadoTruco;
-import modelo.Eventos;
 import modelo.IEnvido;
 import modelo.IJugador;
+import serializacion.AdministradorDeGanadores;
+import serializacion.Serializador;
 public class VistaConsola implements IVista {
+	private static Serializador serializador=new Serializador("src/datos.dat");
 	private Controlador controlador;
 	private Scanner entrada;
 	public VistaConsola() {
@@ -25,7 +25,7 @@ public class VistaConsola implements IVista {
 		System.out.println("######### TRUCO ########");
 		System.out.println("########################");
 		System.out.println();
-		System.out.println("1-Agregar jugador \n2-Salir \nIngrese su opcion");
+		System.out.println("1-Agregar jugador \n2-Ver ranking \n3-Salir \nIngrese su opcion");
 		
 		int opcion = Integer.valueOf(this.entrada.nextLine());
 		while(!valido(1,opcion,2)) {
@@ -39,10 +39,24 @@ public class VistaConsola implements IVista {
 			this.controlador.agregarJugador(nameJ1);
 			break;
 		case 2:
+			verRanking();
+			break;
+		case 3:
 			System.exit(0);
 			break;
 		}
 		}
+	private void verRanking() {
+		AdministradorDeGanadores lista=(AdministradorDeGanadores) serializador.readFirstObject();
+		 ArrayList<String> nombres=lista.getNombresGanadores();
+		 ArrayList<Integer> cant=lista.getCantGanadas();
+		 System.out.println("Nombre"+"    "+"Partidas ganadas");
+		for(int x=0;x<nombres.size();x++) {
+			System.out.println(nombres.get(x)+"        "+cant.get(x));
+		}
+		System.out.println("presione enter para volver");
+		entrada.nextLine();
+		iniciar();}
 	public void menuCantos(String opcion) {
 		boolean valido=false;
 		while(!valido) {
@@ -189,7 +203,6 @@ public class VistaConsola implements IVista {
 	}
 	
 	public void pedirCarta() {
-		Carta cartaTirada=null;
 		int carta=4;
 		int cantCartasJugActual=controlador.obtenerCantCartasJugActual();
 		while (cantCartasJugActual<(Integer.valueOf(carta))) {
@@ -215,8 +228,13 @@ public class VistaConsola implements IVista {
 	 * muestra la carta tirada en caso de que haya
 	 */
 	public void mostrarCartaTirada() {
-		if (controlador.getCartaTirada()!=null){
-		System.out.println("Se tiro el "+controlador.getCartaTirada()); }
+		try {
+			if (controlador.getCartaTirada()!=null&&!controlador.rondaTerminada()){
+			System.out.println("Se tiro el "+controlador.getCartaTirada()); }
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	@Override
 	public void mostrarEnvido(String nombre) {
@@ -280,7 +298,10 @@ public class VistaConsola implements IVista {
 	}
 	@Override
 	public void serializar(String ganador) {
-		// TODO Auto-generated method stub
-		
+		if (serializador!=null) {
+		AdministradorDeGanadores lista=(AdministradorDeGanadores) serializador.readFirstObject();
+		lista.addGanador(ganador);
+		serializador.writeOneObject(lista);
+		serializador=null;}
 	}
 }

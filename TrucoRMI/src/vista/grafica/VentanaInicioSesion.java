@@ -1,7 +1,5 @@
 package vista.grafica;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -11,9 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.JButton;
-import java.awt.Window.Type;
 import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class VentanaInicioSesion extends JFrame {
 
