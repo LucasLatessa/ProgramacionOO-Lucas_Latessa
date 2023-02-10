@@ -550,12 +550,18 @@ public class VentanaPrincipal extends JFrame {
 			switch(trucoPuedeCantar) {
 			case "Truco":
 				btnTruco.setVisible(true);
+				btnReTruco.setVisible(false);
+				btnValeCuatro.setVisible(false);
 				break;
 			case "Re truco":
 				btnReTruco.setVisible(true);
+				btnTruco.setVisible(false);
+				btnValeCuatro.setVisible(false);
 				break;
 			case "Vale cuatro":
 				btnValeCuatro.setVisible(true);
+				btnReTruco.setVisible(false);
+				btnTruco.setVisible(false);
 				;
 			}
 		btnMazo.setVisible(true);
@@ -650,7 +656,7 @@ public class VentanaPrincipal extends JFrame {
 		btnTirarCarta.setVisible(false);
 		btnQuieroEnv.setVisible(true); 
 		btnNoQuieroEnv.setVisible(true);
-		btnTruco.setVisible(true);
+		btnTruco.setVisible(false);
 		for(String canto :puedeCantar) {
 			if (canto.equals(btnEnvido.getText())) {
 				btnEnvido.setVisible(true);}

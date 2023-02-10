@@ -39,6 +39,7 @@ public class VistaSimilConsola extends JFrame implements IVista{
 	private JButton btnTirarCarta;
 	private JButton btnOpcionEnJuego;
 	private EstadoTruco truco;
+	private ArrayList<String> listaOp;
 	public VistaSimilConsola() {
 		setVisible(true);
 		setTitle("Truco");
@@ -85,6 +86,11 @@ public class VistaSimilConsola extends JFrame implements IVista{
 		btnOpcionEnJuego = new JButton("Leer opcion");
 		btnOpcionEnJuego.setHorizontalAlignment(SwingConstants.LEADING);
 		panel_1.add(btnOpcionEnJuego);
+		listaOp=new ArrayList<String>();
+		 listaOp.add("QT");listaOp.add("NT");listaOp.add("QE");
+		 listaOp.add("NE");listaOp.add("E");listaOp.add("F");
+		 listaOp.add("C");listaOp.add("M");listaOp.add("R");
+		 listaOp.add("T");listaOp.add("V");
 		btnOpcionInicio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				opcion = entrada.getText();
@@ -125,17 +131,12 @@ public class VistaSimilConsola extends JFrame implements IVista{
 		}});
 		btnOpcionEnJuego.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 opcion = entrada.getText();
+				 opcion = entrada.getText().toUpperCase();
 				 textArea.append("\n"+entrada.getText());
 				 boolean valido=false;
-				 ArrayList<String> listaOp=new ArrayList<String>();
-				 listaOp.add("QT");listaOp.add("NT");listaOp.add("QE");
-				 listaOp.add("NE");listaOp.add("E");listaOp.add("F");
-				 listaOp.add("C");listaOp.add("M");listaOp.add("R");
-				 listaOp.add("T");listaOp.add("V");
 				 int cont=0;
-				 while ((valido==false)||(listaOp.size()>cont)) {
-					 if(!entrada.getText().equals( listaOp.get(cont))){
+				 while ((valido==false)&&(listaOp.size()>cont)) {
+					 if(opcion.equals( listaOp.get(cont))){
 						 valido=true;
 					 }cont++;
 				 }
@@ -161,6 +162,7 @@ public class VistaSimilConsola extends JFrame implements IVista{
 								break;
 							case "F":
 								controlador.cantar(EstadoEnvido.FALTAENVIDO);
+								break;
 							case "C":
 								pedirCarta();
 								break;
@@ -179,7 +181,18 @@ public class VistaSimilConsola extends JFrame implements IVista{
 								break;
 							case "V":
 								controlador.cantar(EstadoTruco.VALECUATRO);}}
-	}});}
+	}});
+		btnTirarCarta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int cantCartasJugActual=controlador.obtenerCantCartasJugActual();
+				int carta =Integer.valueOf( entrada.getText());
+				textArea.append("\n"+carta);
+				entrada.setText(null);
+				if (cantCartasJugActual<(Integer.valueOf(carta))) {
+					textArea.append("\nOpcion invalida \nIngrese indice de carta<1-"+cantCartasJugActual+">");
+				}else {
+				controlador.tirar(carta);}
+			}});}
 	private boolean valido(int min ,int op,int max) {
 		return op>=min&&op<=max;
 	}
@@ -239,8 +252,7 @@ public class VistaSimilConsola extends JFrame implements IVista{
 			
 			}
 	public void pedirCarta() {
-	int cantCartasJugActual=controlador.obtenerCantCartasJugActual();
-	
+		int cantCartasJugActual=controlador.obtenerCantCartasJugActual();
 	SwingUtilities.getRootPane(btnAddJugador).setDefaultButton(btnAddJugador);
 	textArea.append("\nIngrese indice de carta<1-"+cantCartasJugActual+">");
 	btnOpcionInicio.setVisible(false);
@@ -248,16 +260,7 @@ public class VistaSimilConsola extends JFrame implements IVista{
 	btnOpcionEnJuego.setVisible(false);
 	SwingUtilities.getRootPane(btnTirarCarta).setDefaultButton(btnTirarCarta);
 	btnTirarCarta.setVisible(true);
-	btnTirarCarta.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			int carta =Integer.valueOf( entrada.getText());
-			textArea.append("\n"+entrada.getText());
-			entrada.setText(null);
-			if (cantCartasJugActual<(Integer.valueOf(carta))) {
-				textArea.append("\nOpcion invalida \nIngrese indice de carta<1-"+cantCartasJugActual+">");
-			}else {
-			controlador.tirar(carta);}
-		}});
+	
 	
 }
 	

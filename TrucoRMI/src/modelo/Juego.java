@@ -36,7 +36,6 @@ public class Juego  extends ObservableRemoto implements IJuego,Serializable{
 	
 	/**tira carta y ya cambia el turno(si no es nula)
 	 * @param carta<1-3>
-	 * @return carta tirada(si no la encuentra devuelve nulo)
 	 */
 	public void tirarCarta(int carta) throws RemoteException{
 		cartaTirada=getTurno().tirarCarta(carta);
@@ -116,7 +115,7 @@ public class Juego  extends ObservableRemoto implements IJuego,Serializable{
 	}
 	public void quiero(EstadoTruco estado) throws RemoteException{
 		estadoTruco=estado;
-		changeTurno();
+		turnoPregTruco();
 		getTurno().setCantoUltimo(true);
 		getJugadorContra(getTurno()).setCantoUltimo(false);
 		notificarObservadores(Eventos.SEGUIR_JUEGO);
