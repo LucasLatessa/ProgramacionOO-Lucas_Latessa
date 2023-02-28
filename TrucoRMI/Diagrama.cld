@@ -271,7 +271,7 @@
             <constraint>
               <height>-1</height>
               <width>-1</width>
-              <x>551</x>
+              <x>577</x>
               <y>3</y>
             </constraint>
             <sourceConnections>
@@ -3172,8 +3172,8 @@
                               <constraint>
                                 <height>-1</height>
                                 <width>-1</width>
-                                <x>999</x>
-                                <y>477</y>
+                                <x>939</x>
+                                <y>481</y>
                               </constraint>
                               <sourceConnections>
                                 <net.java.amateras.uml.classdiagram.model.AggregationModel reference="../../.."/>
@@ -10054,7 +10054,19 @@
             <path>/TrucoRMI/src/vista/VistaSimilConsola.java</path>
             <isAbstract>false</isAbstract>
           </target>
-          <bendpoints/>
+          <bendpoints>
+            <net.java.amateras.uml.editpart.ConnectionBendpoint>
+              <weight>0.5</weight>
+              <d1>
+                <width>192</width>
+                <height>44</height>
+              </d1>
+              <d2>
+                <width>-204</width>
+                <height>91</height>
+              </d2>
+            </net.java.amateras.uml.editpart.ConnectionBendpoint>
+          </bendpoints>
           <stereoType></stereoType>
           <fromMultiplicity></fromMultiplicity>
           <toMultiplicity></toMultiplicity>
@@ -11001,8 +11013,8 @@
       <constraint>
         <height>-1</height>
         <width>-1</width>
-        <x>192</x>
-        <y>1294</y>
+        <x>185</x>
+        <y>1291</y>
       </constraint>
       <sourceConnections/>
       <targetConnections/>

@@ -5,20 +5,13 @@ import ar.edu.unlu.rmimvc.cliente.Cliente;
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import controlador.Controlador;
 import vista.IVista;
+import vista.VistaConsola;
 import vista.VistaSimilConsola;
-import vista.grafica.VistaGrafica;
 
-public class TrucoAppCliente {
+public class IntermedioAppCliente {
 
 	public static void main(String[] args) {
 		Integer puerto = Integer.valueOf(args[0]);
-		//System.out.println(puerto); PARA MOSTRAR EL PUERTO EN CONSOLA
-		//IVista vista = new VistaGrafica(Integer.toString(puerto));//PARA PRUEBAS USO PUERTO PARA EL NOMBRE DEL JUGADOR
-		
-		//VISTA GRAFICA
-		//IVista vista = new VistaGrafica();
-		
-		//VISTA CONSOLA(SIMULADA)
 		IVista vista = new VistaSimilConsola();
 		IControladorRemoto controlador = new Controlador(vista);
 		Cliente cliente = new Cliente("127.0.0.1", puerto, "127.0.0.1", 64000);
