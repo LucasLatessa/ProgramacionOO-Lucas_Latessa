@@ -7,7 +7,7 @@ import controlador.Controlador;
 import modelo.Carta;
 import modelo.Eventos;
 import modelo.IJugador;
-public class VistaConsola implements IVista {
+public class VistaConsola  {
 	private Controlador controlador;
 	private Scanner entrada;
 	public VistaConsola() {
@@ -143,7 +143,7 @@ public class VistaConsola implements IVista {
 		}
 		
 		System.out.println(ss);
-	}@Override
+	}
 	/**
 	 * muestra la carta intermedia en caso de que haya
 	 */
@@ -156,26 +156,15 @@ public class VistaConsola implements IVista {
 			e.printStackTrace();
 		}
 	}
-	@Override
 	public void manoTerminada() {
 		System.out.println("La mano termino");
 		mostrarPuntajes();
 		System.out.println("Presione enter para repartir la siguiente mano");
 		this.entrada.nextLine();
 	}
-	@Override
-	public void juegoTerminado() {
-		mostrarPuntajes();
-		System.out.println("El juego termino, el ganador es "+controlador.termino().getNombre());
-		System.out.println("Presione enter para salir");
-		this.entrada.nextLine();
-		System.exit(0);
-	}
-	@Override
 	public void setControlador(Controlador controlador) {
 		this.controlador = controlador;
 	}
-	@Override
 	public void mostrarPuntajes() {
 		String ss="";
 		ArrayList<IJugador> jugadores = null;
@@ -186,22 +175,23 @@ public class VistaConsola implements IVista {
 			e.printStackTrace();
 		}
 		for (IJugador jugador : jugadores) {
-			ss+="Puntos " + jugador.getNombre()+": "+ jugador.getPuntos()+"\n";
+			ss+="Puntos " + jugador.getNombre()+": "+ jugador.getDinero()+"\n";
 		}
 		System.out.println(ss);
 	}
-	@Override
 	public void esperandoJugadores() {
 		
 		System.out.println("Esperando otros jugadores...");
 	}
-	@Override
 	public void esperarJugandoOponente() {
 		System.out.println("Esperando que juegue oponente...");
 		
 	}
-	@Override
 	public void mostrarCartaIntermediaContras() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void mostrarCartaTirada() {
 		// TODO Auto-generated method stub
 		
 	}

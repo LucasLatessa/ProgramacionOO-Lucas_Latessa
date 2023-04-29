@@ -20,11 +20,12 @@ public interface IVista {
 	 */
 	void mostrarCartaIntermedia();
 
-	void mostrarPuntajes();
-
 	public void preguntaEmpezar();
 
-	public void mostrarCartaIntermediaContras();
-
 	void mostrarCartaTirada();
+
+	void mostrarDinero();
+
+	public void actualizarDinero(int dineroEsteJug);
+	public void actualizarPozo(int pozo);
 }

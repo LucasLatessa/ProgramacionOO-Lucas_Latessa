@@ -23,6 +23,9 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import modelo.IJugador;
+
 import javax.swing.BoxLayout;
 
 public class VentanaPrincipal extends JFrame {
@@ -32,8 +35,8 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btnPaso;
 	private ButtonGroup grupo;
 	private JLabel cartaTiradaJ1_1;
-	private JLabel cartaTiradaJ1_2;
-	private JLabel cartaTiradaJ1_3;
+	private JLabel cartaTiradaJ2_1;
+	private JLabel cartaTiradaJ3_1;
 	private JLabel lblPlataDispo;
 	private JLabel lblNotificaciones;
 	private JLabel lblNotificacionFinal;
@@ -48,21 +51,21 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panelJug3;
 	private JLabel jugador3;
 	private JLabel lblResultadoRonda3;
-	private JLabel cartaTiradaJ1;
-	private JLabel cartaTiradaJ1_4;
+	private JLabel cartaTiradaJ4_1;
+	private JLabel cartaTiradaJ5_1;
 	private JPanel panelCartaIntermedia;
 	private JPanel panelCartasIntermedias;
 	private JLabel cartasTiradasJ1_1;
 	private JPanel panelCartaIntermediaJ1;
-	private JLabel cartaTiradaJ1_5;
+	private JLabel cartaIntermediaJ1;
 	private JPanel panelCartaIntermediaJ2;
-	private JLabel cartaTiradaJ1_6;
+	private JLabel cartaIntermediaJ2;
 	private JPanel panelCartaIntermediaJ3;
-	private JLabel cartaTiradaJ1_7;
+	private JLabel cartaIntermediaJ3;
 	private JPanel panelCartaIntermediaJ4;
-	private JLabel cartaTiradaJ1_8;
+	private JLabel cartaIntermediaJ4;
 	private JPanel panelCartaIntermediaJ5;
-	private JLabel cartaTiradaJ1_9;
+	private JLabel cartaIntermediaJ5;
 	private JPanel panelJug4;
 	private JLabel jugador4;
 	private JLabel lblResultadoRonda3_1;
@@ -78,22 +81,18 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panelCartaTiradaJ3;
 	private JPanel panelCartaTiradaJ4;
 	private JPanel panelCartaTiradaJ5;
+	private JLabel cartaTiradaJ1_2;
+	private JLabel cartaTiradaJ2_2;
+	private JLabel cartaTiradaJ3_2;
+	private JLabel cartaTiradaJ4_2;
+	private JLabel cartaTiradaJ5_2;
+	private JButton btnIniciarJuego;
 	public VentanaPrincipal(){
-		Image imagenVerde = null;
-		Image imagenMarron = null;
-		try {
-			imagenVerde = ImageIO.read(new File("src/Imagenes/FondoVerde.png"));
-			imagenMarron = ImageIO.read(new File("src/Imagenes/FondoMarron.png"));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		setTitle("Intermedio");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 600);
+		setBounds(100, 100, 500, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		JPanel panelDer = new JPanel();
@@ -145,12 +144,18 @@ public class VentanaPrincipal extends JFrame {
 		panelDer.add(panelAbajo_Cantos);
 		panelAbajo_Cantos.setLayout(new GridLayout(0, 1, 0, 0));
 		
+		btnIniciarJuego = new JButton("Iniciar juego");
+		panelAbajo_Cantos.add(btnIniciarJuego);
+		this.btnIniciarJuego.setVisible(false);
+		
 		btnPedirCarta = new JButton("Pedir carta");
 		panelAbajo_Cantos.add(btnPedirCarta);
+		btnPedirCarta.setVisible(false);
 		
 		btnPaso = new JButton("Paso");
 		panelAbajo_Cantos.add(btnPaso);
 		grupo= new ButtonGroup();
+		btnPaso.setVisible(false);
 		
 		JPanel panelCentro = new JPanel();
 		contentPane.add(panelCentro, BorderLayout.CENTER);
@@ -178,41 +183,66 @@ public class VentanaPrincipal extends JFrame {
 		cartaTiradaJ1_1.setHorizontalAlignment(SwingConstants.CENTER);
 		panelCartaTiradaJ1.add(cartaTiradaJ1_1);
 		
+		cartaTiradaJ1_2 = new JLabel("");
+		cartaTiradaJ1_2.setHorizontalAlignment(SwingConstants.CENTER);
+		cartaTiradaJ1_2.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		panelCartaTiradaJ1.add(cartaTiradaJ1_2);
+		
 		JPanel panelCartaTiradaJ2 = new JPanel();
 		panelCartasTiradasIzq.add(panelCartaTiradaJ2);
 		panelCartaTiradaJ2.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		cartaTiradaJ1_2 = new JLabel("");
-		cartaTiradaJ1_2.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
-		cartaTiradaJ1_2.setHorizontalAlignment(SwingConstants.CENTER);
-		panelCartaTiradaJ2.add(cartaTiradaJ1_2);
+		cartaTiradaJ2_1 = new JLabel("");
+		cartaTiradaJ2_1.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		cartaTiradaJ2_1.setHorizontalAlignment(SwingConstants.CENTER);
+		panelCartaTiradaJ2.add(cartaTiradaJ2_1);
+		
+		cartaTiradaJ2_2 = new JLabel("");
+		cartaTiradaJ2_2.setHorizontalAlignment(SwingConstants.CENTER);
+		cartaTiradaJ2_2.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		panelCartaTiradaJ2.add(cartaTiradaJ2_2);
 		
 		JPanel panelCartaTiradaJ3 = new JPanel();
 		panelCartasTiradasIzq.add(panelCartaTiradaJ3);
 		panelCartaTiradaJ3.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		cartaTiradaJ1_3 = new JLabel("");
-		cartaTiradaJ1_3.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
-		cartaTiradaJ1_3.setHorizontalAlignment(SwingConstants.CENTER);
-		panelCartaTiradaJ3.add(cartaTiradaJ1_3);
+		cartaTiradaJ3_1 = new JLabel("");
+		cartaTiradaJ3_1.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		cartaTiradaJ3_1.setHorizontalAlignment(SwingConstants.CENTER);
+		panelCartaTiradaJ3.add(cartaTiradaJ3_1);
+		
+		cartaTiradaJ3_2 = new JLabel("");
+		cartaTiradaJ3_2.setHorizontalAlignment(SwingConstants.CENTER);
+		cartaTiradaJ3_2.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		panelCartaTiradaJ3.add(cartaTiradaJ3_2);
 		
 		panelCartaTiradaJ4 = new JPanel();
 		panelCartasTiradasIzq.add(panelCartaTiradaJ4);
 		panelCartaTiradaJ4.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		cartaTiradaJ1 = new JLabel("");
-		cartaTiradaJ1.setHorizontalAlignment(SwingConstants.CENTER);
-		cartaTiradaJ1.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
-		panelCartaTiradaJ4.add(cartaTiradaJ1);
+		cartaTiradaJ4_1 = new JLabel("");
+		cartaTiradaJ4_1.setHorizontalAlignment(SwingConstants.CENTER);
+		cartaTiradaJ4_1.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		panelCartaTiradaJ4.add(cartaTiradaJ4_1);
+		
+		cartaTiradaJ4_2 = new JLabel("");
+		cartaTiradaJ4_2.setHorizontalAlignment(SwingConstants.CENTER);
+		cartaTiradaJ4_2.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		panelCartaTiradaJ4.add(cartaTiradaJ4_2);
 		
 		panelCartaTiradaJ5 = new JPanel();
 		panelCartasTiradasIzq.add(panelCartaTiradaJ5);
 		panelCartaTiradaJ5.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		cartaTiradaJ1_4 = new JLabel("");
-		cartaTiradaJ1_4.setHorizontalAlignment(SwingConstants.CENTER);
-		cartaTiradaJ1_4.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
-		panelCartaTiradaJ5.add(cartaTiradaJ1_4);
+		cartaTiradaJ5_1 = new JLabel("");
+		cartaTiradaJ5_1.setHorizontalAlignment(SwingConstants.CENTER);
+		cartaTiradaJ5_1.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		panelCartaTiradaJ5.add(cartaTiradaJ5_1);
+		
+		cartaTiradaJ5_2 = new JLabel("");
+		cartaTiradaJ5_2.setHorizontalAlignment(SwingConstants.CENTER);
+		cartaTiradaJ5_2.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		panelCartaTiradaJ5.add(cartaTiradaJ5_2);
 		
 		panelCartaIntermedia = new JPanel();
 		panelCentro.add(panelCartaIntermedia);
@@ -229,48 +259,48 @@ public class VentanaPrincipal extends JFrame {
 		
 		panelCartaIntermediaJ1 = new JPanel();
 		panelCartaIntermedia.add(panelCartaIntermediaJ1);
-		panelCartaIntermediaJ1.setLayout(new GridLayout(0, 2, 0, 0));
+		panelCartaIntermediaJ1.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		cartaTiradaJ1_5 = new JLabel("");
-		cartaTiradaJ1_5.setHorizontalAlignment(SwingConstants.CENTER);
-		cartaTiradaJ1_5.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
-		panelCartaIntermediaJ1.add(cartaTiradaJ1_5);
+		cartaIntermediaJ1 = new JLabel("");
+		cartaIntermediaJ1.setHorizontalAlignment(SwingConstants.CENTER);
+		cartaIntermediaJ1.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		panelCartaIntermediaJ1.add(cartaIntermediaJ1);
 		
 		panelCartaIntermediaJ2 = new JPanel();
 		panelCartaIntermedia.add(panelCartaIntermediaJ2);
-		panelCartaIntermediaJ2.setLayout(new GridLayout(0, 2, 0, 0));
+		panelCartaIntermediaJ2.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		cartaTiradaJ1_6 = new JLabel("");
-		cartaTiradaJ1_6.setHorizontalAlignment(SwingConstants.CENTER);
-		cartaTiradaJ1_6.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
-		panelCartaIntermediaJ2.add(cartaTiradaJ1_6);
+		cartaIntermediaJ2 = new JLabel("");
+		cartaIntermediaJ2.setHorizontalAlignment(SwingConstants.CENTER);
+		cartaIntermediaJ2.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		panelCartaIntermediaJ2.add(cartaIntermediaJ2);
 		
 		panelCartaIntermediaJ3 = new JPanel();
 		panelCartaIntermedia.add(panelCartaIntermediaJ3);
-		panelCartaIntermediaJ3.setLayout(new GridLayout(0, 2, 0, 0));
+		panelCartaIntermediaJ3.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		cartaTiradaJ1_7 = new JLabel("");
-		cartaTiradaJ1_7.setHorizontalAlignment(SwingConstants.CENTER);
-		cartaTiradaJ1_7.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
-		panelCartaIntermediaJ3.add(cartaTiradaJ1_7);
+		cartaIntermediaJ3 = new JLabel("");
+		cartaIntermediaJ3.setHorizontalAlignment(SwingConstants.CENTER);
+		cartaIntermediaJ3.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		panelCartaIntermediaJ3.add(cartaIntermediaJ3);
 		
 		panelCartaIntermediaJ4 = new JPanel();
 		panelCartaIntermedia.add(panelCartaIntermediaJ4);
-		panelCartaIntermediaJ4.setLayout(new GridLayout(0, 2, 0, 0));
+		panelCartaIntermediaJ4.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		cartaTiradaJ1_8 = new JLabel("");
-		cartaTiradaJ1_8.setHorizontalAlignment(SwingConstants.CENTER);
-		cartaTiradaJ1_8.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
-		panelCartaIntermediaJ4.add(cartaTiradaJ1_8);
+		cartaIntermediaJ4 = new JLabel("");
+		cartaIntermediaJ4.setHorizontalAlignment(SwingConstants.CENTER);
+		cartaIntermediaJ4.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		panelCartaIntermediaJ4.add(cartaIntermediaJ4);
 		
 		panelCartaIntermediaJ5 = new JPanel();
 		panelCartaIntermedia.add(panelCartaIntermediaJ5);
-		panelCartaIntermediaJ5.setLayout(new GridLayout(0, 2, 0, 0));
+		panelCartaIntermediaJ5.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		cartaTiradaJ1_9 = new JLabel("");
-		cartaTiradaJ1_9.setHorizontalAlignment(SwingConstants.CENTER);
-		cartaTiradaJ1_9.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
-		panelCartaIntermediaJ5.add(cartaTiradaJ1_9);
+		cartaIntermediaJ5 = new JLabel("");
+		cartaIntermediaJ5.setHorizontalAlignment(SwingConstants.CENTER);
+		cartaIntermediaJ5.setFont(new Font("Microsoft JhengHei", Font.PLAIN, 12));
+		panelCartaIntermediaJ5.add(cartaIntermediaJ5);
 		
 		JPanel panelNorte = new JPanel();
 		FlowLayout fl_panelNorte = (FlowLayout) panelNorte.getLayout();
@@ -362,12 +392,33 @@ public class VentanaPrincipal extends JFrame {
 		lblResultadoRonda3_2 = new JLabel("");
 		lblResultadoRonda3_2.setHorizontalAlignment(SwingConstants.CENTER);
 		panelJug5.add(lblResultadoRonda3_2);
+		
+//		panelCartaTiradaJ1.setVisible(false);
+//		panelCartaTiradaJ2.setVisible(false);
+//		panelCartaTiradaJ3.setVisible(false);
+//		panelCartaTiradaJ4.setVisible(false);
+//		panelCartaTiradaJ5.setVisible(false);
+//		
+//		panelJug1.setVisible(false);
+//		panelJug2.setVisible(false);
+//		panelJug3.setVisible(false);
+//		panelJug4.setVisible(false);
+//		panelJug5.setVisible(false);
+//		
+//		panelCartaIntermediaJ1.setVisible(false);
+//		panelCartaIntermediaJ2.setVisible(false);
+//		panelCartaIntermediaJ3.setVisible(false);
+//		panelCartaIntermediaJ4.setVisible(false);
+//		panelCartaIntermediaJ5.setVisible(false);
 	}
 	public void onClickPedirCarta(ActionListener listener) {
 		this.btnPedirCarta.addActionListener(listener);
 	}
 	public void onClickPaso(ActionListener listener) {
 		this.btnPaso.addActionListener(listener);
+	}
+	public void onClickIniciarJuego(ActionListener listener) {
+		this.btnIniciarJuego.addActionListener(listener);
 	}
 	public static JRadioButton getSelection(ButtonGroup group)
 	{
@@ -381,39 +432,7 @@ public class VentanaPrincipal extends JFrame {
 	        }
 	        return null;
 	}
-	public void setJugadores(ArrayList<String> jugadores) {
-		this.esconderTodosJug();
-		for (int x=0;jugadores.size()<x;x++) {
-			switch(x) {
-			case 0:
-				jugador1.setText(jugadores.get(x));
-				panelCartaTiradaJ1.setVisible(true);
-				panelJug1.setVisible(true);
-				panelCartaIntermediaJ1.setVisible(true);
-				break;
-			case 1:
-				jugador2.setText(jugadores.get(x));
-				panelCartaTiradaJ2.setVisible(true);
-				panelJug2.setVisible(true);
-				panelCartaIntermediaJ2.setVisible(true);
-			case 2:
-				jugador3.setText(jugadores.get(x));
-				panelCartaTiradaJ3.setVisible(true);
-				panelJug3.setVisible(true);
-				panelCartaIntermediaJ3.setVisible(true);
-			case 3:
-				jugador4.setText(jugadores.get(x));
-				panelCartaTiradaJ4.setVisible(true);
-				panelJug4.setVisible(true);
-				panelCartaIntermediaJ4.setVisible(true);
-			case 4:
-				jugador5.setText(jugadores.get(x));
-				panelCartaTiradaJ5.setVisible(true);
-				panelJug5.setVisible(true);
-				panelCartaIntermediaJ5.setVisible(true);
-			}
-		}
-	}
+	
 	private void esconderTodosJug() {
 		panelCartaTiradaJ1.setVisible(false);
 		panelCartaTiradaJ2.setVisible(false);
@@ -434,24 +453,78 @@ public class VentanaPrincipal extends JFrame {
 		panelCartaIntermediaJ5.setVisible(false);
 		
 	}
-	public void actualizarPuntos(int jug1,int jug2) {
-		lblPlataDispoCant.setText(Integer.toString(jug1));
-		lblPlataDispoCant.setText(Integer.toString(jug2));
+	public void setJugadores(ArrayList<String> jugadores) {
+		//this.esconderTodosJug();
+		for (int x=0;jugadores.size()>x;x++) {
+			switch(x) {
+			case 0:
+				jugador1.setText(jugadores.get(x));
+				//panelCartaTiradaJ1.setVisible(true);
+				//panelJug1.setVisible(true);
+				//panelCartaIntermediaJ1.setVisible(true);
+				break;
+			case 1:
+				jugador2.setText(jugadores.get(x));
+				//panelCartaTiradaJ2.setVisible(true);
+				//panelJug2.setVisible(true);
+				//panelCartaIntermediaJ2.setVisible(true);
+				break;
+			case 2:
+				jugador3.setText(jugadores.get(x));
+				//panelCartaTiradaJ3.setVisible(true);
+				//panelJug3.setVisible(true);
+				//panelCartaIntermediaJ3.setVisible(true);
+				break;
+			case 3:
+				jugador4.setText(jugadores.get(x));
+				//panelCartaTiradaJ4.setVisible(true);
+				//panelJug4.setVisible(true);
+				//panelCartaIntermediaJ4.setVisible(true);
+				break;
+			case 4:
+				jugador5.setText(jugadores.get(x));
+				//panelCartaTiradaJ5.setVisible(true);
+				//panelJug5.setVisible(true);
+				//panelCartaIntermediaJ5.setVisible(true);
+			}
+		}
+		pack();
+	}
+	public void actualizarDinero(int jug) {
+		lblPlataDispoCant.setText(Integer.toString(jug));
 	}
 	public void botonesComienzo() {
 	}
 	public void limpiarVista() {
 	}
-	public void mostrarCartas(ArrayList<String> cartas) throws IOException {
-		
-	}
+	public void mostrarCartas(ArrayList<String> cartas,String nombreTurno) throws IOException {
+			if (nombreTurno.equals(jugador1.getText())){
+				cartaTiradaJ1_1.setText(cartas.get(0));
+				cartaTiradaJ1_2.setText(cartas.get(1));}
+			if (nombreTurno.equals(jugador2.getText())){
+				cartaTiradaJ2_1.setText(cartas.get(0));
+				cartaTiradaJ2_2.setText(cartas.get(1));}
+			if (nombreTurno.equals(jugador3.getText())){
+				cartaTiradaJ3_1.setText(cartas.get(0));
+				cartaTiradaJ3_2.setText(cartas.get(1));}
+			if (nombreTurno.equals(jugador4.getText())){
+				cartaTiradaJ4_1.setText(cartas.get(0));
+				cartaTiradaJ4_2.setText(cartas.get(1));}
+			if (nombreTurno.equals(jugador5.getText())){
+				cartaTiradaJ5_1.setText(cartas.get(0));
+				cartaTiradaJ5_2.setText(cartas.get(1));}
+			}
 	public void esperarJugandoOponente(String nombreTurno) {
-		setTitle("Truco(TURNO OPONENTE, "+nombreTurno+")");
+		setTitle("Intermedio(TURNO OPONENTE, "+nombreTurno+")");
+		btnIniciarJuego.setVisible(false);
 		btnPedirCarta.setVisible(false);
 		btnPaso.setVisible(false);
 	}
 	public void turnoActual(String nombreTurno) {
-		setTitle("Truco(TURNO ACTUAL, "+nombreTurno+")");
+		setTitle("Intermedio(TURNO ACTUAL, "+nombreTurno+")");
+		btnIniciarJuego.setVisible(false);
+		btnPedirCarta.setVisible(true);
+		btnPaso.setVisible(true);
 	}
 	
 	public void ganoRonda() {
@@ -459,7 +532,7 @@ public class VentanaPrincipal extends JFrame {
 			lblResultadoRonda1.setText("Ganaste la ronda");}
 		else if (lblResultadoRonda2.getText().equals("")) {
 			lblResultadoRonda2.setText("Ganaste la ronda");}
-		else if (lblResultadoRonda3.getText().equals("")&&cartaTiradaJ1_3.getText()!="") {
+		else if (lblResultadoRonda3.getText().equals("")&&cartaTiradaJ3_1.getText()!="") {
 			lblResultadoRonda3.setText("Ganaste la ronda");}
 	}
 	public void perdioRonda() {
@@ -467,31 +540,11 @@ public class VentanaPrincipal extends JFrame {
 			lblResultadoRonda1.setText("Perdiste la ronda");}
 		else if (lblResultadoRonda2.getText().equals("")) {
 			lblResultadoRonda2.setText("Perdiste la ronda");}
-		else if (lblResultadoRonda3.getText().equals("")&&cartaTiradaJ1_3.getText()!="") {
+		else if (lblResultadoRonda3.getText().equals("")&&cartaTiradaJ3_1.getText()!="") {
 			lblResultadoRonda3.setText("Perdiste la ronda");}
-	}
-	public void pardaRonda() {
-		if (lblResultadoRonda1.getText().equals("")) {
-			lblResultadoRonda1.setText("Ronda parda");
-			lblResultadoRonda2.setText("Segunda define");}
-		else if (lblResultadoRonda2.getText().equals("")) {
-			lblResultadoRonda2.setText("Ronda parda");}
-		else if (lblResultadoRonda3.getText().equals("")&&cartaTiradaJ1_3.getText()!="") {
-			lblResultadoRonda3.setText("Ronda parda");}
-	}
-	public boolean isPrimeraRonda() {
-		return cartaTiradaJ1_1.getText().equals("");
-	}
-	public void notificarCanto(String string) {
-		lblNotificaciones.setVisible(true);
-		lblNotificaciones.setText("El contrario canto "+string.toLowerCase());
 	}
 	public void ocultarNotificaciones() {
 		lblNotificaciones.setVisible(false);
-	}
-	public void mostrarGanadorEnvido(String nombre,Integer p1, Integer p2) {
-		lblNotificaciones.setText( "El ganador del tanto es "+nombre+". Los tantos fueron :"+p1+", "+p2+". ");
-		lblNotificaciones.setVisible(true);
 	}
 	public void laManoTermino() {
 		lblNotificaciones.setVisible(true);
@@ -508,8 +561,30 @@ public class VentanaPrincipal extends JFrame {
 	public boolean jugadoresCargados() {
 		return !(jugador1.getText().equals(""));
 	}
-	public void mostrarCartaIntermedia(String cartaIntermedia) {
-		// TODO Auto-generated method stub
-		
+	public void mostrarCartaIntermedia(String cartaIntermedia,String nombreTurno) {
+		if (nombreTurno.equals(jugador1.getText())){
+			cartaIntermediaJ1.setText(cartaIntermedia);}
+		if (nombreTurno.equals(jugador2.getText())){
+			cartaIntermediaJ2.setText(cartaIntermedia);}
+		if (nombreTurno.equals(jugador3.getText())){
+			cartaIntermediaJ3.setText(cartaIntermedia);}
+		if (nombreTurno.equals(jugador4.getText())){
+			cartaIntermediaJ4.setText(cartaIntermedia);}
+		if (nombreTurno.equals(jugador5.getText())){
+			cartaIntermediaJ5.setText(cartaIntermedia);}
+		}
+	public void mostrarJugadores(ArrayList<IJugador> darJugadores) {
+		String jugadores="";
+		for (IJugador jug :darJugadores) {
+			jugadores+=jug.getNombre()+", ";
+		}
+		lblNotificaciones.setVisible(true);
+		this.lblNotificaciones.setText("Jugadores agregados:"+jugadores);
 	}
-}
+	public void yaPuedeEmpezar() {
+		this.btnIniciarJuego.setVisible(true);
+	}
+	public void actualizarPozo(int pozo) {
+		this.lblPozoCant.setText(String.valueOf(pozo));
+	}
+	}

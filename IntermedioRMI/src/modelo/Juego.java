@@ -8,16 +8,15 @@ import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 import observer.Observador;
 import observer.Observable;
 public class Juego extends ObservableRemoto implements  IJuego,Serializable{
-	private static final int puntajeFinal=10;//se arranca con 5 puntos, gana quien llega a (10), si el puntaje es 0 estas fuera de juego
 	private Jugador jugadorTurno;
 	private Mazo mazo;
 	private ArrayList<Jugador>jugadores;
 	private ArrayList<Observador> observadores;
+	private int pozo=0;
 	public Juego(){
 		this.jugadores = new ArrayList<>();
 		this.observadores=new ArrayList<>();
 		this.mazo=new Mazo();
-
 	}
 	@Override
 	public void agregarJugador(String id) throws RemoteException {
@@ -37,7 +36,7 @@ public class Juego extends ObservableRemoto implements  IJuego,Serializable{
 		if (jugadorTurno==null) {//solo para la primera mano
 			jugadorTurno=jugadores.get(0);
 		}
-		if (jugadorTurno.getPuntos()!=0) {//porque cuando llega a 0 no juega mas
+		if (jugadorTurno.getDinero()!=0) {//porque cuando llega a 0 no juega mas
 			for(int x = 0;x < 2;x++) {
 				jugadorTurno.setCarta(mazo.dar());
 			}
@@ -55,16 +54,11 @@ public class Juego extends ObservableRemoto implements  IJuego,Serializable{
 	}
 	@Override
 	public void nuevaMano() throws RemoteException {
-		if(!this.preguntarGanador()) {
 			jugadorTurno=siguiente(jugadorTurno);
 			for (Jugador jugador:jugadores) {
 				jugador.limpiarCartas();}
 			this.mazo=new Mazo();
 			jugar();
-			}
-		else {
-			notificarObservadores(Eventos.JUEGO_TERMINADO);
-			}
 		}
 	private Jugador siguiente(Jugador JugadorTurno){
 		Jugador retorno=null;
@@ -84,15 +78,14 @@ public class Juego extends ObservableRemoto implements  IJuego,Serializable{
 	public IJugador getITurno()throws RemoteException   {
 		return jugadorTurno;
 	}
-	private boolean preguntarGanador() {
-		boolean hayGanador=false;
-		for (Jugador jugador:this.jugadores) {
-			if (jugador.getPuntos()>=puntajeFinal) {
-				hayGanador=true;
-			}
-		}
-		return hayGanador;
-		
+	public void incPozo(int cant) throws RemoteException {
+		pozo+=cant;
+	}
+	public void decPozo(int cant) throws RemoteException {
+		pozo-=cant;
+	}
+	public int getPozo()throws RemoteException  {
+		return pozo;
 	}
 	@Override
 	public boolean puedeEmpezarJuego() throws RemoteException {
@@ -108,7 +101,7 @@ public class Juego extends ObservableRemoto implements  IJuego,Serializable{
 	@Override
 	public void darTercerCarta() throws RemoteException {
 		jugadorTurno.setCartaIntermedia(mazo.dar());
-		if(jugadorTurno.isGano()) {
+		if(jugadorTurno.isGano(pozo)) {
 			notificarObservadores(Eventos.INTERMEDIO_GANADO);
 		}else {
 			notificarObservadores(Eventos.INTERMEDIO_PERDIDO);
@@ -128,6 +121,15 @@ public class Juego extends ObservableRemoto implements  IJuego,Serializable{
 			}}
 		return puedeUsarEsteNombre;
 	}
+	@Override
+	public void introducirDinero(String nombre, int dinero) throws RemoteException {
+		for (Jugador jugador:this.jugadores) {
+			if(nombre.equals(jugador.getNombre())) {
+				jugador.incDinero(dinero-100);
+				this.incPozo(100);
+			}
+			this.notificarObservadores(Eventos.DINERO_INGRESADO);
+	}}
 	
 
 }

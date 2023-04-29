@@ -16,7 +16,7 @@ public class VistaGrafica implements IVista {
 	private VentanaPrincipal vPrincipal;
 	//private VentanaRanking vRanking;
 	private Controlador controlador;
-	//private String nameJugador;//PARA PRUEBAS EL ATRIBUTO,SACAR PARA INSERTAR NOMBRES DE JUGADORES
+	private String nameJugador;
 
 	public VistaGrafica() {//String nameJugadorPARA PRUEBAS EL PARAMETRO,SACAR PARA INSERTAR NOMBRES DE JUGADORES
 		super();
@@ -27,13 +27,15 @@ public class VistaGrafica implements IVista {
 
 		mostrarInicioSesion();
 		
-		this.vInicioSesion.onClickIniciar(new ActionListener() {
+		this.vInicioSesion.onClickSiguiente(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//PARA INSERTAR NOMBRES DE JUGADORES DESCOMENTAR ABAJO
 				try {
-					if(controlador.noNombreRepetido(vInicioSesion.getGetNombreUsuario())) {
-					controlador.agregarJugador(vInicioSesion.getGetNombreUsuario());}
+					if(controlador.noNombreRepetido(vInicioSesion.getTextUsuario())) {
+						nameJugador=vInicioSesion.getTextUsuario();
+						vInicioSesion.ingresarDin();
+						controlador.agregarJugador(vInicioSesion.getTextUsuario());
+					}
 					else {
 						vInicioSesion.nombreRepetido();
 					}
@@ -43,6 +45,24 @@ public class VistaGrafica implements IVista {
 				}
 			}
 		});
+		this.vInicioSesion.onClickIniciar(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					if(vInicioSesion.getDinero()>100) {
+						controlador.ingresarDinero(nameJugador,vInicioSesion.getDinero());
+						vInicioSesion.setVisible(false);
+						vPrincipal.setVisible(true);}
+					else {
+						vInicioSesion.dineroInvalido();
+					}
+					
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}});
 		this.vPrincipal.onClickPedirCarta(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -55,6 +75,16 @@ public class VistaGrafica implements IVista {
 				}
 			}
 		});
+		this.vPrincipal.onClickIniciarJuego(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+					try {
+						controlador.empezarJuego();
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		}});
 		this.vPrincipal.onClickPaso(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -86,24 +116,14 @@ public class VistaGrafica implements IVista {
 
 
 	@Override
-	public void juegoTerminado() {
-		mostrarPuntajes();
-		String ganador=controlador.termino().getNombre();
-		this.vPrincipal.juegoTerminado(ganador);}
-
-
-	@Override
 	public void manoTerminada() {
-		mostrarPuntajes();
+		mostrarDinero();
 		vPrincipal.laManoTermino();
 		vPrincipal.limpiarVista();
 		}
 
 
-	@Override
-	public void esperandoJugadores() {
-		this.vInicioSesion.esperandoOtrosJugadores();
-		}
+	
 	@Override
 	public void jugar() {
 		this.vInicioSesion.setVisible(false);
@@ -116,14 +136,14 @@ public class VistaGrafica implements IVista {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			ArrayList<String> jugadoresSTR = null;
+			ArrayList<String> jugadoresSTR = new ArrayList<String>();
 			for(IJugador jug:jugadores) {
 				jugadoresSTR.add(jug.getNombre());
 			}
 			this.vPrincipal.setJugadores(jugadoresSTR);
 			this.vPrincipal.botonesComienzo();
 		}
-		mostrarPuntajes();
+		mostrarDinero();
 		mostrarCartasEnMano();
 		this.vPrincipal.turnoActual(controlador.getJugador());
 		mostrarCartaTirada();
@@ -140,7 +160,7 @@ public class VistaGrafica implements IVista {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			ArrayList<String> jugadoresSTR = null;
+			ArrayList<String> jugadoresSTR = new ArrayList<String>();
 			for(IJugador jug:jugadores) {
 				jugadoresSTR.add(jug.getNombre());
 			}
@@ -153,13 +173,13 @@ public class VistaGrafica implements IVista {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		mostrarCartaTirada();
-		this.mostrarPuntajes();
+		this.mostrarDinero();
+		mostrarCartasEnMano();
 	}
 	@Override
 	public void mostrarCartasEnMano() {
 		try {
-			this.vPrincipal.mostrarCartas(controlador.listarCartas());
+			this.vPrincipal.mostrarCartas(controlador.listarCartas(),controlador.turnoActual().getNombre());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -167,27 +187,85 @@ public class VistaGrafica implements IVista {
 	}
 	@Override
 	public void mostrarCartaIntermedia() {
-		String cartaIntermedia=controlador.getCartaIntermedio().toString());
+		String cartaIntermedia = null;
+		try {
+			cartaIntermedia = controlador.getCartaIntermedio().toString();
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		if (cartaIntermedia!=null){
 			try {
-				this.vPrincipal.mostrarCartaIntermedia(cartaIntermedia);
-			} catch (IOException e) {
+				this.vPrincipal.mostrarCartaIntermedia(cartaIntermedia,controlador.turnoActual().getNombre());
+			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			}
+		try {
+			actualizarPozo(controlador.getPozo());
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	@Override
 	public void preguntaEmpezar() {
-		// TODO Auto-generated method stub
-		
-	}
-
+		try {
+			mostrarDinero();
+			vPrincipal.mostrarJugadores(controlador.darJugadores());
+			vPrincipal.yaPuedeEmpezar();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
 	@Override
-	public void mostrarCartaIntermediaContras() {
+	public void esperandoJugadores() {
+		try {
+			mostrarDinero();
+			this.vPrincipal.mostrarJugadores(controlador.darJugadores());
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
+	@Override
+	public void mostrarDinero() {
+		try {
+			for (IJugador jug:controlador.darJugadores()) {
+				if (jug.getNombre().equals(nameJugador)) {
+					vPrincipal.actualizarDinero(jug.getDinero());
+				}
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@Override
+	public void mostrarCartaTirada() {
 		// TODO Auto-generated method stub
 		
 	}
-	
+	@Override
+	public void juegoTerminado() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void actualizarDinero(int dineroEsteJug) {
+		vPrincipal.actualizarDinero(dineroEsteJug);
+		try {
+			vPrincipal.actualizarPozo(controlador.getPozo());
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@Override
+	public void actualizarPozo(int pozo) {
+		vPrincipal.actualizarPozo(pozo);
+	}
 }

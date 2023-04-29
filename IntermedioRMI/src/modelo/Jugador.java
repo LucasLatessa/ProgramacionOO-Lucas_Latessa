@@ -6,7 +6,7 @@ public class Jugador implements IJugador,Serializable{
 		private String nombre;
 		private ArrayList<Carta> cartas = new ArrayList<Carta>();//van a ser 2 por mano
 		private Carta cartaIntermedia;
-		private int puntos=5;
+		private int dinero=0;
 		private boolean turno=false;
 	public Jugador(String nombre) {
 		this.nombre=nombre;
@@ -15,6 +15,9 @@ public class Jugador implements IJugador,Serializable{
 		return cartas;
 	}
 	protected void setCarta(Carta carta) {
+		if (cartas.size()==2) {
+			this.cartas = new ArrayList<Carta>();
+		}
 		cartas.add(carta);
 	}
 	protected void setCartaIntermedia(Carta carta) {
@@ -26,29 +29,33 @@ public class Jugador implements IJugador,Serializable{
 	/**
 	 * @return true si el jugador tiene dos cartas y ademas la cartaIntermedio esta entre las otras dos
 	 */
-	public boolean isGano() {
+	public boolean isGano(int pozo) {
 		boolean gano=false;
 		if(cartas.size()==2) {
 			Carta c1=cartas.get(0);
 			Carta c2=cartas.get(1);
 			gano=cartaIntermedia.estaEntre(c1,c2);
 			if (gano) {
-				puntos++;
+				this.incDinero(pozo);
 			}else {
-				puntos--;
+				this.decDinero(pozo);;
 			}
 		}
 		
 		return gano;
 	}
+	
 	protected void limpiarCartas() {
 		cartas.clear();
 	}
-	public int getPuntos() {
-		return puntos;
+	public int getDinero() {
+		return dinero;
 	}
-	protected void incPuntos(int puntos) {
-		this.puntos += puntos;
+	protected void incDinero(int dinero) {
+		this.dinero += dinero;
+	}
+	private void decDinero(int dinero) {
+		this.dinero -= dinero;
 	}
 	protected void setNombre(String nombre) {
 		this.nombre = nombre;

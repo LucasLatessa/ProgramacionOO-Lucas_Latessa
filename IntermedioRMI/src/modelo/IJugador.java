@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public interface IJugador extends Serializable{
-	public int getPuntos();
+	public int getDinero();
 	public String getNombre();
 	public  ArrayList<Carta>  getCartas();
 }

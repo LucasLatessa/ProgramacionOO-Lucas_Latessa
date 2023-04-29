@@ -18,7 +18,7 @@ import vista.VistaConsola;
 	public class Controlador implements IControladorRemoto{
 		private IJuego modelo;
 		private IVista vista;
-		private String jugador;
+		private String jugador="";
 	
 	public Controlador( IVista vista) {
 		this.vista = vista;
@@ -52,21 +52,13 @@ import vista.VistaConsola;
 						vista.esperandoJugadores();}	
 					break;
 				case INTERMEDIO_GANADO:
-					if (esTurnoEsteJugador()) {
-						vista.mostrarCartaIntermedia();
-						}
-					else {
-						vista.mostrarCartaIntermediaContras();
-					}
-					
+					vista.mostrarCartaIntermedia();
 					break;
 				case INTERMEDIO_PERDIDO:
-					if (esTurnoEsteJugador()) {
-						vista.mostrarCartaIntermedia();
-						}
-					else {
-						vista.mostrarCartaIntermediaContras();
-					}
+					vista.mostrarCartaIntermedia();
+					break;
+				case DINERO_INGRESADO:
+					vista.actualizarDinero(this.dineroEsteJug());
 					break;
 				case MANO_TERMINADA:
 					vista.manoTerminada();
@@ -80,11 +72,16 @@ import vista.VistaConsola;
 		}
 		}
 	
-	/**
-	 * @return devuelve el IJugador ganador.
-	 */
-	public IJugador termino() {
-		return null;
+	public int getPozo() throws RemoteException {
+		return modelo.getPozo();
+	}
+	private int dineroEsteJug() throws RemoteException {
+		for(IJugador jug:getJugadores()) {
+			if (jugador.equals(jug.getNombre())){
+				return jug.getDinero();
+			}
+		}
+		return 0;
 	}
 	public ArrayList<IJugador> getJugadores() throws RemoteException {
 		return this.modelo.listarJugadores();
@@ -130,5 +127,8 @@ import vista.VistaConsola;
 	}
 	public void noQuiero() throws RemoteException {
 		modelo.proximoTurno();
+	}
+	public void ingresarDinero(String nombre,int dinero) throws RemoteException {
+		modelo.introducirDinero(nombre,dinero);
 	}
 }

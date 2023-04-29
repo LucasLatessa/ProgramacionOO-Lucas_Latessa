@@ -27,4 +27,9 @@ public interface IJuego extends IObservableRemoto{
 
 	void proximoTurno() throws RemoteException;
 
+
+	void introducirDinero(String nombre, int dinero) throws RemoteException;
+
+	int getPozo() throws RemoteException;
+
 }

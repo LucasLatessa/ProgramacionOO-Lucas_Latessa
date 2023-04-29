@@ -34,7 +34,7 @@ public class VistaSimilConsola extends JFrame implements IVista{
 	private JButton btnOpcionEnJuego;
 	public VistaSimilConsola() {
 		setVisible(true);
-		setTitle("Truco");
+		setTitle("Intermedio");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 390, 390);
 		JPanel contentPane = new JPanel();
@@ -201,7 +201,7 @@ public class VistaSimilConsola extends JFrame implements IVista{
 	}
 
 	public void jugar() {
-		mostrarPuntajes();
+		mostrarDinero();
 		mostrarCartasEnMano();
 		textArea.append("\nOpciones");
 		textArea.append("\nD-Dame la carta intermedia \nP-Paso");
@@ -242,34 +242,16 @@ public class VistaSimilConsola extends JFrame implements IVista{
 		}
 	}
 	@Override
-	/**
-	 * muestra la carta intermedia en caso de que haya
-	 */
-	public void mostrarCartaIntermediaContras() {
-		try {
-			if (controlador.getCartaIntermedio()!=null){
-				textArea.append("\nLa carta intermedia de "+controlador.turnoActual().getNombre()+" es: "+controlador.getCartaIntermedio().toString()); }
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	@Override
 	public void manoTerminada() {
 		textArea.append("\nLa mano termino");
-		mostrarPuntajes();
-	}
-	@Override
-	public void juegoTerminado() {
-		mostrarPuntajes();
-		textArea.append("\nEl juego termino, el ganador es "+controlador.termino().getNombre());
+		mostrarDinero();
 	}
 	@Override
 	public void setControlador(Controlador controlador) {
 		this.controlador = controlador;
 	}
 	@Override
-	public void mostrarPuntajes() {
+	public void mostrarDinero() {
 		String ss="";
 		ArrayList<IJugador> jugadores = null;
 		try {
@@ -279,7 +261,7 @@ public class VistaSimilConsola extends JFrame implements IVista{
 			e.printStackTrace();
 		}
 		for (IJugador jugador : jugadores) {
-			ss+="\nPuntos " + jugador.getNombre()+": "+ jugador.getPuntos()+"\n";
+			ss+="\nPuntos " + jugador.getNombre()+": "+ jugador.getDinero()+"\n";
 		}
 		textArea.append(ss);
 	}
@@ -297,5 +279,20 @@ public class VistaSimilConsola extends JFrame implements IVista{
 		btnOpcionInicio.setVisible(false);
 		btnAddJugador.setVisible(false);
 		btnOpcionEnJuego.setVisible(false);
+	}
+	@Override
+	public void mostrarCartaTirada() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void actualizarDinero(int dineroEsteJug) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void juegoTerminado() {
+		// TODO Auto-generated method stub
+		
 	}
 }
