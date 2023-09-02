@@ -28,4 +28,7 @@ public interface IVista {
 
 	public void actualizarDinero(int dineroEsteJug);
 	public void actualizarPozo(int pozo);
+
+	public void limpiarCartas();
+
 }

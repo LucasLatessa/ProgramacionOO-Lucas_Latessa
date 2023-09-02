@@ -46,15 +46,14 @@ public class Juego extends ObservableRemoto implements  IJuego,Serializable{
 	public void proximoTurno() throws RemoteException {
 		jugadorTurno=siguiente(jugadorTurno);
 		if (jugadorTurno.yaJugoEstaMano()) {
-			nuevaMano();
 			this.notificarObservadores(Eventos.MANO_TERMINADA);
-		}
-		jugar();
+		}else {
+		jugar();}
 		
 	}
 	@Override
 	public void nuevaMano() throws RemoteException {
-			jugadorTurno=siguiente(jugadorTurno);
+			//jugadorTurno=siguiente(jugadorTurno);
 			for (Jugador jugador:jugadores) {
 				jugador.limpiarCartas();}
 			this.mazo=new Mazo();
@@ -102,8 +101,10 @@ public class Juego extends ObservableRemoto implements  IJuego,Serializable{
 	public void darTercerCarta() throws RemoteException {
 		jugadorTurno.setCartaIntermedia(mazo.dar());
 		if(jugadorTurno.isGano(pozo)) {
+			pozo=0;
 			notificarObservadores(Eventos.INTERMEDIO_GANADO);
 		}else {
+			pozo+=pozo;
 			notificarObservadores(Eventos.INTERMEDIO_PERDIDO);
 		}
 		proximoTurno();

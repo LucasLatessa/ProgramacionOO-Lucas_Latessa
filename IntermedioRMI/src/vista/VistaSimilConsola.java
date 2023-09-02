@@ -90,7 +90,7 @@ public class VistaSimilConsola extends JFrame implements IVista{
 					break;
 				case "E":
 					try {
-						controlador.empezarJuego();
+						controlador.repartir();
 					} catch (RemoteException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -292,6 +292,16 @@ public class VistaSimilConsola extends JFrame implements IVista{
 	}
 	@Override
 	public void juegoTerminado() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void actualizarPozo(int pozo) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void limpiarCartas() {
 		// TODO Auto-generated method stub
 		
 	}

@@ -71,7 +71,7 @@ public class VistaConsola  {
 			break;
 		case "E":
 			try {
-				controlador.empezarJuego();
+				controlador.repartir();
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

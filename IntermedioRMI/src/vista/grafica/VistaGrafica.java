@@ -79,7 +79,7 @@ public class VistaGrafica implements IVista {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 					try {
-						controlador.empezarJuego();
+						controlador.repartir();
 					} catch (RemoteException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -119,7 +119,6 @@ public class VistaGrafica implements IVista {
 	public void manoTerminada() {
 		mostrarDinero();
 		vPrincipal.laManoTermino();
-		vPrincipal.limpiarVista();
 		}
 
 
@@ -267,5 +266,10 @@ public class VistaGrafica implements IVista {
 	@Override
 	public void actualizarPozo(int pozo) {
 		vPrincipal.actualizarPozo(pozo);
+	}
+	@Override
+	public void limpiarCartas() {
+		vPrincipal.limpiarCartas();
+		
 	}
 }

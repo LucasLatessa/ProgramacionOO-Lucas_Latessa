@@ -34,6 +34,8 @@ import vista.VistaConsola;
 		if(evento instanceof Eventos) {
 			switch((Eventos) evento) {
 				case REPARTIDO:
+
+					vista.limpiarCartas();
 					if (esTurnoEsteJugador()) {
 						vista.jugar();
 						}
@@ -62,7 +64,6 @@ import vista.VistaConsola;
 					break;
 				case MANO_TERMINADA:
 					vista.manoTerminada();
-					modelo.nuevaMano();
 					break;
 				case JUEGO_TERMINADO:
 					vista.juegoTerminado();
@@ -71,7 +72,6 @@ import vista.VistaConsola;
 			}
 		}
 		}
-	
 	public int getPozo() throws RemoteException {
 		return modelo.getPozo();
 	}
@@ -105,8 +105,8 @@ import vista.VistaConsola;
 	public Carta getCartaIntermedio() throws RemoteException {
 		return modelo.getCartaIntermedio();
 	}
-	public void empezarJuego() throws RemoteException {
-		modelo.jugar();
+	public void repartir() throws RemoteException {
+		modelo.nuevaMano();
 	}
 	public boolean puedeEmpezarJuego() throws RemoteException {
 		return modelo.puedeEmpezarJuego();

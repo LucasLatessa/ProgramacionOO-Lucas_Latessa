@@ -495,7 +495,22 @@ public class VentanaPrincipal extends JFrame {
 	}
 	public void botonesComienzo() {
 	}
-	public void limpiarVista() {
+	public void limpiarCartas() {
+		cartaTiradaJ1_1.setText("");
+		cartaTiradaJ1_2.setText("");
+		cartaTiradaJ2_1.setText("");
+		cartaTiradaJ2_2.setText("");
+		cartaTiradaJ3_1.setText("");
+		cartaTiradaJ3_2.setText("");
+		cartaTiradaJ4_1.setText("");
+		cartaTiradaJ4_2.setText("");
+		cartaTiradaJ5_1.setText("");
+		cartaTiradaJ5_2.setText("");
+		cartaIntermediaJ1.setText("");
+		cartaIntermediaJ2.setText("");
+		cartaIntermediaJ3.setText("");
+		cartaIntermediaJ4.setText("");
+		cartaIntermediaJ5.setText("");
 	}
 	public void mostrarCartas(ArrayList<String> cartas,String nombreTurno) throws IOException {
 			if (nombreTurno.equals(jugador1.getText())){
@@ -549,6 +564,10 @@ public class VentanaPrincipal extends JFrame {
 	public void laManoTermino() {
 		lblNotificaciones.setVisible(true);
 		lblNotificaciones.setText( "La mano termino");
+		btnIniciarJuego.setVisible(true);
+		btnIniciarJuego.setText("Repartir");
+		this.btnPaso.setVisible(false);
+		this.btnPedirCarta.setVisible(false);
 	}
 	public void juegoTerminado(String ganador) {
 		lblNotificacionFinal.setText("El juego termino, el ganador es "+ ganador);
