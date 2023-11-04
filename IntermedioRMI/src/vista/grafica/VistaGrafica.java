@@ -2,12 +2,18 @@ package vista.grafica;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import controlador.Controlador;
 import modelo.IJugador;
+import serializacion.AdministradorDeDineros;
 import vista.IVista;
 
 public class VistaGrafica implements IVista {
@@ -17,46 +23,57 @@ public class VistaGrafica implements IVista {
 	//private VentanaRanking vRanking;
 	private Controlador controlador;
 	private String nameJugador;
-
+	private VentanaDeudas vRanking;
+	private static final int pozoInicial = 100;
+	private AdministradorDeDineros lista = null;
 	public VistaGrafica() {//String nameJugadorPARA PRUEBAS EL PARAMETRO,SACAR PARA INSERTAR NOMBRES DE JUGADORES
 		super();
 		this.vInicioSesion = new VentanaInicioSesion();
 		this.vPrincipal = new VentanaPrincipal();
-		//this.vRanking = new VentanaRanking();
+		this.vRanking = new VentanaDeudas();
 		//this.nameJugador=nameJugador;//PARA PRUEBAS
-
-		mostrarInicioSesion();
 		
+		mostrarInicioSesion();
 		this.vInicioSesion.onClickSiguiente(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					if(controlador.noNombreRepetido(vInicioSesion.getTextUsuario())) {
 						nameJugador=vInicioSesion.getTextUsuario();
-						vInicioSesion.ingresarDin();
 						controlador.agregarJugador(vInicioSesion.getTextUsuario());
+						vInicioSesion.ingresarDin();
 					}
 					else {
 						vInicioSesion.nombreRepetido();
 					}
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		});
-		this.vInicioSesion.onClickIniciar(new ActionListener() {
+		this.vInicioSesion.onClickIngresarDin(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					if(vInicioSesion.getDinero()>100) {
-						controlador.ingresarDinero(nameJugador,vInicioSesion.getDinero());
+					//si entre lo que acaba de ingresar y lo que ya tenia es mayor a pozoInicial
+					if((controlador.dineroEsteJug() + vInicioSesion.getDinero())>pozoInicial) {
+						controlador.ingresarDineroYDec(nameJugador,vInicioSesion.getDinero());
 						vInicioSesion.setVisible(false);
 						vPrincipal.setVisible(true);}
 					else {
 						vInicioSesion.dineroInvalido();
 					}
-					
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+				
+			}});
+		this.vPrincipal.onClickCargar(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					controlador.ingresarDineroSinDec(nameJugador, vPrincipal.getDinero());
+					vPrincipal.ocultarCarga(); 
 				} catch (RemoteException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -81,7 +98,6 @@ public class VistaGrafica implements IVista {
 					try {
 						controlador.repartir();
 					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 		}});
@@ -97,7 +113,32 @@ public class VistaGrafica implements IVista {
 				}
 			}
 		});
+		vPrincipal.addWindowListener((WindowListener) new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                handleWindowClosing();
+            }
+        });
+
+		vPrincipal.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                handleWindowClosing();
+            }
+        });
+		this.vInicioSesion.onClickVerRanking(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				vRanking.setVisible(true);
+				vRanking.mostrarTabla(lista.getNombresGanadores(),lista.getDineroAFavor());}
+		});
 	}
+	public void handleWindowClosing() {
+        try {
+            controlador.meRetiro();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 	private void mostrarInicioSesion() {
 		this.vInicioSesion.setVisible(true);
 		this.vPrincipal.setVisible(false);
@@ -112,6 +153,17 @@ public class VistaGrafica implements IVista {
 	@Override
 	public void iniciar() {
 		//controlador.agregarJugador(nameJugador);//PARA PRUEBAS RAPIDAS
+		
+		//bloque para decidir si muestro btnVerRanking(depende de si el archivo serializacion existe)
+		try {
+			lista = controlador.traerHistorial();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} 
+		if (lista==null) {
+			vInicioSesion.btnVerRanking.setVisible(false);
+		}
+		//------------------------------------------------------------------------------------------
 	}
 
 
@@ -127,7 +179,7 @@ public class VistaGrafica implements IVista {
 	public void jugar() {
 		this.vInicioSesion.setVisible(false);
 		this.vPrincipal.setVisible(true);
-		if(!vPrincipal.jugadoresCargados()) {//es porque es la primera mano
+		if(!vPrincipal.jugadoresCargados()) {//porque es la primera mano
 			ArrayList<IJugador> jugadores = null;
 			try {
 				jugadores = controlador.darJugadores();
@@ -140,7 +192,6 @@ public class VistaGrafica implements IVista {
 				jugadoresSTR.add(jug.getNombre());
 			}
 			this.vPrincipal.setJugadores(jugadoresSTR);
-			this.vPrincipal.botonesComienzo();
 		}
 		mostrarDinero();
 		mostrarCartasEnMano();
@@ -164,7 +215,6 @@ public class VistaGrafica implements IVista {
 				jugadoresSTR.add(jug.getNombre());
 			}
 			this.vPrincipal.setJugadores(jugadoresSTR);
-			this.vPrincipal.botonesComienzo();
 		}
 		try {
 			this.vPrincipal.esperarJugandoOponente(this.controlador.turnoActual().getNombre());
@@ -267,9 +317,25 @@ public class VistaGrafica implements IVista {
 	public void actualizarPozo(int pozo) {
 		vPrincipal.actualizarPozo(pozo);
 	}
+//	@Override
+//	public void limpiarCartas() {
+//		vPrincipal.limpiarCartas();
+//		
+//	}
+	@Override
+	public void mostrarRepartir() {
+		vPrincipal.mostrarRepartir();
+	}
+	@Override
+	public void pedirIngresoPozo(int dineroDispo) {
+		vInicioSesion.setVisible(true);
+		vPrincipal.setVisible(false);
+		vInicioSesion.pedirIngresoPozo(dineroDispo,controlador.getJugador());
+		
+	}
 	@Override
 	public void limpiarCartas() {
 		vPrincipal.limpiarCartas();
-		
+		vPrincipal.ocultarNotificaciones();
 	}
 }

@@ -301,7 +301,7 @@ public class VistaSimilConsola extends JFrame implements IVista{
 		
 	}
 	@Override
-	public void limpiarCartas() {
+	public void mostrarRepartir() {
 		// TODO Auto-generated method stub
 		
 	}

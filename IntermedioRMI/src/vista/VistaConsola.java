@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import controlador.Controlador;
-import modelo.Carta;
-import modelo.Eventos;
 import modelo.IJugador;
 public class VistaConsola  {
 	private Controlador controlador;

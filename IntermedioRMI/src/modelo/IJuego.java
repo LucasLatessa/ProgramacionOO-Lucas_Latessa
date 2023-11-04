@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
+import serializacion.AdministradorDeDineros;
 
 public interface IJuego extends IObservableRemoto{
 
@@ -28,8 +29,17 @@ public interface IJuego extends IObservableRemoto{
 	void proximoTurno() throws RemoteException;
 
 
-	void introducirDinero(String nombre, int dinero) throws RemoteException;
+	void ingresarDineroSinDec(String nombre, int dinero) throws RemoteException;
 
 	int getPozo() throws RemoteException;
+
+
+	void introducirDineroYInizPozo(String nombre, int dinero) throws RemoteException;
+
+	void serializar(String string, int dinero) throws RemoteException;
+
+	void retirarse(String jugador) throws RemoteException;
+
+	AdministradorDeDineros traerHistorial()throws RemoteException;
 
 }

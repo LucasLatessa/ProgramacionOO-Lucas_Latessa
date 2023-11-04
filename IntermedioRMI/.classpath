@@ -6,7 +6,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/lucas/Documents/GitHub/ProgramacionOO-Lucas_Latessa_182970/miglayout15-swing.jar"/>
-	<classpathentry kind="lib" path="C:/Users/lucas/Documents/GitHub/ProgramacionOO-Lucas_Latessa_182970/LibreriaRMIMVC.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lucas/Documents/GitHub/todo intermedio/IntermedioRMI/miglayout15-swing.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lucas/Documents/GitHub/todo intermedio/IntermedioRMI/LibreriaRMIMVC.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,8 +1,5 @@
 package vista;
 
-import java.util.ArrayList;
-
-import modelo.IJugador;
 import controlador.Controlador;
 public interface IVista {
 	
@@ -28,6 +25,11 @@ public interface IVista {
 
 	public void actualizarDinero(int dineroEsteJug);
 	public void actualizarPozo(int pozo);
+
+
+	public void mostrarRepartir();
+
+	public void pedirIngresoPozo(int dineroDispo);
 
 	public void limpiarCartas();
 

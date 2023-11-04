@@ -1,21 +1,24 @@
 package modelo;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
-import observer.Observador;
-import observer.Observable;
+import serializacion.AdministradorDeDineros;
+import serializacion.Serializador;
 public class Juego extends ObservableRemoto implements  IJuego,Serializable{
+	private static final String rutaSerializ="src/datos.dat";
+	private static Serializador serializador=new Serializador(rutaSerializ);
 	private Jugador jugadorTurno;
 	private Mazo mazo;
 	private ArrayList<Jugador>jugadores;
-	private ArrayList<Observador> observadores;
 	private int pozo=0;
+	private static final int pozoInicial = 100;
 	public Juego(){
 		this.jugadores = new ArrayList<>();
-		this.observadores=new ArrayList<>();
 		this.mazo=new Mazo();
 	}
 	@Override
@@ -53,10 +56,11 @@ public class Juego extends ObservableRemoto implements  IJuego,Serializable{
 	}
 	@Override
 	public void nuevaMano() throws RemoteException {
-			//jugadorTurno=siguiente(jugadorTurno);
+			jugadorTurno=siguiente(jugadorTurno);
 			for (Jugador jugador:jugadores) {
 				jugador.limpiarCartas();}
 			this.mazo=new Mazo();
+			this.notificarObservadores(Eventos.LIMPIAR_CARTAS);
 			jugar();
 		}
 	private Jugador siguiente(Jugador JugadorTurno){
@@ -102,12 +106,15 @@ public class Juego extends ObservableRemoto implements  IJuego,Serializable{
 		jugadorTurno.setCartaIntermedia(mazo.dar());
 		if(jugadorTurno.isGano(pozo)) {
 			pozo=0;
+			serializar(jugadorTurno.getNombre(),pozo);//si gano incrementamos el saldo en historial
 			notificarObservadores(Eventos.INTERMEDIO_GANADO);
 		}else {
 			pozo+=pozo;
+			serializar(jugadorTurno.getNombre(),-pozo);//si perdio derementamos el saldo en historial
 			notificarObservadores(Eventos.INTERMEDIO_PERDIDO);
+			proximoTurno();
 		}
-		proximoTurno();
+		
 	}
 	@Override
 	public Carta getCartaIntermedio() throws RemoteException {
@@ -122,15 +129,68 @@ public class Juego extends ObservableRemoto implements  IJuego,Serializable{
 			}}
 		return puedeUsarEsteNombre;
 	}
+	/**
+	 *Ingresa dinero en el usuario sin decrementarle la cuota de ingreso
+	 */
 	@Override
-	public void introducirDinero(String nombre, int dinero) throws RemoteException {
+	public void ingresarDineroSinDec(String nombre, int dinero) throws RemoteException {
+		serializar(nombre,-dinero);//porque debe esa cantidad
 		for (Jugador jugador:this.jugadores) {
 			if(nombre.equals(jugador.getNombre())) {
-				jugador.incDinero(dinero-100);
-				this.incPozo(100);
+				jugador.incDinero(dinero);
+			}}
+		this.notificarObservadores(Eventos.DINERO_INGRESADO);}
+	/**
+	 *Ingresa dinero y resta la cuota de ingreso(pozoInicial)
+	 *TIENE QUE DECREMENTAR CADA VEZ QUE ALGUIEN SE UNE A LA SESION o el pozo se queda en 0
+	 */
+	@Override
+	public void introducirDineroYInizPozo(String nombre, int dinero) throws RemoteException {
+		serializar(nombre,-dinero);//porque debe esa cantidad
+		for (Jugador jugador:this.jugadores) {
+			if(nombre.equals(jugador.getNombre())) {
+				jugador.incDinero(dinero);
+				jugador.decDinero(pozoInicial);
+				pozo+=pozoInicial;
+			}}
+		this.notificarObservadores(Eventos.DINERO_INGRESADO);}
+	@Override
+	public void retirarse(String nombre)  throws RemoteException{
+		Jugador aEliminar=null;
+		for (Jugador jugador:this.jugadores) {
+			if(nombre.equals(jugador.getNombre())) {
+				serializar(nombre,jugador.getDinero());
+				aEliminar=jugador;
+			}}
+		jugadores.remove(aEliminar);
+		
+	}
+	@Override
+	public void serializar(String nombre,int dinero)throws RemoteException {
+		AdministradorDeDineros lista=null;
+		File archivo = new File(rutaSerializ);
+		if (!(archivo.exists())) {
+			try {
+				archivo.createNewFile();//crea el archivo
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			this.notificarObservadores(Eventos.DINERO_INGRESADO);
-	}}
+			lista= new AdministradorDeDineros();//para primera serializacion del archivo
+		} else {
+			lista=(AdministradorDeDineros) serializador.readFirstObject();
+			}
+		lista.addJugador(nombre,dinero);
+		serializador.writeOneObject(lista);
+	}
+	@Override
+	public AdministradorDeDineros traerHistorial() throws RemoteException {
+		File archivo = new File(rutaSerializ);
+		if (!(archivo.exists())) {
+			return null;
+		}else {
+			return (AdministradorDeDineros) serializador.readFirstObject();
+		}
+		
+	}
 	
-
 }

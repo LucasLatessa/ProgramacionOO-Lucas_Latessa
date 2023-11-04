@@ -7,12 +7,25 @@ import controlador.Controlador;
 import vista.IVista;
 //import vista.VistaSimilConsola;
 import vista.grafica.VistaGrafica;
-
-public class IntermedioAppCliente {
+import ar.edu.unlu.rmimvc.servidor.Servidor;
+import modelo.IJuego;
+import modelo.Juego;
+public class IntermedioAppServYCliente {
 
 	public static void main(String[] args) {
+		IJuego modelo = new Juego();
+		Servidor servidor = new Servidor("127.0.0.1", 64000);
+		System.out.println("Iniciando servidor...");
+		try {
+			servidor.iniciar(modelo);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RMIMVCException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Integer puerto = Integer.valueOf(args[0]);
-		//Integer puerto = Integer.valueOf(12000);
 		//IVista vista = new VistaSimilConsola();
 		IVista vista = new VistaGrafica();
 		IControladorRemoto controlador = new Controlador(vista);

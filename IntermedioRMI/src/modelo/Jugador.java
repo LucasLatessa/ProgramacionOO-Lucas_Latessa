@@ -54,7 +54,7 @@ public class Jugador implements IJugador,Serializable{
 	protected void incDinero(int dinero) {
 		this.dinero += dinero;
 	}
-	private void decDinero(int dinero) {
+	protected void decDinero(int dinero) {
 		this.dinero -= dinero;
 	}
 	protected void setNombre(String nombre) {
