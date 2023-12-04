@@ -1,4 +1,0 @@
-Crear servidor y cliente(indicar puerto cliente, 64000 puerto servidor hardcodeado):
-java -jar IntermedioServYCliente.jar PUERTO_CLIENTE
-Crear cliente(indicar puerto cliente):
-java -jar IntermedioCliente.jar PUERTO_CLIENTE
